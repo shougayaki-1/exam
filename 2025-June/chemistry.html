@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>化学 定期テスト対策問題 (高校2年)</title>
+  <!-- beer.css を直接読み込む -->
+  <link rel="stylesheet" href="../beer.css">
+  <!-- Material Symbols Outlined (beer.cssで推奨されるアイコンフォント) -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <style>
+    body {
+      font-family: var(--font); /* beer.cssのフォント変数を適用 */
+    }
+    .precautions ul {
+      list-style-position: inside;
+      padding-left: 0;
+    }
+    .precautions li {
+      margin-bottom: 0.5rem;
+    }
+    .main-question {
+      margin-bottom: 2rem;
+    }
+    .sub-question {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--outline-variant);
+    }
+    .sub-question:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .question-text {
+      margin-bottom: 0.8rem;
+      line-height: 1.6;
+    }
+    details summary {
+      cursor: pointer;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    /* ヒントボタンと解答ボタンの間のスペース */
+    details + details {
+      margin-top: 0.5rem;
+    }
+    details .content {
+      padding: 0.8rem;
+      border-radius: var(--_round, 0.25rem); /* beer.cssの変数を使うか、固定値 */
+      background-color: var(--surface-container-lowest);
+      border: 1px solid var(--outline-variant);
+    }
+    .formula {
+      font-family: "Times New Roman", Times, serif; /* 数式が見やすいフォント（例） */
+      font-size: 1.1em;
+    }
+    .graph-placeholder {
+      padding: 1rem;
+      border: 1px dashed var(--outline);
+      text-align: center;
+      color: var(--on-surface-variant);
+      background-color: var(--surface-variant);
+      border-radius: var(--_round, 0.25rem);
+      margin-top: 0.5rem;
+    }
+    h1, h2, h3 {
+      margin-bottom: 1rem;
+    }
+    .text-center {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header class="responsive padding">
+    <h1 class="center-align">化学 定期テスト対策問題 (高校2年)</h1>
+    <div class="grid">
+      <div class="s12 m6 l6">
+        <p><strong>出題範囲:</strong> 物質の状態 (蒸気圧、気体の性質、溶液の性質)</p>
+      </div>
+      <div class="s12 m6 l6">
+        <p><strong>試験時間:</strong> 60分</p>
+        <p><strong>満点:</strong> 100点</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="responsive padding">
+    <article class="surface-container-low padding round">
+      <h2>注意事項</h2>
+      <ul class="precautions">
+        <li>計算問題は、特に指示がない限り有効数字2桁で答えなさい。</li>
+        <li>原子量は、H=1.0, C=12, N=14, O=16, Na=23, S=32, Cl=35.5, K=39, Cu=63.5 を用いなさい。</li>
+        <li>気体定数 R = 8.31 × 10<sup>3</sup> Pa・L/(K・mol)</li>
+        <li>必要であれば、答案用紙の裏面も使用して良い。</li>
+      </ul>
+    </article>
+
+    <article class="main-question">
+      <header>
+        <h2>第1問 次の各問いに答えなさい。(計20点)</h2>
+      </header>
+      
+      <div class="sub-question">
+        <p class="question-text">以下の文中の ( ア ) 〜 ( オ ) に最も適する語句を答えなさい。(各2点×5 = 10点)</p>
+        <p class="question-text">液体が蒸発も凝縮もせず、見かけ上変化が起こらない状態を ( ア ) といい、このときの蒸気の圧力をその液体の ( イ ) (または飽和蒸気圧) という。</p>
+        <p class="question-text">一定量の気体の体積は、圧力が一定のとき、絶対温度に ( ウ ) する。これを ( エ ) の法則という。</p>
+        <p class="question-text">溶媒が水である溶液のことを特に ( オ ) という。</p>
+        <details>
+          <summary class="button small-text responsive">ヒントを見る</summary>
+          <div class="content">
+            <p>(ア) 液体とその蒸気が共存し、見た目の変化がなくなる状態です。</p>
+            <p>(イ) (ア)の状態で、蒸気が示す圧力のことです。</p>
+            <p>(ウ) 気体の体積と温度の関係を示す法則の一部です。「T」が大きくなると「V」も大きくなる関係です。</p>
+            <p>(エ) (ウ)を含む気体の体積と温度に関する法則の名前です。</p>
+            <p>(オ) 最も身近な溶媒である「水」が使われている溶液の呼び方です。</p>
+          </div>
+        </details>
+        <details>
+          <summary class="button small-text responsive">解答を見る</summary>
+          <div class="content">
+            <p>(ア) 気液平衡 (イ) 蒸気圧 (ウ) 比例 (エ) シャルル (オ) 水溶液</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="sub-question">
+        <p class="question-text">次の記述のうち、正しいものには〇、誤っているものには×をつけなさい。(各2点×3 = 6点)</p>
+        <p class="question-text">(1) 物質の三重点では、固体、液体、気体の三つの状態が共存できる。</p>
+        <p class="question-text">(2) 理想気体とは、分子自身の体積や分子間力を無視できる仮想的な気体である。</p>
+        <p class="question-text">(3) 質量モル濃度は、溶液の体積に対する溶質の物質量で定義される。</p>
+        <details>
+          <summary class="button small-text responsive">ヒントを見る</summary>
+          <div class="content">
+            <p>(1) 物質が固体・液体・気体の3つの姿で同時にいられる特別な温度と圧力の組み合わせ点です。</p>
+            <p>(2) 気体の法則を考える上で、仮定される理想的な気体の特徴を思い出しましょう。分子の大きさや分子同士の力はどうでしたか？</p>
+            <p>(3) 質量モル濃度は、何「1kgあたり」の溶質の物質量でしたか？溶液全体か、溶媒か。</p>
+          </div>
+        </details>
+        <details>
+          <summary class="button small-text responsive">解答を見る</summary>
+          <div class="content">
+            <p>(1) 〇</p>
+            <p>(2) 〇</p>
+            <p>(3) × (質量モル濃度は溶媒1kgあたりの溶質の物質量)</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="sub-question">
+        <p class="question-text">純粋な液体とその液体に不揮発性の物質を溶かした溶液を比較したとき、溶液の蒸気圧は純粋な液体に比べてどうなるか。理由とともに簡潔に説明しなさい。(4点)</p>
+        <details>
+          <summary class="button small-text responsive">ヒントを見る</summary>
+          <div class="content">
+            <p>液体に何かを溶かすと、液体の表面で蒸発しようとする溶媒分子の邪魔をするものが現れます。それが蒸気圧にどう影響するか考えてみましょう。</p>
+          </div>
+        </details>
+        <details>
+          <summary class="button small-text responsive">解答を見る</summary>
+          <div class="content">
+            <p>解答例：溶液の蒸気圧は純粋な液体に比べて低くなる。理由は、不揮発性の溶質粒子が液体の表面の一部を覆い、溶媒分子が蒸発するのを妨げるため。</p>
+          </div>
+        </details>
+      </div>
+    </article>
+
+    <article class="main-question">
+      <header>
+        <h2>第2問 気体の性質に関する次の各問いに答えなさい。(計30点)</h2>
+      </header>
+      
+      <div class="sub-question">
+        <p class="question-text">27℃、1.5 × 10<sup>5</sup> Pa で 3.0 L の体積を占める理想気体がある。</p>
+        <p class="question-text">(1) 温度を 127℃ に上げ、圧力を 2.0 × 10<sup>5</sup> Pa にすると、気体の体積は何 L になるか。(5点)</p>
+        <p class="question-text">(2) この気体の物質量は何 mol か。(5点)</p>
+        <details>
+          <summary class="button small-text responsive">ヒントを見る</summary>
+          <div class="content">
+            <p>(1) 温度、圧力、体積が変化する問題です。「P₁V₁/T₁ = P₂V₂/T₂」の公式（ボイル・シャルルの法則）を使いましょう。温度は必ず絶対温度 (K) に直すのを忘れずに。</p>
+            <p>(2) 気体の状態方程式「PV = nRT」を使いましょう。P, V, T の値は分かっているので、n (物質量) を求めます。R は問題文に与えられた気体定数です。</p>
+          </div>
+        </details>
+        <details>
+          <summary class="button small-text responsive">解答を見る</summary>
+          <div class="content">
+            <p>(1) ボイル・シャルルの法則 (P₁V₁/T₁ = P₂V₂/T₂) を用いる。温度は絶対温度に換算。</p>
+            <p class="formula">T₁ = 27 + 273 = 300 K, T₂ = 127 + 273 = 400 K</p>
+            <p class="formula">(1.5 × 10<sup>5</sup> Pa × 3.0 L) / 300 K = (2.0 × 10<sup>5</sup> Pa × V₂) / 400 K</p>
+            <p class="formula">V₂ = (1.5 × 10<sup>5</sup> × 3.0 × 400) / (300 × 2.0 × 10<sup>5</sup>) L = 3.0 L</p>
+            <p>(2) 気体の状態方程式 (PV = nRT) を用いる。P = 1.5 × 10<sup>5</sup> Pa, V = 3.0 L, T = 300 K</p>
+            <p class="formula">n = (1.5 × 10<sup>5</sup> Pa × 3.0 L) / (8.31 × 10<sup>3</sup> Pa・L/(K・mol) × 300 K) ≒ 0.1805 mol ≒ 0.18 mol</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="sub-question">
+        <p class="question-text">右の図は、ある揮発性液体A、B、Cの蒸気圧曲線である。次の問いに答えなさい。(各3点×2 = 6点)</p>
+        <div class="graph-placeholder">
+          <p>ここに蒸気圧曲線のグラフが表示されます。</p>
+          <p>(例：ジエチルエーテル、エタノール、水 のような形状の異なる曲線)</p>
+          <p>(縦軸: 蒸気圧(Pa)、横軸: 温度(℃))</p>
+        </div>
+        <p class="question-text">(1) 外圧が 1.0 × 10<sup>5</sup> Pa のとき、最も沸点の低い液体は A、B、C のどれか。記号で答えなさい。</p>
+        <p class="question-text">(2) 液体Cは、70℃ で約何 Pa の蒸気圧を示すか。グラフから読み取りなさい。</p>
+        <details>
+          <summary class="button small-text responsive">ヒントを見る</summary>
+          <div class="content">
+            <p>(1) 沸点とは、液体の蒸気圧が外圧（ここでは 1.0 × 10<sup>5</sup> Pa）と等しくなる温度のことです。グラフ上で、蒸気圧が 1.0 × 10<sup>5</sup> Pa になる点が、より低い温度にある液体を選びましょう。</p>
+            <p>(2) グラフの横軸から70℃を見つけ、そこから真上に線を延ばし、液体Cの曲線とぶつかった点の縦軸の値を読み取ります。</p>
+          </div>
+        </details>
+        <details>
+          <summary class="button small-text responsive">解答を見る</summary>
+          <div class="content">
+            <p>(1) グラフで 1.0 × 10<sup>5</sup> Pa の線を引き、各曲線との交点の温度を比較。最も低い温度で交わるものが沸点が低い。(グラフがないため具体的な解答は不可)</p>
+            <p>(2) グラフから読み取る。(グラフがないため具体的な解答は不可)</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="sub-question">
+        <p class="question-text">窒素と酸素からなる混合気体が 27℃ で 10 L の容器に入っている。この混合気体の全圧は 2.49 × 10<sup>5</sup> Pa であった。窒素の分圧が 1.66 × 10<sup>5</sup> Pa であるとき、次の問いに答えなさい。</p>
+        <p class="question-text">(1) 酸素の分圧は何 Pa か。(3点)</p>
+        <p class="question-text">(2) 混合気体中の窒素のモル分率はいくらか。(3点)</p>
+        <p class="question-text">(3) 混合気体中の酸素の物質量は何 mol か。(4点)</p>
+        <details>
+          <summary class="button small-text responsive">ヒントを見る</summary>
+          <div class="content">
+            <p>(1) 混合気体の全圧は、各成分気体の分圧の和になります（ドルトンの分圧の法則）。</p>
+            <p>(2) モル分率は、(ある成分気体の分圧) / (全圧) または (ある成分気体の物質量) / (全物質量) で求められます。ここでは分圧が分かっているので前者を使います。</p>
+            <p>(3) 酸素の分圧が分かれば、気体の状態方程式「PV = nRT」を使って酸素の物質量 n を求めることができます。このときの V は容器の体積 (10L)、T は混合気体の温度 (27℃をKに直す) です。</p>
+          </div>
+        </details>
+        <details>
+          <summary class="button small-text responsive">解答を見る</summary>
+          <div class="content">
+            <p>(1) P(酸素) = P(全圧) - P(窒素) = 2.49 × 10<sup>5</sup> Pa - 1.66 × 10<sup>5</sup> Pa = 0.83 × 10<sup>5</sup> Pa (または 8.3 × 10<sup>4</sup> Pa)</p>
+            <p>(2) モル分率(窒素) = P(窒素) / P(全圧) = 1.66 × 10<sup>5</sup> Pa / 2.49 × 10<sup>5</sup> Pa ≒ 0.6666... ≒ 0.67 (有効数字2桁なら)</p>
+            <p>(3) 酸素の分圧と気体の状態方程式から求める。 n(酸素) = (P(酸素) × V) / (R × T)</p>
+            <p class="formula">T = 27 + 273 = 300 K</p>
+            <p class="formula">n(酸素) = (0.83 × 10<sup>5</sup> Pa × 10 L) / (8.31 × 10<sup>3</sup> Pa・L/(K・mol) × 300 K) ≒ 0.3325... mol ≒ 0.33 mol</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="sub-question">
+        <p class="question-text">27℃、1.00 × 10<sup>5</sup> Pa のもとで、水上置換で水素を捕集したところ、その体積は 831 mL であった。27℃ における水の飽和蒸気圧を 3.6 × 10<sup>3</sup> Pa とするとき、捕集した水素の物質量は何 mol か。(4点)</p>
+        <details>
+          <summary class="button small-text responsive">ヒントを見る</summary>
+          <div class="content">
+            <p>水上置換で集めた気体の圧力は、(捕集した気体の分圧) + (その温度での水の飽和蒸気圧) = (大気圧) となります。まず水素の分圧を求め、その後、気体の状態方程式を使いましょう。</p>
+          </div>
+        </details>
+        <details>
+          <summary class="button small-text responsive">解答を見る</summary>
+          <div class="content">
+            <p class="formula">P(水素) = P(大気圧) - P(水蒸気) = 1.00 × 10<sup>5</sup> Pa - 3.6 × 10<sup>3</sup> Pa = 0.964 × 10<sup>5</sup> Pa = 9.64 × 10<sup>4</sup> Pa</p>
+            <p class="formula">V = 831 mL = 0.831 L</p>
+            <p class="formula">T = 27 + 273 = 300 K</p>
+            <p class="formula">n(水素) = (P(水素) × V) / (R × T) = (9.64 × 10<sup>4</sup> Pa × 0.831 L) / (8.31 × 10<sup>3</sup> Pa・L/(K・mol) × 300 K) ≒ 0.03210... mol ≒ 0.032 mol</p>
+          </div>
+        </details>
+      </div>
+    </article>
+
+    <article class="main-question">
+      <header>
+        <h2>第3問 溶液の性質に関する次の各問いに答えなさい。(計30点)</h2>
+      </header>
+
+      <div class="sub-question">
+        <p class="question-text">グルコース (分子量 180) 36 g を水に溶かして 500 mL の水溶液とした。</p>
+        <p class="question-text">(1) この水溶液のモル濃度は何 mol/L か。(4点)</p>
+        <p class="question-text">(2) この水溶液の質量パーセント濃度を求めなさい。ただし、この水溶液の密度を 1.04 g/cm<sup>3</sup> とする。(4点)</p>
+        <details>
+          <summary class="button small-text responsive">ヒントを見る</summary>
+          <div class="content">
+            <p>(1) モル濃度 [mol/L] = (溶質の物質量 [mol]) / (溶液の体積 [L]) です。まずグルコースの物質量を求めましょう。</p>
+            <p>(2) 質量パーセント濃度 [%] = (溶質の質量 [g]) / (溶液の質量 [g]) × 100 です。溶液の質量は、密度と体積から計算できます。</p>
+          </div>
+        </details>
+        <details>
+          <summary class="button small-text responsive">解答を見る</summary>
+          <div class="content">
+            <p>(1) n(グルコース) = 36 g / 180 g/mol = 0.20 mol. V = 500 mL = 0.500 L.</p>
+            <p class="formula">モル濃度 = 0.20 mol / 0.500 L = 0.40 mol/L</p>
+            <p>(2) 溶液の質量 = 500 mL × 1.04 g/mL = 520 g. 溶質の質量 = 36 g.</p>
+            <p class="formula">質量パーセント濃度 = (36 g / 520 g) × 100 ≒ 6.923... % ≒ 6.9 %</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="sub-question">
+        <p class="question-text">尿素 CO(NH<sub>2</sub>)<sub>2</sub> (分子量 60.0) 3.00 g を水 200 g に溶かした水溶液がある。</p>
+        <p class="question-text">(1) この水溶液の質量モル濃度は何 mol/kg か。(4点)</p>
+        <p class="question-text">(2) この水溶液の凝固点は何℃か。水のモル凝固点降下を 1.85 K・kg/mol とする。(5点)</p>
+        <p class="question-text">(3) この水溶液の沸点は何℃か。水のモル沸点上昇を 0.515 K・kg/mol とし、大気圧は 1.013 × 10<sup>5</sup> Pa とする。(5点)</p>
+        <details>
+          <summary class="button small-text responsive">ヒントを見る</summary>
+          <div class="content">
+            <p>(1) 質量モル濃度 [mol/kg] = (溶質の物質量 [mol]) / (溶媒の質量 [kg]) です。尿素の物質量を求め、水の質量を kg に直しましょう。</p>
+            <p>(2) 凝固点降下度 ΔTf = Kf × m (Kf: モル凝固点降下, m: 質量モル濃度) の公式を使います。水の凝固点は0℃なので、計算したΔTfを0℃から引きます。</p>
+            <p>(3) 沸点上昇度 ΔTb = Kb × m (Kb: モル沸点上昇, m: 質量モル濃度) の公式を使います。水の沸点は100℃ (1.013 × 10<sup>5</sup> Paにおいて) なので、計算したΔTbを100℃に加えます。</p>
+          </div>
+        </details>
+        <details>
+          <summary class="button small-text responsive">解答を見る</summary>
+          <div class="content">
+            <p>(1) n(尿素) = 3.00 g / 60.0 g/mol = 0.0500 mol. 溶媒の質量 = 200 g = 0.200 kg.</p>
+            <p class="formula">質量モル濃度 m = 0.0500 mol / 0.200 kg = 0.250 mol/kg</p>
+            <p>(2) ΔTf = Kfm = 1.85 K・kg/mol × 0.250 mol/kg = 0.4625 K ≒ 0.46 K (有効数字2桁)</p>
+            <p class="formula">凝固点 = 0℃ - 0.46℃ = -0.46℃</p>
+            <p>(3) ΔTb = Kbm = 0.515 K・kg/mol × 0.250 mol/kg = 0.12875 K ≒ 0.13 K (有効数字2桁)</p>
+            <p class="formula">沸点 = 100℃ + 0.13℃ = 100.13℃</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="sub-question">
+        <p class="question-text">塩化ナトリウム (式量 58.5) 11.7 g を水 500 g に溶かした水溶液がある。この水溶液の凝固点降下度は 1.48 K であった。</p>
+        <p class="question-text">(1) このときの塩化ナトリウムの電離度 α を求めなさい。水のモル凝固点降下を 1.85 K・kg/mol とする。(5点)</p>
+        <p class="question-text">(2) 非電解質の物質 X 0.10 mol を水 100 g に溶かした水溶液の沸点上昇度は、同じ質量モル濃度の塩化ナトリウム水溶液の沸点上昇度と比較して大きいか、小さいか、等しいか。理由とともに答えなさい。(3点)</p>
+        <details>
+          <summary class="button small-text responsive">ヒントを見る</summary>
+          <div class="content">
+            <p>(1) 塩化ナトリウム (NaCl) は電解質なので、水中で電離します。電離によって粒子数が増える効果を考慮する必要があります。<br>ΔTf = i × Kf × m (i: ファントホッフ係数)<br>NaCl の場合、完全に電離すれば Na⁺ と Cl⁻ の2つの粒子になるので、理想的には i=2 です。電離度 α を使うと、i = 1 + (ν - 1)α (νは電離によって生じるイオンの数。NaCl は ν=2) なので、i = 1 + α となります。<br>まず質量モル濃度 m を計算し、次にファントホッフ係数 i を求め、そこから電離度 α を計算します。</p>
+            <p>(2) 電解質と非電解質では、同じ質量モル濃度でも水溶液中での粒子数が異なります。粒子数が多いほど、沸点上昇や凝固点降下の効果は大きくなります。</p>
+          </div>
+        </details>
+        <details>
+          <summary class="button small-text responsive">解答を見る</summary>
+          <div class="content">
+            <p>(1) NaCl → Na<sup>+</sup> + Cl<sup>-</sup> (電離度 α のとき、ファントホッフ係数 i = 1 + (ν-1)α。NaCl は ν=2 なので i = 1+α)</p>
+            <p class="formula">m(NaCl) = (11.7 g / 58.5 g/mol ) / 0.500 kg = 0.200 mol / 0.500 kg = 0.400 mol/kg</p>
+            <p class="formula">ΔTf = i Kf m より、1.48 K = i × 1.85 K・kg/mol × 0.400 mol/kg</p>
+            <p class="formula">i = 1.48 / (1.85 × 0.400) = 1.48 / 0.74 = 2.00</p>
+            <p class="formula">i = 1 + α なので、2.00 = 1 + α  => α = 1.00</p>
+            <p>(解説方針からの補足：この計算結果ではα=1.00となりますが、実際の問題ではiがもう少し低い値、例えば1.8などになり、α=0.8となるような調整がされることもあります。)</p>
+            <p>(2) 小さい。理由は、塩化ナトリウムは電解質であり水中で電離して粒子数が増えるため、同じ質量モル濃度でも非電解質に比べて沸点上昇度が大きくなるから。逆に言えば非電解質は粒子数が増えないので小さい。</p>
+          </div>
+        </details>
+      </div>
+    </article>
+
+    <article class="main-question">
+      <header>
+        <h2>第4問 実験と思考に関する次の問いに答えなさい。(計20点)</h2>
+      </header>
+
+      <div class="sub-question">
+        <p class="question-text">ある未知の液体化合物 (非電解質) の分子量を決定するために、次の実験を行った。<br>
+        1.00 L のフラスコに少量の未知試料を入れ、フラスコの口をアルミ箔で覆い、小さな穴を開けた。フラスコを 100℃ の湯浴に浸し、試料を完全に蒸発させた。このとき、フラスコから過剰な蒸気が出ていった。フラスコを冷却後、フラスコ内に凝縮した液体の質量を測定したところ、2.40 g であった。実験時の大気圧は 1.00 × 10<sup>5</sup> Pa であった。</p>
+        <p class="question-text">(1) この実験で、試料が蒸気としてフラスコ内に満たされたときの圧力は何 Pa とみなせるか。(3点)</p>
+        <p class="question-text">(2) 試料が蒸気としてフラスコ内に満たされたときの絶対温度は何 K か。(3点)</p>
+        <p class="question-text">(3) この未知の液体の分子量を求めなさい。(6点)</p>
+        <details>
+          <summary class="button small-text responsive">ヒントを見る</summary>
+          <div class="content">
+            <p>(1) フラスコ内の蒸気は、過剰な分が小さな穴から出ていき、最終的に外部の圧力とつり合います。</p>
+            <p>(2) 湯浴の温度が、フラスコ内の蒸気の温度になります。絶対温度に直しましょう。</p>
+            <p>(3) フラスコ内の蒸気に対して気体の状態方程式 PV = nRT を適用します。n = w/M (w: 質量, M: 分子量) なので、PV = (w/M)RT となります。この式を M について解きましょう。V はフラスコの体積 (1.00 L) です。</p>
+          </div>
+        </details>
+        <details>
+          <summary class="button small-text responsive">解答を見る</summary>
+          <div class="content">
+            <p>(1) フラスコ内の蒸気は外に出ていくので、フラスコ内の圧力は大気圧と等しくなるとみなせる。1.00 × 10<sup>5</sup> Pa</p>
+            <p>(2) T = 100 + 273 = 373 K</p>
+            <p>(3) 気体の状態方程式 PV = (w/M)RT を用いる。M = wRT / PV</p>
+            <p class="formula">M = (2.40 g × 8.31 × 10<sup>3</sup> Pa・L/(K・mol) × 373 K) / (1.00 × 10<sup>5</sup> Pa × 1.00 L)</p>
+            <p class="formula">M = (2.40 × 8.31 × 373) / 100 g/mol ≒ 74.34... g/mol ≒ 74 g/mol (有効数字2桁)</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="sub-question">
+        <p class="question-text">密閉された容器内に、純粋な水を入れたビーカーAと、スクロース水溶液を入れたビーカーBを並べて長時間放置した。それぞれのビーカーで液面の高さはどのように変化するか。また、その理由を蒸気圧の観点から説明しなさい。(8点)</p>
+        <details>
+          <summary class="button small-text responsive">ヒントを見る</summary>
+          <div class="content">
+            <p>ポイントは「蒸気圧降下」です。純粋な溶媒と溶液では、どちらの蒸気圧が高い（または低い）でしょうか？ 密閉容器内では、蒸気圧の高い方から低い方へ、気体を通して何かが移動しようとします。その結果、それぞれの液面の高さはどうなるか考えてみましょう。</p>
+          </div>
+        </details>
+        <details>
+          <summary class="button small-text responsive">解答を見る</summary>
+          <div class="content">
+            <p>解答例：ビーカーA(純水)の液面は下がり、ビーカーB(スクロース水溶液)の液面は上がる。<br>
+            理由は、スクロース水溶液は純水よりも蒸気圧が低い（蒸気圧降下）。そのため、容器内では純水の蒸気圧の方が高く、スクロース水溶液の蒸気圧の方が低い状態になる。気相を通って、蒸気圧の高い純水から蒸気圧の低いスクロース水溶液へ水の蒸気が移動し、純水は蒸発し、スクロース水溶液では凝縮が蒸発を上回るため。</p>
+          </div>
+        </details>
+      </div>
+    </article>
+    
+  </main>
+  <footer class="responsive padding center-align">
+    <p><small>© 定期テスト対策問題</small></p>
+  </footer>
+</body>
+</html>

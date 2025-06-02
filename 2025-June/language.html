@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>インタラクティブ古典文学問題集</title>
+    <!-- Beer CSS (Linked from local file) -->
+    <link rel="stylesheet" href="../beer.css">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/beercss@3.5.1/dist/beercss.min.js"></script>
+    <!-- Material Design Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Custom Styles (after beer.css) -->
+    <style>
+        body {
+            font-family: var(--font, 'Inter', 'Noto Sans JP', sans-serif);
+        }
+        .scrollable-container { /* Renamed from math-container for generality */
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .scrollable-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        header#app-header nav.primary {
+            padding: 1rem 1.5rem;
+        }
+
+        /* Sidebar Navigation List */
+        #problem-navigation ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin-top: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        #problem-navigation li {
+            position: relative;
+            border-radius: var(--border-radius, 4px);
+            transition: background-color 0.2s;
+            width: 100%;
+        }
+        #problem-navigation li::before {
+            content: none;
+        }
+
+        #problem-navigation .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            text-decoration: none;
+            color: var(--on-surface);
+            border-radius: inherit;
+            transition: background-color 0.2s, color 0.2s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        #problem-navigation .nav-link .nav-item-icon {
+            font-size: 1.25rem;
+            color: var(--on-surface-variant);
+            transition: color 0.2s;
+            flex-shrink: 0;
+        }
+        #problem-navigation .nav-link span {
+            white-space: normal;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            flex-grow: 1;
+            min-width: 0;
+        }
+
+        #problem-navigation li:not(.active-item) .nav-link:hover {
+            background-color: var(--surface-container-hover, var(--active));
+            color: var(--primary);
+        }
+        #problem-navigation li:not(.active-item) .nav-link:hover .nav-item-icon {
+            color: var(--primary);
+        }
+
+        #problem-navigation li.active-item {
+            background-color: var(--primary-container);
+            border-left: 4px solid var(--primary);
+        }
+        #problem-navigation li.active-item .nav-link {
+            color: var(--on-primary-container);
+            font-weight: 500;
+            background-color: transparent;
+        }
+        #problem-navigation li.active-item .nav-link .nav-item-icon {
+            color: var(--primary);
+        }
+
+        .problem-set-title {
+            border-bottom: 2px solid var(--outline-variant);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .problem-section-title { /* For 問1, 問2 titles */
+            font-size: 1.25rem; /* large-text equiv. */
+            color: var(--primary);
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        .problem-card {
+            margin-bottom: 1.5rem;
+            background-color: var(--surface-container);
+        }
+        .problem-card-id {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        .problem-text u { /* Style for underlined text in problems */
+            text-decoration: underline;
+            text-decoration-style: wavy;
+            text-decoration-color: var(--primary);
+        }
+        .waka-text {
+            white-space: pre-line; /* Preserve newlines in Waka */
+            font-style: italic;
+            background-color: var(--surface-container-low); /* Slightly different background for waka */
+            padding: 0.5rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 0.5rem;
+        }
+
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Styles for Hint/Answer actions and content */
+        .problem-actions {
+            display: flex;
+            gap: 0.5rem; /* 8px */
+            margin-top: 1rem; /* 16px */
+            flex-wrap: wrap; /* Small screens */
+        }
+        .problem-actions button.chip .material-icons {
+            font-size: 1.125rem; /* 18px */
+        }
+        .problem-actions button.chip .button-text {
+            margin-left: 0.25rem; /* 4px */
+        }
+
+        .hint-content, .answer-content {
+            background-color: var(--surface-container-low); /* Slightly different background */
+            border-left: 4px solid var(--primary);
+            margin-top: 1rem; /* 16px */
+        }
+        .hint-content h6, .answer-content h6 {
+            color: var(--on-surface-variant);
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem; /* 14px */
+            font-weight: 500;
+        }
+        .hint-content p, .answer-content p,
+        .hint-content div, .answer-content div { /* Allow div for multiple paragraphs in answer */
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .answer-content strong, .hint-content strong {
+            color: var(--primary); /* Highlight keywords in answers/hints */
+        }
+
+        /* Chapter commentary specific styles */
+        .chapter-set h4 {
+            margin-top: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-variant); /* Darker shade of primary */
+            border-bottom: 1px solid var(--outline-variant);
+            padding-bottom: 0.25rem;
+        }
+        .chapter-set ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .chapter-set ul li {
+            margin-bottom: 0.5rem;
+        }
+        .one-point-commentary-card {
+            background-color: var(--surface-container-lowest);
+            border-left: 4px solid var(--secondary);
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+        }
+        .one-point-commentary-card h5 {
+            color: var(--secondary);
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+        }
+
+    </style>
+</head>
+<body data-theme="light">
+
+    <header id="app-header">
+        <nav class="primary">
+            <h1 class="large-title">インタラクティブ古典文学問題集</h1>
+            <p class="opacity-75">左のメニューから問題セットまたは解説を選択してください。</p>
+        </nav>
+    </header>
+
+    <div id="main-grid-layout" class="grid large-padding">
+        <aside class="s12 m4 l3 xl2 padding">
+            <h6 class="medium-title">問題・解説一覧</h6>
+            <nav id="problem-navigation" class="scrollable-container" style="max-height: calc(100vh - 200px); overflow-y: auto;">
+                <ul><!-- Navigation items will be populated here --></ul>
+            </nav>
+        </aside>
+
+        <main id="content-area" class="s12 m8 l9 xl10 padding scrollable-container">
+            <article id="welcome-message" class="card large-padding">
+                <h2 class="large-title primary-text">ようこそ！</h2>
+                <p class="medium-text">このアプリケーションは、古典文学に関する様々な問題や解説を提供するインタラクティブな学習ツールです。左のナビゲーションから問題セットまたは章段解説を選択して、学習を開始してください。</p>
+            </article>
+            <!-- Problem sets and chapter commentaries will be injected here -->
+        </main>
+    </div>
+
+<script>
+const problemsData = [
+    {
+        title: "基礎問題",
+        id: "basic-questions",
+        sections: [
+            {
+                title: "問1 次の言葉の読みを現代仮名遣いで記し、意味を書きなさい。",
+                type: "definition_list",
+                questions: [
+                    { id: "B1-1", no: "1", term: "うひかうぶり", hint_reading: "「ういこうぶり」ではない点に注意", hint_meaning: "成人した男性が初めて冠をつける儀式", answer_reading: "ういかぶり", answer_meaning: "元服（男子が成人したしるしに初めて冠をつけること）" },
+                    { id: "B1-2", no: "2", term: "しるよし", hint_reading: "「知る」＋「縁（ゆかり）」のような意味", hint_meaning: "土地を領有している縁", answer_reading: "しるよし", answer_meaning: "領有している縁（つて）" },
+                    { id: "B1-3", no: "3", term: "なまめいたる", hint_reading: "「なまめかしい」の連体形", hint_meaning: "若々しく美しい、優美だ", answer_reading: "なまめいたる", answer_meaning: "若々しく美しい、優美である" },
+                    { id: "B1-4", no: "4", term: "こころばへ", hint_reading: "「心」＋「映え」から", hint_meaning: "心のあり方、性格、気だて", answer_reading: "こころばえ", answer_meaning: "心遣い、気だて、性格" },
+                    { id: "B1-5", no: "5", term: "かぎり", hint_reading: "「限りなし」という言葉を思い出そう", hint_meaning: "極限、この上ないこと", answer_reading: "かぎり", answer_meaning: "この上ないこと、極み" },
+                    { id: "B1-6", no: "6", term: "かたち", hint_reading: "人の「すがた」", hint_meaning: "容貌、顔立ち", answer_reading: "かたち", answer_meaning: "容貌、顔立ち" },
+                    { id: "B1-7", no: "7", term: "はしたなし", hint_reading: "中途半端で、きまりが悪い様子", hint_meaning: "きまりが悪い、不釣り合いだ、そっけない", answer_reading: "はしたなし", answer_meaning: "きまりが悪い、体裁が悪い" },
+                    { id: "B1-8", no: "8", term: "ついゐる", hint_reading: "「つい」と座る様子", hint_meaning: "かしこまって座る", answer_reading: "ついいる", answer_meaning: "かしこまってひざまずいて座る" },
+                    { id: "B1-9", no: "9", term: "こころぼそし", hint_reading: "心が細くなるような気持ち", hint_meaning: "心細い、頼りない", answer_reading: "こころぼそし", answer_meaning: "心細い" },
+                    { id: "B1-10", no: "10", term: "あかなくに", hint_reading: "「飽く」の未然形＋打消の助動詞「ず」の古い形＋接続助詞", hint_meaning: "満足しないのに、名残惜しいのに", answer_reading: "あかなくに", answer_meaning: "名残惜しいのに、満足しないのに" },
+                    { id: "B1-11", no: "11", term: "とみなり", hint_reading: "「急ぎ」の様子", hint_meaning: "急であること、突然であること", answer_reading: "とみなり", answer_meaning: "急であること" },
+                    { id: "B1-12", no: "12", term: "つれなし", hint_reading: "冷たい態度", hint_meaning: "そっけない、冷淡だ", answer_reading: "つれなし", answer_meaning: "そっけない、冷淡だ" }
+                ]
+            },
+            {
+                title: "問2 次の傍線部を品詞分解し、それぞれの品詞名を答えなさい。",
+                type: "grammar_analysis",
+                questions: [
+                    { id: "B2-1", text_before_underline: "狩りに ", underlined_text: "往にけり", text_after_underline: "。（初冠）", hint: "「往ぬ」という動詞の活用形＋過去の助動詞「けり」", answer: "往に：ナ行変格活用動詞「往ぬ」の連用形<br>けり：過去の助動詞「けり」の終止形" },
+                    { id: "B2-2", text_before_underline: "いと ", underlined_text: "なまめいたる", text_after_underline: " 女はらから住みけり。（初冠）", hint: "「なまめく」という動詞の活用形＋完了の助動詞「たり」の連体形", answer: "なまめい：カ行四段活用動詞「なまめく」の連用形<br>たる：完了の助動詞「たり」の連体形" },
+                    { id: "B2-3", text_before_underline: "", underlined_text: "月やあらぬ", text_after_underline: " 春や昔の春ならぬ（月やあらぬ）", hint: "「月」＋係助詞「や」＋動詞「あり」の未然形＋打消の助動詞「ず」の連体形", answer: "月：名詞<br>や：係助詞<br>あら：ラ行変格活用動詞「あり」の未然形<br>ぬ：打消の助動詞「ず」の連体形" },
+                    { id: "B2-4", text_before_underline: "露と答へて ", underlined_text: "消えなましものを", text_after_underline: "（行く蛍）", hint: "動詞「消ゆ」の未然形＋完了（確述）の助動詞「ぬ」の未然形＋反実仮想の助動詞「まし」の連体形＋終助詞「ものを」", answer: "消え：ヤ行下二段活用動詞「消ゆ」の未然形<br>な：強意（確述）の助動詞「ぬ」の未然形<br>まし：反実仮想の助動詞「まし」の連体形<br>ものを：終助詞" },
+                    { id: "B2-5", text_before_underline: "", underlined_text: "とみの文", text_after_underline: "もなければ、（とみの文）", hint: "「とみ」＋格助詞「の」＋「文」", answer: "とみ：名詞（「急ぎ」の意）<br>の：格助詞<br>文：名詞" }
+                ]
+            },
+            {
+                title: "問3 次の文または和歌を現代語訳しなさい。",
+                type: "translation",
+                questions: [
+                    { id: "B3-1", original_text: "心地惑ひにけり。（初冠）", hint: "「心地」は気持ち、「惑ひ」は心が乱れること、「にけり」は～してしまった。", answer: "心がすっかり乱れてしまった。" },
+                    { id: "B3-2", original_text: "春日野の若紫のすり衣しのぶの乱れかぎり知られず（初冠 - 和歌）", is_waka: true, hint: "「若紫」は若い紫草、「すり衣」は紫草で染めた衣。「しのぶの乱れ」は信夫もじずりの乱れ模様と、恋心を抑えきれない気持ちの乱れを掛けている。", answer: "春日野の若い紫草で染めた衣の、信夫もじずりの乱れ模様のように、（あなたを恋い慕う私の）心の乱れは際限がありません。" },
+                    { id: "B3-3", original_text: "月やあらぬ春や昔の春ならぬわが身ひとつはもとの身にして（月やあらぬ - 和歌）", is_waka: true, hint: "「月やあらぬ」は月が昔の月ではないのだろうか、いや昔の月だ。「春や昔の春ならぬ」も同様。それなのに「わが身ひとつはもとの身」ではない、変わってしまった、と嘆いている。", answer: "月は昔の月ではないのだろうか、いや昔の月のままだ。春は昔の春ではないのだろうか、いや昔の春のままだ。それなのに（恋しい人への想いに苦しむ）私一人はもとの私の身のままで（こうして物思いにふけっている）。<br>（後半の「わが身ひとつはもとの身にして」は、昔のままの私であるのに、相手の心が変わってしまった、という解釈もある）" },
+                    { id: "B3-4", original_text: "寝も寝られず。（月やあらぬ）", hint: "「寝」は睡眠。「寝られず」は寝ることができない。", answer: "寝ることもできない。" },
+                    { id: "B3-5", original_text: "白玉か何ぞと人の問ひしとき露と答へて消えなましものを（行く蛍 - 和歌）", is_waka: true, hint: "「白玉」は真珠。「露」ははかないもののたとえ。「消えなましものを」は～してしまえばよかったのになあ、という反実仮想。", answer: "（あれは）真珠かと人が尋ねたときに、（いいえあれは）露ですよと答えて（蛍の光のように）消えてしまえばよかったのになあ。" },
+                    { id: "B3-6", original_text: "女、返事もせず。（とみの文）", hint: "そのままの意味。", answer: "女は、返事もしない。" }
+                ]
+            }
+        ]
+    },
+    {
+        title: "充実問題",
+        id: "advanced-questions",
+        sections: [
+            {
+                title: "問4 次の（ ）に示した語の活用形を答え、文全体を現代語訳しなさい。",
+                type: "conjugation_translation",
+                questions: [
+                    { id: "A4-1", original_text: "その里に、いとなまめいたる女はらから（住む）。（初冠）", target_word: "住む", hint_conjugation: "「住みけり」のように「けり」に続く形。", hint_translation: "「女はらから」は姉妹。", answer_conjugation: "マ行四段活用動詞「住む」の連用形", answer_translation: "その里に、たいそう若々しく美しい姉妹が住んでいた。" },
+                    { id: "A4-2", original_text: "この男かいま見てけり。思ほえず、ふる里に、いとはしたなく（あり）ければ、心地惑ひにけり。（初冠）", target_word: "あり", hint_conjugation: "「ければ」は已然形接続の接続助詞。", hint_translation: "「かいま見」はのぞき見ること。「思ほえず」は思いがけず。", answer_conjugation: "ラ行変格活用動詞「あり」の已然形", answer_translation: "この男が（姉妹を）のぞき見てしまった。思いがけず、（こんな）旧都に（似つかわしくなく）たいそうきまりが悪いくらい立派だったので、心がすっかり乱れてしまった。" },
+                    { id: "A4-3", original_text: "女、いとつれなく、「かかるわざをして、あなづり（たまふ）こそ、なほ人柄のあやしさよ」と（言ふ）て、返事もせず。（とみの文）", target_word: "たまふ、言ふ", hint_conjugation: "たまふ：「こそ」があるので結びは已然形。尊敬の補助動詞。\n言ふ：「て」に続くので連用形。", hint_translation: "「かかるわざ」はこのようなこと（男が手紙をよこしたこと）。「あなづりたまふ」は見下しなさる。「人柄のあやしさ」は人柄の不思議さ、けしからなさ。", answer_conjugation: "たまふ：ハ行四段活用補助動詞「たまふ」の已然形<br>言ふ：ハ行四段活用動詞「言ふ」の連用形", answer_translation: "女は、たいそうそっけなく、「このようなことをして、（私を）見下しなさることこそ、やはり人柄がけしからんことですわ」と言って、返事もしない。" }
+                ]
+            },
+            {
+                title: "問5 次の文をすべてひらがなで書き下し（歴史的仮名遣いの部分はそのままでよい）、それぞれ品詞分解しなさい。その後、文全体の現代語訳を書きなさい。",
+                type: "full_analysis",
+                questions: [
+                    { id: "A5-1", original_text: "むかし、おとこ、うひかうぶりして、ならのきやう、かすがのさとに、しるよしして、かりにいにけり。（初冠）", hint_grammar: "助詞、助動詞を見分ける。動詞の活用形に注意。", answer_hiragana: "むかし、おとこ、うひかうぶりして、ならのきゃう、かすがのさとに、しるよしして、かりにいにけり。", answer_pos: "むかし：名詞<br>、：読点<br>おとこ：名詞<br>、：読点<br>うひかうぶりし：サ行変格活用動詞「うひかうぶりす」の連用形<br>て：接続助詞<br>、：読点<br>なら：名詞（地名）<br>の：格助詞<br>きゃう：名詞（「京」）<br>、：読点<br>かすが：名詞（地名）<br>の：格助詞<br>さと：名詞<br>に：格助詞<br>、：読点<br>しるよしし：サ行変格活用動詞「しるよしす」の連用形<br>て：接続助詞<br>、：読点<br>かり：名詞<br>に：格助詞<br>い：ナ行変格活用動詞「往ぬ」の連用形<br>に：完了の助動詞「ぬ」の連用形<br>けり：過去の助動詞「けり」の終止形<br>。：句点", answer_translation: "昔、ある男が元服して、奈良の京の春日の里に、領地を持っていた縁で、鷹狩りに出かけた。" },
+                    { id: "A5-2", original_text: "つきよみて、ありし女のおもひいでて、いとこころぼそく、ねもねられず。（月やあらぬ）", hint_grammar: "「ありし」は連体詞。「おもひいでて」は複合動詞。", answer_hiragana: "つきよみて、ありしをんなのおもひいでて、いとこころぼそく、ねもねられず。", answer_pos: "つきよみ：名詞（「月夜見」）<br>て：格助詞（「月夜を見て」の意もあるが、ここでは「月夜なので」といった原因・理由の接続助詞的用法と解釈する方が自然）<br>、：読点<br>ありし：連体詞<br>をんな：名詞<br>の：格助詞<br>おもひいで：ダ行下二段活用動詞「おもひいづ」の連用形<br>て：接続助詞<br>、：読点<br>いと：副詞<br>こころぼそく：形容詞「こころぼそし」の連用形<br>、：読点<br>ね：名詞<br>も：係助詞<br>ね：ナ行下二段活用動詞「寝（ぬ）」の未然形<br>られ：可能の助動詞「らる」の未然形<br>ず：打消の助動詞「ず」の終止形<br>。：句点", answer_translation: "月夜を見て（いると）、以前の女のことを思い出して、たいそう心細く、寝ることもできない。" },
+                    { id: "A5-3", original_text: "ゆきけれど、けふの心地、なほわりなし。（行く蛍）", hint_grammar: "「けれど」は接続助詞。「わりなし」は形容詞。", answer_hiragana: "ゆきけれど、けふのこころち、なほわりなし。", answer_pos: "ゆき：カ行四段活用動詞「行く」の連用形<br>けれど：接続助詞<br>、：読点<br>けふ：名詞<br>の：格助詞<br>こころち：名詞<br>、：読点<br>なほ：副詞<br>わりなし：形容詞「わりなし」の終止形<br>。：句点", answer_translation: "（女の所へ）行ったけれども、今日の気持ちは、やはりどうしようもなくつらい。" },
+                    { id: "A5-4", original_text: "おもひわびて、いかでこの女を盗まむとおもふ。（とみの文）", hint_grammar: "「いかで」は副詞。「盗まむ」は未然形＋推量の助動詞「む」。", answer_hiragana: "おもひわびて、いかでこのをんなをぬすまむとおもふ。", answer_pos: "おもひわび：バ行上二段活用動詞「おもひわぶ」の連用形<br>て：接続助詞<br>、：読点<br>いかで：副詞<br>この：連体詞<br>をんな：名詞<br>を：格助詞<br>ぬすま：マ行四段活用動詞「盗む」の未然形<br>む：意志の助動詞「む」の終止形（「盗まむと」で引用）<br>と：格助詞<br>おもふ：ハ行四段活用動詞「思ふ」の終止形<br>。：句点", answer_translation: "思い悩んで、なんとかしてこの女を盗み出そうと思う。" }
+                ]
+            },
+            {
+                title: "問6 次の和歌を声に出して読んだときの区切り（句切れ）を示し、使われている掛詞や枕詞、序詞があれば指摘しなさい。その後、和歌全体の現代語訳を完成させなさい。",
+                type: "waka_analysis",
+                questions: [
+                    { id: "A6-1", waka: "春日野の若紫のすり衣\nしのぶの乱れかぎり知られず\n（初冠）", hint_division: "意味のまとまりで区切る。", hint_technique: "「春日野の若紫のすり衣」が「しのぶの乱れ」を導き出す。", answer_division: "三句切れ（春日野の若紫のすり衣／しのぶの乱れ／かぎり知られず）", answer_technique: "<strong>序詞：</strong>「春日野の若紫のすり衣」が「しのぶ（の乱れ）」を導く。<br><strong>掛詞：</strong>「しのぶ」に「忍ぶ（恋心を）」と「信夫もじずり（染め模様の一種）」の二つの意味。", answer_translation: "春日野の若い紫草で染めた衣の、信夫もじずりの乱れ模様のように、（あなたを恋い慕う私の）心の乱れは際限がありません。" },
+                    { id: "A6-2", waka: "月やあらぬ春や昔の春ならぬ\nわが身ひとつはもとの身にして\n（月やあらぬ）", hint_division: "二句ずつ対比されている。", hint_technique: "「月やあらぬ」は反語。", answer_division: "二句切れ、四句切れ（月やあらぬ／春や昔の春ならぬ／わが身ひとつは／もとの身にして）", answer_technique: "<strong>対句</strong>、<strong>反語</strong>（「月やあらぬ」＝月は昔の月ではないか、いや昔の月だ。「春や昔の春ならぬ」も同様）", answer_translation: "月は昔の月ではないのだろうか、いや昔の月のままだ。春は昔の春ではないのだろうか、いや昔の春のままだ。それなのに（恋しい人への想いに苦しむ）私一人はもとの私の身のままで（こうして物思いにふけっている）。" },
+                    { id: "A6-3", waka: "白玉か何ぞと人の問ひしとき\n露と答へて消えなましものを\n（行く蛍）", hint_division: "会話の部分で意味が区切れる。", hint_technique: "「白玉」と「露」は美しいがはかないものの比喩。", answer_division: "三句切れ（白玉か何ぞと人の問ひしとき／露と答へて／消えなましものを）", answer_technique: "<strong>比喩</strong>（白玉、露）、<strong>反実仮想</strong>（～なましものを）", answer_translation: "（あれは）真珠かと人が尋ねたときに、（いいえあれは）露ですよと答えて（蛍の光のように）消えてしまえばよかったのになあ。" }
+                ]
+            }
+        ]
+    },
+    {
+        title: "章段解説",
+        id: "chapter-commentary",
+        chapters: [
+            {
+                id: "chapter-shokubun",
+                title: "1. 初冠（ういこうぶり）- 第一段",
+                excerpt: "昔、男、初冠して、奈良の京、春日の里に、しるよしして、狩りに往にけり。その里に、いとなまめいたる女はらから住みけり。この男、かいま見てけり。思ほえず、ふる里にいとはしたなくてありければ、心地まどひにけり。男の着たりける狩衣の裾を切りて、歌を書きてやる。その男、しのぶずりの狩衣をなむ着たりける。",
+                keywords: [
+                    { term: "初冠（ういこうぶり）", definition: "男子の元服の儀式。成人のしるしとして初めて冠をかぶること。" },
+                    { term: "しるよしして（領る由して）", definition: "土地を領有している縁で。" },
+                    { term: "なまめいたる", definition: "若々しく美しい、優雅な、色っぽい。" },
+                    { term: "はらから", definition: "姉妹。" },
+                    { term: "かいまみる（垣間見る）", definition: "すき間からのぞき見ること。当時の恋愛のきっかけとして一般的な行為。" },
+                    { term: "はしたなし", definition: "不釣り合いだ、きまりが悪い、中途半端だ。ここでは、田舎には不似合いなほど美しい、という意味合い。" },
+                    { term: "しのぶずり（忍摺）", definition: "福島県の信夫地方で作られた、忍草（しのぶぐさ）の汁で乱れ模様を摺りだした染め物。「忍ぶ恋」の掛詞としてもよく使われる。" }
+                ],
+                waka: {
+                    text: "春日野（かすがの）の若紫（わかむらさき）のすり衣（ごろも）\nしのぶの乱（みだ）れかぎり知られず",
+                    explanation: "春日野に咲く若々しい紫草で染めた、しのぶ摺りの衣のように、（私の心は）あなたへの思いで限りなく乱れています。\n若紫の衣は美しい姉妹を、しのぶ摺りの乱れ模様は作者の抑えきれない恋心の乱れをたとえています。初めての恋に戸惑い、胸をときめかせている様子が表現されています。"
+                },
+                one_point_commentary: "この段は『伊勢物語』の冒頭を飾り、主人公「昔男」の鮮烈な恋の始まりを描いています。「初冠」という人生の節目に、偶然見かけた美しい姉妹に心を奪われるという、若々しい情熱が印象的です。狩衣の裾を切って歌を書き送るという行為は、即興性とロマンチックな行動力を示しています。また、「しのぶずり」の「乱れ」模様に自らの心の乱れを重ねる技法は、平安和歌の典型的な表現であり、視覚的なイメージと内面的な感情を結びつけています。この一途で情熱的な恋のあり方が、後の物語全体を貫く「みやび」な精神の萌芽とも言えるでしょう。"
+            },
+            {
+                id: "chapter-tsukiyaranu",
+                title: "2. 月やあらぬ（つきやあらぬ）- 第四段（諸説あり）",
+                comment_before_excerpt: "※「月やあらぬ」という題名の章段は厳密には存在しませんが、この和歌が登場する章段（多くは第四段や第五段とされる、恋人が宮中に入ってしまい、昔を懐かしむ場面）を指すことが多いです。ここでは、その代表的な章段の文脈で説明します。",
+                excerpt: "昔、男ありけり。東の五条あたりに、いと忍びていきけり。みそかなる所にはあらざりけれど、たよりにふれて、逢ひ見てけり。さて、年ごろ經るうちに、女、宮仕へに出で立ちて、男、いと嘆かしけれど、いかがはせむ。…\n（その後、男がかつて女と逢っていた場所を訪れ、変わり果てた様子を見て詠む）",
+                keywords: [
+                    { term: "忍びて（しのびて）", definition: "人目を避けて、こっそりと。" },
+                    { term: "みそかなる所（密かなる所）", definition: "人目につかない場所。" },
+                    { term: "たよりにふれて（便りに触れて）", definition: "何かの機会に、つてを頼って。" },
+                    { term: "年ごろ（としごろ）", definition: "数年来。" },
+                    { term: "宮仕へ（みやづかへ）", definition: "宮中に仕えること。女性にとっては出世の道でもあったが、恋人との別離を意味することも。" }
+                ],
+                waka: {
+                    text: "月（つき）やあらぬ 春（はる）や昔（むかし）の 春ならぬ\n我（わ）が身（み）ひとつは もとの身（み）にして",
+                    explanation: "月は昔の月ではないのだろうか。春は昔の春ではないのだろうか。いや、月も春も昔のままなのだろう。ただ私自身の身だけは（あなたを想う気持ちは）昔のままなのに、（あなたとの関係や周囲の状況はすっかり変わってしまった）。\nかつて愛し合った女性が高貴な方のものとなり、逢えなくなった男の嘆き。自然は変わらないように見えても、人間関係は変わってしまい、自分だけが変わらぬ想いを抱いているという苦悩が詠まれています。"
+                },
+                one_point_commentary: "この和歌は、在原業平の作として『古今和歌集』にも収録されており、失恋の歌の代表として名高い一首です。「月やあらぬ 春や昔の春ならぬ」という問いかけと、「我が身ひとつは もとの身にして」という結びの対比が鮮やかです。変わらない自然（月、春）と、変わってしまった人間関係、そして変わらない自分の想いを対置することで、主人公の深い喪失感と孤独感が際立っています。一見すると自然も変わってしまったのかと問いかけていますが、本心では自然は変わらず、変わったのは自分たちを取り巻く状況と相手の心（あるいは立場）であることを嘆いているのです。無常観や、手の届かない存在になってしまった恋人への未練が凝縮された名歌と言えます。"
+            },
+            {
+                id: "chapter-yukuhotaru",
+                title: "3. 行く蛍（ゆくほたる）- 第四十五段",
+                excerpt: "昔、男、身はいやしながら、母なむ宮なりける。その母、長岡といふ所に住み給ひけり。子は京に宮仕へしければ、まうづとしけれど、しばしばえまうでず。心もとなくおぼつかなかりければ、夜、人のしづまりたる頃、のぞき奉りければ、母、ひとり子の方を見やりて、蛍の多く飛びちがひけるを見て、よめる。",
+                keywords: [
+                    { term: "いやし（賤し）", definition: "身分が低い。主人公の父方が低いことを示唆。" },
+                    { term: "宮（みや）", definition: "この場合は皇族の女性、内親王や女王を指す。母の身分が高いことを示す。" },
+                    { term: "まうづ（詣づ）", definition: "参上する（謙譲語）。子が母に会いに行くこと。" },
+                    { term: "心もとなし", definition: "気がかりだ、待ち遠しい。母が子を思う気持ち。" },
+                    { term: "おぼつかなし", definition: "はっきりしない、気がかりだ。これも母が子を思う気持ち。" },
+                    { term: "のぞき奉る（覗き奉る）", definition: "そっとお伺いする（謙譲語）。子が母の様子をうかがう。" }
+                ],
+                waka: [
+                    {
+                        type: "母の歌",
+                        text: "行（ゆ）く蛍（ほたる） 雲（くも）の上（うへ）まで 往（い）ぬべくは\n秋風（あきかぜ）吹（ふ）くと 雁（かり）に告（つ）げこせ",
+                        explanation: "飛んでいく蛍よ、もしお前が雲の上（＝都にいる息子のもと）まで行けるのなら、（息子が恋しがる）秋風が吹いていると雁に告げて（私のもとへ連れてきて）おくれ。\n息子を恋しがる母の心情。蛍を使いとして、遠くにいる息子への想いを伝えようとしています。「雲の上」は宮中、都を指し、「雁」は秋に渡ってくる鳥で、手紙を運ぶ使者とされることもあります。"
+                    },
+                    {
+                        type: "男の返歌",
+                        text: "音（おと）もせで 思（おも）ひに燃（も）ゆる 蛍（ほたる）こそ\n鳴（な）く虫（むし）よりも あはれなりけれ",
+                        explanation: "（母の歌を聞いた男が詠む）声も立てずに恋の思いに身を焦がしている蛍こそ、声を出して鳴く虫よりも、しみじみと心打たれるものだなあ。\n母の自分を想う深い愛情を、声を出さずに燃える蛍の光に重ね合わせ、その切なさに心を打たれています。「鳴く虫」よりも「音もせで思ひに燃ゆる蛍」に深い情を感じるのは、言葉にできない母の深い愛情と自分の共感を重ねているからです。"
+                    }
+                ],
+                one_point_commentary: "この段は、親子間の深い情愛を描いた感動的な場面です。身分差のある親子という設定が、二人の絆をより一層切ないものにしています。母の歌では、蛍を単なる虫ではなく、息子のいる「雲の上」（都）への使者と見立て、さらに雁に伝言を託すという二重の願望を込めています。これは、息子に会いたいという切実な思いの表れです。それに対し、息子の返歌は、母の歌の「蛍」を受け、声高に鳴く虫よりも静かに燃える蛍の光に、言葉にならない母の深い愛情を感じ取り、それに共感する繊細な感受性を示しています。蛍の光は、恋心だけでなく、ここでは親子の情愛の象徴としても機能しており、美しい情景とともに心に染みる一場面です。"
+            },
+            {
+                id: "chapter-tominofumi",
+                title: "4. とみの文（とみのふみ）- 第六段（芥川の段）",
+                comment_before_excerpt: "※「とみの文」という言葉が直接出てくるのは第九十九段などですが、第六段の駆け落ちの際に親に送った手紙が「とみの文」の例としてよく挙げられます。ここでは、第六段の「芥川」の悲劇と、その前に親へ送ったとされる手紙の歌に焦点を当てます。",
+                excerpt: "昔、男ありけり。女の、えうまじかりけるを、すみわたりて、よばひわたりけるを、親のゆるさざりければ、いたう思ひ嘆きて、しのびて率て出でて、人の国へいかむとす。道いと暗くて、雨も降りければ、神鳴り、いと恐ろしくて、女、あばらなる蔵にゐたり。男、弓胡籙（ゆみやなぐひ）を負ひて、戸口にあり。はや夜も明けなむと思ひつつゐたるに、鬼、はや女を食ひてけり。「あなや」と言ひけれど、神鳴る騒ぎに、え聞かざりけり。やうやう夜も明けゆくに、見れば、率て来し女もなし。足ずりをして泣けどもかひなし。",
+                keywords: [
+                    { term: "えうまじかりける（得うまじかりける）", definition: "とうてい手に入りそうもなかった（女）。身分違いなど、障害のある恋を示唆。" },
+                    { term: "よばひわたる（呼ばひ渡る）", definition: "求婚し続ける。" },
+                    { term: "しのびて（忍びて）", definition: "人目を忍んで。" },
+                    { term: "とみの文（頓の文）", definition: "急ぎの手紙。緊急の用件を伝える手紙。この段では、駆け落ちの際に親に送った手紙を指すことが多い。" },
+                    { term: "神鳴り（かみなり）", definition: "雷。" },
+                    { term: "あばらなる蔵（荒らなる蔵）", definition: "荒れ果てた蔵。" },
+                    { term: "弓胡籙（ゆみやなぐひ）", definition: "弓と矢を入れる道具（箙・胡籙）。武具。" },
+                    { term: "足ずりをして（あしずりをして）", definition: "地団駄を踏んで。深い悲しみを表す動作。" }
+                ],
+                waka: [
+                    {
+                        type: "関連する和歌（第六段、鬼に女を食われた後の男の嘆きの歌）",
+                        text: "白玉（しらたま）か 何（なに）ぞと人（ひと）の 問（と）ひし時（とき）\n露（つゆ）と答（こた）へて 消（き）えなましものを",
+                        explanation: "（あなたが私を）白玉か何か（大切なもの）かと人が尋ねた時に、（はかない）露ですよと答えて、（その言葉通りに露のように）消えてしまえばよかったのに。（そうすれば、こんな辛い思いをしなくて済んだものを）。\nこれは、女を失った男の深い後悔と悲しみを詠んだ歌です。女を大切に思っていたこと、そしてその女を守れなかった無念さが込められています。「白玉」は美しく貴重なもの、「露」ははかなく消えやすいものの比喩です。"
+                    },
+                    {
+                        type: "第六段で、男が女の親に送った「とみの文」に書かれたとされる歌",
+                        text: "起（お）きもせず 寝（ね）もせで夜（よる）を 明（あかしては\n春（はる）の物（もの）とて ながめ暮（く）らしつ",
+                        explanation: "（娘さんを恋い慕うあまり）起きることも寝ることもなく夜を明かしては、春の長閑な景色を眺めるように、（ただぼんやりと娘さんのことばかりを考えて）一日を過ごしておりました。\n親の許しを得られず、娘を連れて駆け落ちするに至った苦しい恋心を訴えています。「春の物とてながめ暮らしつ」は、春の物思いにふけるように、やるせない気持ちで日々を過ごしていたことを示唆します。この歌で、娘を連れて行くことへの弁明と覚悟を伝えたと考えられます。"
+                    }
+                ],
+                one_point_commentary: "第六段「芥川」は、『伊勢物語』の中でも特に有名な悲劇の一つです。親の反対を押し切っての駆け落ちは、当時の社会では大きな禁忌であり、その結末の悲惨さが際立ちます。「鬼」の正体については、文字通りの鬼、盗賊、あるいは水害などの天災といった諸説があり、物語に神秘性と多義性を与えています。男が「とみの文」で親に送ったとされる「起きもせず」の歌は、娘を奪うことへの苦しい胸の内と、それほどまでに思い詰めていたことを示そうとしたのでしょう。しかし、その後の悲劇によって、この手紙はさらに痛切なものとなります。「白玉か」の歌は、失ったものの大きさと、守りきれなかった男の絶望的な後悔を「露」というはかないものに託して表現しており、読者の胸を打ちます。この段は、情熱的な恋が必ずしも幸福な結末を迎えるわけではないという、人生の厳しさをも示唆しています。",
+                supplement: "『伊勢物語』は、主人公とされる在原業平（ありわらのなりひら）とおぼしき「昔男」の恋愛や流浪の生涯を描いた歌物語です。各章段は独立した短い話の形式をとっており、和歌が中心的な役割を果たしています。章段の区切りや内容は写本によって多少異同があることがあります。"
+            }
+        ]
+    }
+];
+
+document.addEventListener('DOMContentLoaded', () => {
+    const navigationUl = document.getElementById('problem-navigation').querySelector('ul');
+    const contentArea = document.getElementById('content-area');
+    const welcomeMessage = document.getElementById('welcome-message');
+
+    // Helper function to generate problem text HTML
+    function generateProblemTextHtmlForType(q, type) {
+        let html = "";
+        switch (type) {
+            case "definition_list":
+                html += `<p class="medium-text problem-text"><strong>${q.term}</strong></p>`;
+                break;
+            case "grammar_analysis":
+                html += `<p class="medium-text problem-text">${q.text_before_underline}<u>${q.underlined_text}</u>${q.text_after_underline}</p>`;
+                break;
+            case "translation":
+                html += `<p class="medium-text problem-text ${q.is_waka ? 'waka-text' : ''}">${q.original_text.replace(/\n/g, '<br>')}</p>`;
+                break;
+            case "conjugation_translation":
+                 html += `<p class="medium-text problem-text">${q.original_text.replace(/\（([^）]+)\）/g, '(<u style="text-decoration-style: dotted;">$1</u>)')}</p>`;
+                break;
+            case "full_analysis":
+                html += `<p class="medium-text problem-text">${q.original_text.replace(/\n/g, '<br>')}</p>`;
+                break;
+            case "waka_analysis":
+                html += `<p class="medium-text problem-text waka-text">${q.waka.replace(/\n/g, '<br>')}</p>`;
+                break;
+            default:
+                html += `<p class="medium-text problem-text">${q.text || ''}</p>`;
+        }
+        return html;
+    }
+
+    // Helper function to generate hint HTML
+    function generateHintHtmlForType(q, type) {
+        let html = "";
+        switch (type) {
+            case "definition_list":
+                if (q.hint_reading) html += `<p><strong>読みのヒント:</strong> ${q.hint_reading}</p>`;
+                if (q.hint_meaning) html += `<p><strong>意味のヒント:</strong> ${q.hint_meaning}</p>`;
+                break;
+            case "grammar_analysis":
+            case "translation":
+                if (q.hint) html += `<p>${q.hint.replace(/\n/g, '<br>')}</p>`;
+                break;
+            case "conjugation_translation":
+                if (q.hint_conjugation) html += `<p><strong>「${q.target_word}」の活用形のヒント:</strong><br>${q.hint_conjugation.replace(/\n/g, '<br>')}</p>`;
+                if (q.hint_translation) html += `<p><strong>現代語訳のヒント:</strong><br>${q.hint_translation.replace(/\n/g, '<br>')}</p>`;
+                break;
+            case "full_analysis":
+                if (q.hint_grammar) html += `<p>${q.hint_grammar.replace(/\n/g, '<br>')}</p>`;
+                break;
+            case "waka_analysis":
+                if (q.hint_division) html += `<p><strong>句切れのヒント:</strong><br>${q.hint_division.replace(/\n/g, '<br>')}</p>`;
+                if (q.hint_technique) html += `<p><strong>技法のヒント:</strong><br>${q.hint_technique.replace(/\n/g, '<br>')}</p>`;
+                break;
+            default:
+                if (q.hint) html += `<p>${q.hint.replace(/\n/g, '<br>')}</p>`;
+        }
+        return html || "<p>ヒントはありません。</p>";
+    }
+
+    // Helper function to generate answer HTML
+    function generateAnswerHtmlForType(q, type) {
+        let html = "";
+        switch (type) {
+            case "definition_list":
+                html += `<div><p><strong>読み:</strong> ${q.answer_reading}</p>`;
+                html += `<p><strong>意味:</strong> ${q.answer_meaning}</p></div>`;
+                break;
+            case "grammar_analysis":
+                html += `<div><p>${q.answer}</p></div>`;
+                break;
+            case "translation":
+                html += `<div><p>${q.answer}</p></div>`;
+                break;
+            case "conjugation_translation":
+                html += `<div><p><strong>「${q.target_word}」の活用形:</strong> ${q.answer_conjugation}</p>`;
+                html += `<p><strong>現代語訳:</strong> ${q.answer_translation}</p></div>`;
+                break;
+            case "full_analysis":
+                html += `<div><p><strong>ひらがな書き下し:</strong><br>${q.answer_hiragana}</p>`;
+                html += `<p><strong>品詞分解:</strong><br>${q.answer_pos}</p>`;
+                html += `<p><strong>現代語訳:</strong><br>${q.answer_translation}</p></div>`;
+                break;
+            case "waka_analysis":
+                html += `<div><p><strong>句切れ:</strong><br>${q.answer_division}</p>`;
+                html += `<p><strong>技法:</strong><br>${q.answer_technique}</p>`;
+                html += `<p><strong>現代語訳:</strong><br>${q.answer_translation}</p></div>`;
+                break;
+            default:
+                html += `<div><p>${q.answer || ''}</p></div>`;
+        }
+        return html;
+    }
+
+    problemsData.forEach((dataSet) => {
+        const navLi = document.createElement('li');
+        navLi.innerHTML = `<a href="#" data-target="${dataSet.id}" class="nav-link"><i class="material-icons nav-item-icon">${dataSet.chapters ? 'menu_book' : 'description'}</i><span>${dataSet.title}</span></a>`;
+        navigationUl.appendChild(navLi);
+
+        const contentDiv = document.createElement('div');
+        contentDiv.id = dataSet.id;
+        contentDiv.className = dataSet.chapters ? 'chapter-set hidden' : 'problem-set hidden';
+
+        let contentHTML = `<h2 class="large-title primary-text problem-set-title">${dataSet.title}</h2>`;
+
+        if (dataSet.chapters) { // 章段解説の場合
+            dataSet.chapters.forEach(chapter => {
+                contentHTML += `
+                    <article class="card problem-card" id="chapter-${chapter.id}">
+                        <div class="padding">
+                            <h3 class="problem-section-title" style="color: var(--primary); margin-top: 0; font-size: 1.5rem;">${chapter.title}</h3>`;
+
+                if (chapter.comment_before_excerpt) {
+                    contentHTML += `<p class="medium-text" style="font-style: italic; color: var(--on-surface-variant); margin-bottom: 1rem;">${chapter.comment_before_excerpt.replace(/\n/g, '<br>')}</p>`;
+                }
+
+                contentHTML += `
+                            <h4>本文（抜粋）</h4>
+                            <p class="medium-text" style="white-space: pre-line; margin-bottom: 1rem;">${chapter.excerpt.replace(/\n/g, '<br>')}</p>
+
+                            <h4>重要な単語</h4>
+                            <ul>`;
+                chapter.keywords.forEach(kw => {
+                    contentHTML += `<li><strong>${kw.term}</strong>: ${kw.definition}</li>`;
+                });
+                contentHTML += `</ul>`;
+
+                if (chapter.waka) {
+                    contentHTML += `<h4>和歌</h4>`;
+                    if (Array.isArray(chapter.waka)) {
+                        chapter.waka.forEach(w => {
+                            contentHTML += `
+                                <div style="margin-bottom: 1rem;">
+                                    <p class="medium-text waka-text" style="margin-bottom: 0.25rem;">${w.type ? `<strong>${w.type}</strong><br>` : ''}${w.text.replace(/\n/g, '<br>')}</p>
+                                    <p class="small-text opacity-75" style="padding-left: 0.5rem;"><strong>説明:</strong> ${w.explanation.replace(/\n/g, '<br>')}</p>
+                                </div>`;
+                        });
+                    } else {
+                        contentHTML += `
+                            <p class="medium-text waka-text" style="margin-bottom: 0.25rem;">${chapter.waka.text.replace(/\n/g, '<br>')}</p>
+                            <p class="small-text opacity-75" style="padding-left: 0.5rem;"><strong>説明:</strong> ${chapter.waka.explanation.replace(/\n/g, '<br>')}</p>`;
+                    }
+                }
+                contentHTML += `
+                            <div class="one-point-commentary-card">
+                                <h5>ワンポイント解説</h5>
+                                <p class="medium-text">${chapter.one_point_commentary.replace(/\n/g, '<br>')}</p>
+                            </div>`;
+                
+                if (chapter.supplement) {
+                    contentHTML += `<p class="small-text" style="margin-top: 1.5rem; font-style: italic; color: var(--on-surface-variant);">${chapter.supplement.replace(/\n/g, '<br>')}</p>`;
+                }
+                
+                contentHTML += `
+                        </div>
+                    </article>
+                `;
+            });
+        } else if (dataSet.sections) { // 既存の問題セットの場合
+            dataSet.sections.forEach(section => {
+                contentHTML += `<h3 class="problem-section-title">${section.title}</h3>`;
+                section.questions.forEach(q => {
+                    const problemIdPrefix = section.type === 'definition_list' ? `問1-${q.no}` : q.id;
+                    contentHTML += `
+                        <article class="card problem-card" id="problem-card-${q.id}">
+                            <div class="padding">
+                                <h6 class="problem-card-id">${problemIdPrefix}</h6>
+                                ${generateProblemTextHtmlForType(q, section.type)}
+                                
+                                <div class="problem-actions">
+                                    <button class="chip fill small" data-action="toggle-hint" data-target-id="hint-${q.id}" aria-expanded="false" aria-controls="hint-${q.id}">
+                                        <i class="material-icons">lightbulb</i>
+                                        <span class="button-text">ヒントを見る</span>
+                                    </button>
+                                    <button class="chip fill small" data-action="toggle-answer" data-target-id="answer-${q.id}" aria-expanded="false" aria-controls="answer-${q.id}">
+                                        <i class="material-icons">check_circle</i>
+                                        <span class="button-text">解答を見る</span>
+                                    </button>
+                                </div>
+
+                                <div id="hint-${q.id}" class="hint-content card small-padding hidden" role="region" aria-labelledby="hint-btn-${q.id}">
+                                    <h6>ヒント (${problemIdPrefix})</h6>
+                                    ${generateHintHtmlForType(q, section.type)}
+                                </div>
+                                <div id="answer-${q.id}" class="answer-content card small-padding hidden" role="region" aria-labelledby="answer-btn-${q.id}">
+                                    <h6>解答 (${problemIdPrefix})</h6>
+                                    ${generateAnswerHtmlForType(q, section.type)}
+                                </div>
+                            </div>
+                        </article>
+                    `;
+                });
+            });
+        }
+        contentDiv.innerHTML = contentHTML;
+        contentArea.appendChild(contentDiv);
+    });
+
+    navigationUl.addEventListener('click', (e) => {
+        const targetLink = e.target.closest('.nav-link');
+        if (targetLink) {
+            e.preventDefault();
+            const targetId = targetLink.dataset.target;
+
+            navigationUl.querySelectorAll('li').forEach(item => item.classList.remove('active-item'));
+            targetLink.parentElement.classList.add('active-item');
+
+            welcomeMessage.classList.add('hidden');
+
+            contentArea.querySelectorAll('.problem-set, .chapter-set').forEach(set => {
+                set.classList.toggle('hidden', set.id !== targetId);
+            });
+        }
+    });
+
+    contentArea.addEventListener('click', (e) => {
+        const button = e.target.closest('button[data-action]');
+        if (!button) return;
+
+        const action = button.dataset.action;
+        const targetId = button.dataset.targetId;
+        const contentElement = document.getElementById(targetId);
+
+        if (contentElement) {
+            const wasHidden = contentElement.classList.contains('hidden');
+            contentElement.classList.toggle('hidden');
+            button.setAttribute('aria-expanded', !wasHidden);
+
+            const buttonTextElement = button.querySelector('.button-text');
+            const buttonIconElement = button.querySelector('.material-icons');
+
+            if (action === 'toggle-hint') {
+                if (wasHidden) { 
+                    buttonTextElement.textContent = 'ヒントを隠す';
+                    buttonIconElement.textContent = 'visibility_off';
+                } else { 
+                    buttonTextElement.textContent = 'ヒントを見る';
+                    buttonIconElement.textContent = 'lightbulb';
+                }
+            } else if (action === 'toggle-answer') {
+                if (wasHidden) { 
+                    buttonTextElement.textContent = '解答を隠す';
+                    buttonIconElement.textContent = 'visibility_off';
+                } else { 
+                    buttonTextElement.textContent = '解答を見る';
+                    buttonIconElement.textContent = 'check_circle';
+                }
+            }
+        }
+    });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>インタラクティブベクトル問題集</title>
+    <!-- Beer CSS (Linked from local file) -->
+    <link rel="stylesheet" href="../beer.css">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/beercss@3.5.1/dist/beercss.min.js"></script>
+    <!-- Material Design Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    <!-- Custom Styles (after beer.css) -->
+    <style>
+        body {
+            font-family: var(--font, 'Inter', 'Noto Sans JP', sans-serif);
+        }
+        .math-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .math-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        header#app-header nav.primary {
+            padding: 1rem 1.5rem;
+        }
+
+        /* Sidebar Navigation List */
+        #problem-navigation ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin-top: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        #problem-navigation li {
+            position: relative;
+            border-radius: var(--border-radius, 4px);
+            transition: background-color 0.2s;
+            width: 100%;
+        }
+        #problem-navigation li::before {
+            content: none;
+        }
+
+        #problem-navigation .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            text-decoration: none;
+            color: var(--on-surface);
+            border-radius: inherit;
+            transition: background-color 0.2s, color 0.2s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        #problem-navigation .nav-link .nav-item-icon {
+            font-size: 1.25rem;
+            color: var(--on-surface-variant);
+            transition: color 0.2s;
+            flex-shrink: 0;
+        }
+        #problem-navigation .nav-link span {
+            white-space: normal;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            flex-grow: 1;
+            min-width: 0;
+        }
+
+        #problem-navigation li:not(.active-item) .nav-link:hover {
+            background-color: var(--surface-container-hover, var(--active));
+            color: var(--primary);
+        }
+        #problem-navigation li:not(.active-item) .nav-link:hover .nav-item-icon {
+            color: var(--primary);
+        }
+
+        #problem-navigation li.active-item {
+            background-color: var(--primary-container);
+            border-left: 4px solid var(--primary);
+        }
+        #problem-navigation li.active-item .nav-link {
+            color: var(--on-primary-container);
+            font-weight: 500;
+            background-color: transparent;
+        }
+        #problem-navigation li.active-item .nav-link .nav-item-icon {
+            color: var(--primary);
+        }
+
+        .problem-set-title {
+            border-bottom: 2px solid var(--outline-variant);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .problem-card {
+            margin-bottom: 1.5rem;
+            background-color: var(--surface-container);
+        }
+        .problem-card-id {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Styles for Hint/Answer actions and content */
+        .problem-actions {
+            display: flex;
+            gap: 0.5rem; /* 8px */
+            margin-top: 1rem; /* 16px */
+            flex-wrap: wrap; /* Small screens */
+        }
+        .problem-actions button.chip .material-icons {
+            font-size: 1.125rem; /* 18px */
+        }
+        .problem-actions button.chip .button-text {
+            margin-left: 0.25rem; /* 4px */
+        }
+
+        .hint-content, .answer-content {
+            background-color: var(--surface-container-low); /* Slightly different background */
+            border-left: 4px solid var(--primary);
+            margin-top: 1rem; /* 16px */
+        }
+        .hint-content h6, .answer-content h6 {
+            color: var(--on-surface-variant);
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem; /* 14px */
+            font-weight: 500;
+        }
+        .hint-content p, .answer-content p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body data-theme="light">
+
+    <header id="app-header">
+        <nav class="primary">
+            <h1 class="large-title">インタラクティブベクトル問題集</h1>
+            <p class="opacity-75">左のメニューから問題を選択してください。</p>
+        </nav>
+    </header>
+
+    <div id="main-grid-layout" class="grid large-padding">
+        <aside class="s12 m4 l3 xl2 padding">
+            <h6 class="medium-title">問題セット一覧</h6>
+            <nav id="problem-navigation" class="math-container" style="max-height: calc(100vh - 200px); overflow-y: auto;">
+                <ul><!-- Navigation items will be populated here --></ul>
+            </nav>
+        </aside>
+
+        <main id="content-area" class="s12 m8 l9 xl10 padding math-container">
+            <article id="welcome-message" class="card large-padding">
+                <h2 class="large-title primary-text">ようこそ！</h2>
+                <p class="medium-text">このアプリケーションは、ベクトルに関する様々な問題を提供するインタラクティブな学習ツールです。左のナビゲーションから問題セットを選択して、学習を開始してください。各問題は分野ごとにまとめられています。</p>
+            </article>
+            <!-- Problem sets will be injected here -->
+        </main>
+    </div>
+
+<script>
+const problemsData = [
+    {
+        title: "問題1: ベクトルの幾何学的表現",
+        id: "problem-set-1",
+        questions: [
+            {
+                id: "Q1-1",
+                text: "平行四辺形 ABCD において、辺 BC を $2:1$ に内分する点を E, 辺 CD を $1:2$ に内分する点を F とする。$\\vec{AB} = \\vec{b}$, $\\vec{AD} = \\vec{d}$ とするとき、$\\vec{AE}$, $\\vec{AF}$ を $\\vec{b}$, $\\vec{d}$ を用いて表せ。",
+                hint: "内分点の公式と平行四辺形の性質 ( $\\vec{AC} = \\vec{AB} + \\vec{AD}$ ) を利用します。",
+                answer: "$\\vec{AE} = \\vec{b} + \\frac{2}{3}\\vec{d}$, $\\vec{AF} = \\frac{2}{3}\\vec{b} + \\frac{1}{3}\\vec{d}$"
+            },
+            {
+                id: "Q1-2",
+                text: "平行四辺形 ABCD において、対角線 AC の中点を M, 辺 CD を $3:1$ に内分する点を N とする。$\\vec{AB} = \\vec{b}$, $\\vec{AD} = \\vec{d}$ とするとき、$\\vec{MN}$ を $\\vec{b}$, $\\vec{d}$ を用いて表せ。",
+                hint: "中点と内分点の公式、およびベクトルの差 ( $\\vec{MN} = \\vec{AN} - \\vec{AM}$ ) を利用します。",
+                answer: "$\\vec{MN} = -\\frac{1}{4}\\vec{b} + \\frac{1}{2}\\vec{d}$"
+            },
+            {
+                id: "Q1-3",
+                text: "三角形 ABC において、辺 AB の中点を D, 辺 AC を $2:3$ に内分する点を E, 線分 CD と線分 BE の交点を P とする。$\\vec{AB} = \\vec{b}$, $\\vec{AC} = \\vec{c}$ とするとき、$\\vec{AP}$ を $\\vec{b}$, $\\vec{c}$ を用いて表せ。",
+                hint: "交点の位置ベクトルを2通りで表し、係数を比較します。メネラウスの定理やチェバの定理も有効です。",
+                answer: "$\\vec{AP} = \\frac{3}{7}\\vec{b} + \\frac{2}{7}\\vec{c}$"
+            },
+            {
+                id: "Q1-4",
+                text: "平行四辺形 ABCD において、$\\vec{AE} = \\frac{2}{3}\\vec{AB} + \\frac{1}{3}\\vec{AD}$, $\\vec{AF} = \\frac{1}{2}\\vec{AB} + \\frac{1}{2}\\vec{AC}$ であるとき、$3$点 D, E, F が一直線上にあるか調べよ。(もし一直線上にある場合は DE:EF を求めよ。)",
+                hint: "$\\vec{DE}$ と $\\vec{DF}$ を $\\vec{AB}$ と $\\vec{AD}$ で表し、 $\\vec{DF} = k \\vec{DE}$ となる実数 k が存在するかを確認します。 $\\vec{AC} = \\vec{AB} + \\vec{AD}$ を利用します。",
+                answer: "一直線上にある。DE:EF = 1:2"
+            },
+            {
+                id: "Q1-5",
+                text: "平行六面体 ABCD-EFGH において、$\\vec{AB} = \\vec{a}$, $\\vec{AD} = \\vec{b}$, $\\vec{AE} = \\vec{c}$ とする。対角線 AG の中点を M, 辺 FG を $1:2$ に内分する点を N とするとき、$\\vec{MN}$ を $\\vec{a}$, $\\vec{b}$, $\\vec{c}$ を用いて表せ。",
+                hint: "空間における中点と内分点の公式、およびベクトルの差 ( $\\vec{MN} = \\vec{ON} - \\vec{OM}$ ) を利用します。平行六面体の頂点の位置関係を把握します。",
+                answer: "$\\vec{MN} = -\\frac{1}{2}\\vec{a} + \\frac{1}{6}\\vec{b} - \\frac{1}{2}\\vec{c}$"
+            }
+        ]
+    },
+    {
+        title: "問題2: ベクトルの成分と演算",
+        id: "problem-set-2",
+        questions: [
+            {
+                id: "Q2-1",
+                text: "$\\vec{a} = (1, -2)$, $\\vec{b} = (3, 1)$ とする。等式 $2(\\vec{x} - \\vec{a}) = 3(\\vec{b} - \\vec{x})$ を満たすベクトル $\\vec{x}$ を成分表示せよ。",
+                hint: "ベクトル方程式を $\\vec{x}$ について解き、成分を代入して計算します。",
+                answer: "$\\vec{x} = (\\frac{11}{5}, -\\frac{1}{5})$"
+            },
+            {
+                id: "Q2-2",
+                text: "$\\vec{a} = (x, 2)$, $\\vec{b} = (-1, y)$, $\\vec{c} = (5, 8)$ とする。$2\\vec{a} + 3\\vec{b} = \\vec{c}$ を満たす実数 $x, y$ の値を求めよ。",
+                hint: "ベクトル方程式を成分ごとに連立方程式として解きます。",
+                answer: "$x=4, y=\\frac{4}{3}$"
+            },
+            {
+                id: "Q2-3",
+                text: "$\\vec{a} = (2, 1, -3)$, $\\vec{b} = (-1, 3, 2)$ とする。$k\\vec{a} + l\\vec{b} = (7, -4, -13)$ を満たす実数 $k, l$ が存在するか調べよ。存在する場合はその値を求めよ。",
+                hint: "成分ごとに連立方程式を立て、その連立方程式に解が存在するかを調べます。",
+                answer: "存在する。$k=2, l=-3$"
+            },
+            {
+                id: "Q2-4",
+                text: "$3$つのベクトル $\\vec{a} = (1, -1)$, $\\vec{b} = (2, 1)$, $\\vec{c} = (k, k+3)$ がある。ベクトル $\\vec{c}$ が $\\vec{a}, \\vec{b}$ を用いて $\\vec{c} = s\\vec{a} + t\\vec{b}$ ($s, t$ は実数) と表せ、かつ $s+t=1$ であるとき、$k$の値を求めよ。",
+                hint: "$\\vec{c} = s\\vec{a} + t\\vec{b}$ を成分で表し、$s+t=1$ の条件を利用して $s,t$ を $k$ で表します。",
+                answer: "$k=6$"
+            },
+            {
+                id: "Q2-5",
+                text: "等式 $2\\vec{x} + \\vec{y} = (5, -1, 8)$, $\\vec{x} - 2\\vec{y} = (0, 8, -1)$ を満たすベクトル $\\vec{x}, \\vec{y}$ をそれぞれ成分表示せよ。",
+                hint: "連立方程式として解きます。例えば、1つ目の式を2倍して2つ目の式と足し合わせることで $\\vec{y}$ を消去できます。",
+                answer: "$\\vec{x}=(2, \\frac{6}{5}, 3), \\vec{y}=(1, -\\frac{17}{5}, 2)$"
+            }
+        ]
+    },
+    {
+        title: "問題3: 内積の定義と計算",
+        id: "problem-set-3",
+        questions: [
+            {
+                id: "Q3-1",
+                text: "$|\\vec{a}| = 3$, $|\\vec{b}| = 4$, $\\vec{a}$ と $\\vec{b}$ のなす角が $60^\\circ$ のとき、内積 $\\vec{a} \\cdot \\vec{b}$ を求めよ。",
+                hint: "内積の定義 $\\vec{a} \\cdot \\vec{b} = |\\vec{a}||\\vec{b}|\\cos\\theta$ を利用します。",
+                answer: "$\\vec{a} \\cdot \\vec{b} = 6$"
+            },
+            {
+                id: "Q3-2",
+                text: "$|\\vec{a}| = \\sqrt{2}$, $|\\vec{b}| = 5$, $\\vec{a}$ と $\\vec{b}$ のなす角が $150^\\circ$ のとき、内積 $\\vec{a} \\cdot \\vec{b}$ を求めよ。",
+                hint: "内積の定義 $\\vec{a} \\cdot \\vec{b} = |\\vec{a}||\\vec{b}|\\cos\\theta$ を利用します。$\\cos150^\\circ$ の値を正確に求めます。",
+                answer: "$\\vec{a} \\cdot \\vec{b} = -\\frac{5\\sqrt{6}}{2}$"
+            },
+            {
+                id: "Q3-3",
+                text: "$|\\vec{p}| = 6$ であり、ベクトル $\\vec{q}$ は $\\vec{p}$ と同じ向きの単位ベクトルである。内積 $\\vec{p} \\cdot \\vec{q}$ を求めよ。",
+                hint: "単位ベクトルは大きさが 1 です。 $\\vec{q}$ が $\\vec{p}$ と同じ向きなので、なす角は $0^\\circ$ です。",
+                answer: "$\\vec{p} \\cdot \\vec{q} = 6$"
+            },
+            {
+                id: "Q3-4",
+                text: "$|\\vec{a}| = 2$, $|\\vec{b}| = 3$ であり、$\\vec{a} \\cdot \\vec{b} = -3$ であるとき、$\\vec{a}$ と $\\vec{b}$ のなす角 $\\theta$ ($0^\\circ \\leqq \\theta \\leqq 180^\\circ$) を求めよ。",
+                hint: "内積の定義から $\\cos\\theta = \\frac{\\vec{a} \\cdot \\vec{b}}{|\\vec{a}||\\vec{b}|}$ を利用して $\\cos\\theta$ を求めます。",
+                answer: "$\\theta = 120^\\circ$"
+            },
+            {
+                id: "Q3-5",
+                text: "$1$辺の長さが$2$の正三角形ABCについて、内積 $\\vec{AB} \\cdot \\vec{AC}$ を求めよ。",
+                hint: "正三角形の辺の長さと角を利用して内積を計算します。",
+                answer: "$\\vec{AB} \\cdot \\vec{AC} = 2$"
+            }
+        ]
+    },
+    {
+        title: "問題4: 成分による内積計算",
+        id: "problem-set-4",
+        questions: [
+            {
+                id: "Q4-1",
+                text: "$\\vec{a} = (3, 1)$, $\\vec{b} = (-2, 6)$ について、内積 $\\vec{a} \\cdot \\vec{b}$, $|\\vec{a}|$, $|\\vec{b}|$, および $\\vec{a}$ と $\\vec{b}$ のなす角 $\\theta$ を求めよ。",
+                hint: "内積の成分計算 $\\vec{a} \\cdot \\vec{b} = a_x b_x + a_y b_y$ と、大きさの公式 $|\\vec{a}| = \\sqrt{a_x^2 + a_y^2}$ 、なす角の公式 $\\cos\\theta = \\frac{\\vec{a} \\cdot \\vec{b}}{|\\vec{a}||\\vec{b}|}$ を利用します。",
+                answer: "$\\vec{a} \\cdot \\vec{b} = 0, |\\vec{a}| = \\sqrt{10}, |\\vec{b}| = 2\\sqrt{10}, \\theta = 90^\\circ$"
+            },
+            {
+                id: "Q4-2",
+                text: "$\\vec{a} = (1, -2, 3)$, $\\vec{b} = (4, 1, -2)$ について、内積 $\\vec{a} \\cdot \\vec{b}$, $|\\vec{a}|$, $|\\vec{b}|$, および $\\vec{a}$ と $\\vec{b}$ のなす角 $\\theta$ を求めよ。",
+                hint: "空間ベクトルの内積と大きさの公式を適用します。",
+                answer: "$\\vec{a} \\cdot \\vec{b} = -4, |\\vec{a}| = \\sqrt{14}, |\\vec{b}| = \\sqrt{21}, \\cos\\theta = -\\frac{2\\sqrt{6}}{21}$"
+            },
+            {
+                id: "Q4-3",
+                text: "$\\vec{u} = (2, -4)$, $\\vec{v} = (x, 3)$ が垂直であるとき、$x$ の値を求めよ。",
+                hint: "2つのベクトルが垂直であるとき、その内積は 0 になります。",
+                answer: "$x=6$"
+            },
+            {
+                id: "Q4-4",
+                text: "$\\vec{a} = (\\sqrt{3}, 1)$, $\\vec{b} = (1, \\sqrt{3})$ のなす角を求めよ。",
+                hint: "なす角の公式 $\\cos\\theta = \\frac{\\vec{a} \\cdot \\vec{b}}{|\\vec{a}||\\vec{b}|}$ を利用します。",
+                answer: "$\\theta = 30^\\circ$"
+            },
+            {
+                id: "Q4-5",
+                text: "$3$点 A$(1, 0)$, B$(3, 1)$, C$(0, 2)$ があるとき、$\\cos\\angle BAC$ を求めよ。",
+                hint: "$\\vec{AB}$ と $\\vec{AC}$ のなす角を求めます。$\\vec{AB} = \\vec{B} - \\vec{A}$, $\\vec{AC} = \\vec{C} - \\vec{A}$ として成分を求め、内積となす角の公式を利用します。",
+                answer: "$\\cos\\angle BAC = 0$"
+            }
+        ]
+    },
+    {
+        title: "問題5: ベクトルの決定",
+        id: "problem-set-5",
+        questions: [
+            {
+                id: "Q5-1",
+                text: "ベクトル $\\vec{a} = (1, 2)$ と $45^\\circ$ の角をなし、大きさが $\\sqrt{10}$ であるベクトル $\\vec{b}$ を求めよ。",
+                hint: "$\\vec{b}=(x,y)$ とおき、$|\\vec{b}| = \\sqrt{10}$ と $\\vec{a} \\cdot \\vec{b} = |\\vec{a}||\\vec{b}|\\cos45^\\circ$ の2つの条件から $x,y$ に関する連立方程式を立てます。",
+                answer: "$\\vec{b} = (3, 1)$ または $\\vec{b} = (-1, 3)$"
+            },
+            {
+                id: "Q5-2",
+                text: "ベクトル $\\vec{a} = (3, -4)$ となす角が $90^\\circ$ であり、大きさが $10$ であるベクトル $\\vec{b}$ を求めよ。($2$つ求めよ)",
+                hint: "$\\vec{a} \\cdot \\vec{b} = 0$ と $|\\vec{b}|=10$ の条件を利用します。",
+                answer: "$\\vec{b} = (8, 6)$ または $\\vec{b} = (-8, -6)$"
+            },
+            {
+                id: "Q5-3",
+                text: "ベクトル $\\vec{a} = (1, 1, \\sqrt{2})$ と $60^\\circ$ の角をなし、大きさが $4$ であるベクトル $\\vec{b} = (x, y, z)$ で、$x=y$ となるものを求めよ。",
+                hint: "$\\vec{b}=(x,x,z)$ とおき、$|\\vec{b}|=4$ と $\\vec{a} \\cdot \\vec{b} = |\\vec{a}||\\vec{b}|\\cos60^\\circ$ の条件を利用します。",
+                answer: "$\\vec{b}=(1+\\sqrt{3}, 1+\\sqrt{3}, \\sqrt{2}-\\sqrt{6})$ または $\\vec{b}=(1-\\sqrt{3}, 1-\\sqrt{3}, \\sqrt{2}+\\sqrt{6})$"
+            },
+            {
+                id: "Q5-4",
+                text: "ベクトル $\\vec{a} = (-3, 1)$ と同じ向きで、大きさが $2\\sqrt{10}$ であるベクトル $\\vec{b}$ を求めよ。",
+                hint: "$\\vec{b} = k\\vec{a}$ ($k>0$) とおき、$|\\vec{b}|=2\\sqrt{10}$ の条件から $k$ を求めます。",
+                answer: "$\\vec{b} = (-6, 2)$"
+            },
+            {
+                id: "Q5-5",
+                text: "$x$軸の正の向きとのなす角が $120^\\circ$ で、大きさが $6$ であるベクトル $\\vec{p}$ を成分で表せ。",
+                hint: "ベクトルの成分は、大きさと $x$軸とのなす角から $p_x = |\\vec{p}|\\cos\\theta, p_y = |\\vec{p}|\\sin\\theta$ で求められます。",
+                answer: "$\\vec{p} = (-3, 3\\sqrt{3})$"
+            }
+        ]
+    },
+    {
+        title: "問題6: ベクトルの大きさの最小値",
+        id: "problem-set-6",
+        questions: [
+            {
+                id: "Q6-1",
+                text: "$|\\vec{a}|=2$, $|\\vec{b}|=3$, $\\vec{a} \\cdot \\vec{b}=1$ のとき、実数$t$に対して $|\\vec{a} + t\\vec{b}|$ の最小値とそのときの$t$の値を求めよ。",
+                hint: "$|\\vec{a} + t\\vec{b}|^2 = (\\vec{a} + t\\vec{b})\\cdot(\\vec{a} + t\\vec{b})$ を展開し、$t$ の2次関数として最小値を求めます。",
+                answer: "最小値 $\\frac{\\sqrt{35}}{3}$ ($t=-\\frac{1}{9}$ のとき)"
+            },
+            {
+                id: "Q6-2",
+                text: "$|\\vec{a}|=\\sqrt{5}$, $|\\vec{b}|=\\sqrt{2}$, $\\vec{a}$ と $\\vec{b}$ のなす角が $45^\\circ$ のとき、実数$t$に対して $|t\\vec{a} - \\vec{b}|$ の最小値を求めよ。",
+                hint: "$|t\\vec{a} - \\vec{b}|^2$ を展開し、$t$ の2次関数として最小値を求めます。",
+                answer: "最小値 $1$"
+            },
+            {
+                id: "Q6-3",
+                text: "$\\vec{a}=(1, 2)$, $\\vec{b}=(-1, 1)$ のとき、実数$t$に対して $|\\vec{a} + t\\vec{b}|$ の最小値を求めよ。",
+                hint: "成分で表されたベクトルの大きさの2乗を計算し、$t$ の2次関数として最小値を求めます。",
+                answer: "最小値 $\\frac{3\\sqrt{2}}{2}$"
+            },
+            {
+                id: "Q6-4",
+                text: "$|\\vec{a}|=1$, $|\\vec{b}|=2$ で、$\\vec{a}$ と $\\vec{b}$ が垂直であるとき、$|\\vec{a} + t(\\vec{a}+\\vec{b})|$ の最小値を求めよ。",
+                hint: "$\\vec{a}$ と $\\vec{b}$ が垂直なので $\\vec{a} \\cdot \\vec{b} = 0$ を利用します。$|\\vec{a} + t(\\vec{a}+\\vec{b})|^2$ を展開し、$t$ の2次関数として最小値を求めます。",
+                answer: "最小値 $\\frac{2\\sqrt{5}}{5}$"
+            },
+            {
+                id: "Q6-5",
+                text: "$|\\vec{u}|=4$, $|\\vec{v}|=2$, $\\vec{u} \\cdot \\vec{v}=-3$ のとき、$|s\\vec{u} + (1-s)\\vec{v}|$ の最小値を求めよ。",
+                hint: "$|s\\vec{u} + (1-s)\\vec{v}|^2$ を展開し、$s$ の2次関数として最小値を求めます。",
+                answer: "最小値 $\\frac{\\sqrt{1430}}{26}$ (または $\\sqrt{\\frac{55}{26}}$)"
+            }
+        ]
+    },
+    {
+        title: "問題7: 位置ベクトルと図形",
+        id: "problem-set-7",
+        questions: [
+            {
+                id: "Q7-1",
+                text: "$3$点 A$(\\vec{a})$, B$(\\vec{b})$, C$(\\vec{c})$ を頂点とする $\\triangle ABC$ において、辺 AB を $1:3$ に内分する点を P, 辺 BC の中点を M, 辺 CA を $3:2$ に外分する点を Q とする。$\\vec{p}, \\vec{m}, \\vec{q}$ をそれぞれ $\\vec{a}, \\vec{b}, \\vec{c}$ を用いて表せ。",
+                hint: "内分点・外分点の公式を適用します。",
+                answer: "$\\vec{p} = \\frac{3\\vec{a} + \\vec{b}}{4}, \\vec{m} = \\frac{\\vec{b} + \\vec{c}}{2}, \\vec{q} = -2\\vec{a} + 3\\vec{c}$"
+            },
+            {
+                id: "Q7-2",
+                text: "$\\triangle ABC$ の重心を G とする。点 P が $\\vec{PA} + 2\\vec{PB} + 3\\vec{PC} = \\vec{0}$ を満たすとき、点 P はどのような位置にあるか。$\\triangle ABC$ の面積を $S$ とするとき、$\\triangle PBC$ の面積を求めよ。",
+                hint: "$\\vec{PA} = \\vec{a} - \\vec{p}$ などと置き換え、$\\vec{p}$ を $\\vec{a}, \\vec{b}, \\vec{c}$ で表します。点 P の位置を特定し、面積比は底辺の比や高さの比から求めます。",
+                answer: "点 P は辺 BC を $3:2$ に内分する点を D としたとき、線分 AD を $5:1$ に内分する点 (または $\\vec{AP} = \\frac{2\\vec{AB} + 3\\vec{AC}}{6}$)。$\\triangle PBC$ の面積は $\\frac{1}{6}S$"
+            },
+            {
+                id: "Q7-3",
+                text: "四角形 ABCD において、辺 AB, BC, CD, DA の中点をそれぞれ P, Q, R, S とする。$\\vec{AC} = \\vec{x}$, $\\vec{BD} = \\vec{y}$ とするとき、$\\vec{PQ}$, $\\vec{RS}$ を $\\vec{x}, \\vec{y}$ を用いて表し、四角形 PQRS が平行四辺形であることを示せ。",
+                hint: "$\\vec{PQ} = \\vec{AQ} - \\vec{AP}$ のように位置ベクトルで表し、中点の公式を利用します。 $\\vec{PQ} = \\vec{SR}$ を示せば平行四辺形です。",
+                answer: "$\\vec{PQ} = \\frac{1}{2}\\vec{AC} = \\frac{1}{2}\\vec{x}$, $\\vec{SR} = \\frac{1}{2}\\vec{AC} = \\frac{1}{2}\\vec{x}$。 $\\vec{PQ} = \\vec{SR}$ となるため平行四辺形。"
+            },
+            {
+                id: "Q7-4",
+                text: "座標平面上に$3$点 A$(1,5)$, B$(-2,1)$, C$(4,-1)$ がある。$\\triangle ABC$ の重心 G の座標を求めよ。また、辺 BC を $1:2$ に内分する点 D の座標を求めよ。",
+                hint: "重心の座標は各座標の平均です。内分点の座標公式を利用します。",
+                answer: "G$(1, \\frac{5}{3})$, D$(0, \\frac{1}{3})$"
+            },
+            {
+                id: "Q7-5",
+                text: "平行六面体 OADB-CEGF において、$\\vec{OA} = \\vec{a}$, $\\vec{OB} = \\vec{b}$, $\\vec{OC} = \\vec{c}$ とする ($\\vec{OA}, \\vec{OB}, \\vec{OC}$ は隣り合う$3$辺のベクトル)。対角線 OG を $1:3$ に内分する点を P とするとき、$\\vec{OP}$ を $\\vec{a}, \\vec{b}, \\vec{c}$ を用いて表せ。",
+                hint: "平行六面体の対角線は、3つの隣接する辺のベクトルの和で表せます ($\\vec{OG} = \\vec{OA} + \\vec{AD} + \\vec{DG} = \\vec{a} + \\vec{b} + \\vec{c}$)。内分点の公式を適用します。",
+                answer: "$\\vec{OP} = \\frac{1}{4}(\\vec{a} + \\vec{b} + \\vec{c})$"
+            }
+        ]
+    },
+    {
+        title: "問題8: ベクトルの交点",
+        id: "problem-set-8",
+        questions: [
+            {
+                id: "Q8-1",
+                text: "$\\triangle OAB$ において、辺 OA を $3:1$ に内分する点を C, 辺 OB を $2:3$ に内分する点を D とする。線分 AD と線分 BC の交点を P とし、$\\vec{OA} = \\vec{a}$, $\\vec{OB} = \\vec{b}$ とするとき、$\\vec{OP}$ を $\\vec{a}, \\vec{b}$ を用いて表せ。",
+                hint: "交点 P は線分 AD 上にあるので $\\vec{OP} = (1-s)\\vec{OA} + s\\vec{OD}$ と表せ、線分 BC 上にあるので $\\vec{OP} = (1-t)\\vec{OB} + t\\vec{OC}$ と表せます (始点をOに統一)。係数比較を行います。",
+                answer: "$\\vec{OP} = \\frac{3}{7}\\vec{a} + \\frac{2}{7}\\vec{b}$"
+            },
+            {
+                id: "Q8-2",
+                text: "$\\triangle OAB$ において、辺 OA の中点を M, 辺 AB を $1:2$ に内分する点を N とし、線分 OM と線分 BN の交点を P とする。$\\vec{OA} = \\vec{a}$, $\\vec{OB} = \\vec{b}$ とするとき、$\\vec{OP}$ を $\\vec{a}, \\vec{b}$ を用いて表せ。",
+                hint: "交点 P は線分 OM 上にあり、線分 BN 上にもあります。それぞれの線分上の点として位置ベクトルを2通りで表し、係数比較を行います。ただし、この問題の条件では、線分 OM と線分 BN は交点を持ちません。交点は線分 BN の延長線上にあります。",
+                answer: "線分 OM と線分 BN の間には交点が存在しない。線分を延長した直線同士の交点は $\\vec{OP}=\\vec{a}$ となるが、これは線分 BN 上にはない。"
+            },
+            {
+                id: "Q8-3",
+                text: "平行四辺形 ABCD において、辺 BC の中点を E, 対角線 BD と AE の交点を P とする。$\\vec{AB} = \\vec{b}$, $\\vec{AD} = \\vec{d}$ とするとき、$\\vec{AP}$ を $\\vec{b}, \\vec{d}$ を用いて表せ。",
+                hint: "交点 P は線分 BD 上にあるので $\\vec{AP} = (1-s)\\vec{AB} + s\\vec{AD}$ と表せ (始点をAに統一)、線分 AE 上にあるので $\\vec{AP} = t\\vec{AE}$ と表せます。係数比較を行います。",
+                answer: "$\\vec{AP} = \\frac{2}{3}\\vec{b} + \\frac{1}{3}\\vec{d}$"
+            },
+            {
+                id: "Q8-4",
+                text: "$\\triangle OAB$ において、$\\vec{OP} = s\\vec{OA} + t\\vec{OB}$ とする。点 P が辺 AB 上にあり (両端を含む)、AP:PB = $2:1$ であるとき、$s$ と $t$ の値を求めよ。",
+                hint: "点 P が線分 AB 上にあるとき、 $\\vec{OP} = (1-\\lambda)\\vec{OA} + \\lambda\\vec{OB}$ と表せます。AP:PB = $2:1$ の条件から $\\lambda$ の値を決定します。",
+                answer: "$s = \\frac{1}{3}, t = \\frac{2}{3}$"
+            },
+            {
+                id: "Q8-5",
+                text: "$\\triangle OAB$ において、直線 OP が線分 AB を $3:4$ に内分する点 Q を通る。O, P, Q は同一直線上にある。$\\vec{OQ}$ を $\\vec{OA}$ と $\\vec{OB}$ で表し、さらに $\\vec{OP} = k\\vec{OQ}$ であるとき、$\\vec{OP}$ を $\\vec{OA}, \\vec{OB}, k$ で表せ。",
+                hint: "点 Q は線分 AB を $3:4$ に内分する点なので、内分点の公式で $\\vec{OQ}$ を表します。O, P, Q が同一直線上にあることから $\\vec{OP} = k\\vec{OQ}$ となります。",
+                answer: "$\\vec{OQ} = \\frac{4\\vec{OA} + 3\\vec{OB}}{7}, \\vec{OP} = k(\\frac{4\\vec{OA} + 3\\vec{OB}}{7})$"
+            }
+        ]
+    },
+    {
+        title: "問題9: 点の存在範囲",
+        id: "problem-set-9",
+        questions: [
+            {
+                id: "Q9-1",
+                text: "O を原点として、$\\vec{OA} = (2, 1)$, $\\vec{OB} = (1, 3)$ とする。実数 $s, t$ が $s + t = 2, s \\geqq 0, t \\geqq 0$ を満たしながら変わるとき、$\\vec{OP} = s\\vec{OA} + t\\vec{OB}$ で表される点 P の存在範囲を図示せよ。",
+                hint: "$s+t=2$ を $s/2+t/2=1$ と変形し、 $\\vec{OP} = (s/2)(2\\vec{OA})+(t/2)(2\\vec{OB})$ と考えます。新たな終点を設定して線分として図示します。",
+                answer: "点 P の存在範囲は、点 A'$(4,2)$ と点 B'$(2,6)$ を結ぶ線分。"
+            },
+            {
+                id: "Q9-2",
+                text: "O を原点として、$\\vec{OA} = (3, 0)$, $\\vec{OB} = (0, 2)$ とする。実数 $s, t$ が $0 \\leqq s \\leqq 1, 0 \\leqq t \\leqq 1$ を満たしながら変わるとき、$\\vec{OP} = s\\vec{OA} + t\\vec{OB}$ で表される点 P の存在範囲を図示し、その面積を求めよ。",
+                hint: "$0 \\leqq s \\leqq 1, 0 \\leqq t \\leqq 1$ の条件は、 $\\vec{OP}$ が平行四辺形 OACB (Cは $\\vec{OC}=\\vec{OA}+\\vec{OB}$ なる点) の内部（境界含む）を表すことを意味します。",
+                answer: "点 P の存在範囲は、O$(0,0)$, A$(3,0)$, C$(3,2)$, B$(0,2)$ を頂点とする長方形の周および内部。面積は $3 \\times 2 = 6$。"
+            },
+            {
+                id: "Q9-3",
+                text: "O を原点として、$\\vec{OA} = (1, 1)$, $\\vec{OB} = (-1, 2)$ とする。実数 $s, t$ が $s + 2t = 1$ を満たしながら変わるとき、$\\vec{OP} = s\\vec{OA} + t\\vec{OB}$ で表される点 P の軌跡の方程式を求めよ。",
+                hint: "$s+2t=1$ を $s=1-2t$ と変形し、 $\\vec{OP}$ に代入します。 $\\vec{OP} = (1-2t)\\vec{OA} + t\\vec{OB}$ を成分で表し、$x,y$ の関係式を導きます。",
+                answer: "$y=1$"
+            },
+            {
+                id: "Q9-4",
+                text: "$\\triangle OAB$ において、$\\vec{OP} = s\\vec{OA} + t\\vec{OB}$ とする。実数 $s, t$ が $1 \\leqq s + t \\leqq 3, s \\geqq 0, t \\geqq 0$ を満たしながら変わるとき、点 P の存在範囲を図示せよ。",
+                hint: "$s+t=k$ ($1 \\leqq k \\leqq 3$) とおき、 $\\vec{OP} = \\frac{s}{k}(k\\vec{OA}) + \\frac{t}{k}(k\\vec{OB})$ と変形します。これは、 $\\vec{OA}$ と $\\vec{OB}$ をそれぞれ $k$ 倍したベクトルを終点とする線分の集合がなす領域となります。",
+                answer: "点 P の存在範囲は、線分 AB (両端含む) と、線分 A'B' (ここで $\\vec{OA'} = 3\\vec{OA}$, $\\vec{OB'} = 3\\vec{OB}$ とする) 、および線分 AA', 線分 BB' で囲まれた台形の周および内部。"
+            },
+            {
+                id: "Q9-5",
+                text: "O を原点として、$\\vec{OA} = (4, -2)$, $\\vec{OB} = (-2, 3)$ とする。実数 $s, t$ が $|s| \\leqq 1, |t| \\leqq 1$ を満たしながら変わるとき、$\\vec{OP} = s\\vec{OA} + t\\vec{OB}$ で表される点 P の存在範囲を図示せよ。",
+                hint: "$|s| \\leqq 1, |t| \\leqq 1$ は $-1 \\leqq s \\leqq 1, -1 \\leqq t \\leqq 1$ を意味します。これは、 $\\vec{OA}$ と $\\vec{OB}$ で張られる平行四辺形を原点中心に拡大・対象移動した領域を表します。",
+                answer: "点 P の存在範囲は、原点 O を中心とし、頂点が $(2,1), (6,-5), (-2,-1), (-6,5)$ となる平行四辺形の周および内部。"
+            }
+        ]
+    },
+    {
+        title: "問題10: 直線の方程式",
+        id: "problem-set-10",
+        questions: [
+            {
+                id: "Q10-1",
+                text: "$2$直線 $x + 2y - 1 = 0$, $3x - y + 4 = 0$ のなす鋭角 $\\alpha$ を求めよ。",
+                hint: "各直線の法線ベクトルを求め、そのなす角から直線のなす角を計算します。",
+                answer: "$\\cos\\alpha = \\frac{\\sqrt{2}}{2}, \\alpha = 45^\\circ$"
+            },
+            {
+                id: "Q10-2",
+                text: "直線 $y = \\sqrt{3} x + 1$ と $x$軸の正の向きとのなす角 $\\theta$ を求めよ。ただし $0^\\circ \\leqq \\theta < 180^\\circ$ とする。",
+                hint: "直線の傾きが $\\tan\\theta$ に対応します。",
+                answer: "$\\theta = 60^\\circ$"
+            },
+            {
+                id: "Q10-3",
+                text: "点 $(1, 2)$ を通り、直線 $x - 3y + 5 = 0$ に垂直な直線の方程式を求めよ。",
+                hint: "垂直な直線の傾きの積は $-1$ です。または、法線ベクトルを方向ベクトルとして利用します。",
+                answer: "$3x + y - 5 = 0$"
+            },
+            {
+                id: "Q10-4",
+                text: "$2$直線 $\\vec{p} = (1, 2) + s(2, -1)$, $\\vec{q} = (3, 0) + t(1, k)$ が垂直であるとき、$k$の値を求めよ。",
+                hint: "2つの直線の方向ベクトルが垂直であるとき、それらの内積は $0$ です。",
+                answer: "$k=2$"
+            },
+            {
+                id: "Q10-5",
+                text: "空間内の$2$直線 $L_1: \\frac{x-1}{2} = \\frac{y+1}{-1} = \\frac{z}{3}$, $L_2: \\frac{x}{1} = \\frac{y-2}{2} = \\frac{z+1}{-1}$ のなす角 $\\theta$ ($0^\\circ \\leqq \\theta \\leqq 90^\\circ$) を求めよ。",
+                hint: "各直線の方向ベクトルを求め、そのなす角を計算します。",
+                answer: "$\\cos\\theta = \\frac{\\sqrt{21}}{14}$"
+            }
+        ]
+    },
+    {
+        title: "問題11: 円と球の方程式",
+        id: "problem-set-11",
+        questions: [
+            {
+                id: "Q11-1",
+                text: "中心が点 C$(1, -4)$ で、半径が $5$ の円の方程式をベクトルを用いて表し、さらに $x, y$ の方程式で表せ。",
+                hint: "ベクトル方程式は $|\\vec{p} - \\vec{c}| = r$ の形です。成分で表すには両辺を2乗します。",
+                answer: "ベクトル方程式: $|\\vec{p} - (1,-4)| = 5$。$x,y$ の方程式: $(x-1)^2 + (y+4)^2 = 25$"
+            },
+            {
+                id: "Q11-2",
+                text: "$2$点 A$(-3, 2)$, B$(5, 0)$ を直径の両端とする円の方程式をベクトルを用いて表し、さらに $x, y$ の方程式で表せ。",
+                hint: "直径の両端 A, B が与えられている場合、中心は AB の中点、半径は AB の長さの半分です。または、点 P が円周上にあるとき、 $\\vec{PA} \\cdot \\vec{PB} = 0$ となります。",
+                answer: "ベクトル方程式: $(\\vec{p} - \\vec{a}) \\cdot (\\vec{p} - \\vec{b}) = 0$。$x,y$ の方程式: $(x-1)^2 + (y-1)^2 = 17$"
+            },
+            {
+                id: "Q11-3",
+                text: "点 C$(2, 3)$ を中心とし、点 A$(5, -1)$ を通る円の方程式をベクトルを用いて表せ。",
+                hint: "半径は中心 C と点 A の距離です。",
+                answer: "ベクトル方程式: $|\\vec{p} - (2,3)| = 5$。$x,y$ の方程式: $(x-2)^2+(y-3)^2=25$"
+            },
+            {
+                id: "Q11-4",
+                text: "$|\\vec{p} - (2, 1)| = 3$ を満たす点 P$(x, y)$ の軌跡の方程式を求めよ。",
+                hint: "ベクトルの大きさを成分で表し、両辺を2乗します。",
+                answer: "$(x-2)^2 + (y-1)^2 = 9$"
+            },
+            {
+                id: "Q11-5",
+                text: "空間において、中心が C$(1, 2, -1)$ で半径が $4$ の球面の方程式をベクトルを用いて表せ。",
+                hint: "空間における球の方程式も、円と同様に $|\\vec{p} - \\vec{c}| = r$ の形です。",
+                answer: "ベクトル方程式: $|\\vec{p} - (1,2,-1)| = 4$。"
+            }
+        ]
+    },
+    {
+        title: "問題12: 空間ベクトルの大きさ",
+        id: "problem-set-12",
+        questions: [
+            {
+                id: "Q12-1",
+                text: "$\\vec{a} = (1, -2, \\sqrt{3})$ の大きさを求めよ。",
+                hint: "空間ベクトルの大きさは $|\\vec{a}| = \\sqrt{a_x^2 + a_y^2 + a_z^2}$ で計算します。",
+                answer: "$|\\vec{a}| = 2\\sqrt{2}$"
+            },
+            {
+                id: "Q12-2",
+                text: "$\\vec{b} = (-3, 0, 4)$ の大きさを求めよ。",
+                hint: "同上。",
+                answer: "$|\\vec{b}| = 5$"
+            },
+            {
+                id: "Q12-3",
+                text: "$\\vec{c} = (2\\cos\\theta, 2\\sin\\theta, 1)$ の大きさを求めよ。",
+                hint: "$\\cos^2\\theta + \\sin^2\\theta = 1$ を利用します。",
+                answer: "$|\\vec{c}| = \\sqrt{5}$"
+            },
+            {
+                id: "Q12-4",
+                text: "$2$点 A$(1, 2, 3)$, B$(4, 0, -1)$ 間の距離を求めよ。",
+                hint: "2点間の距離の公式 $\\sqrt{(x_2-x_1)^2 + (y_2-y_1)^2 + (z_2-z_1)^2}$ を利用します。",
+                answer: "距離 $= \\sqrt{29}$"
+            },
+            {
+                id: "Q12-5",
+                text: "ベクトル $\\vec{u} = (x, y, z)$ の大きさが $5$ であり、$\\vec{u}$ が $x$軸、$y$軸、$z$軸の正の向きとなす角をそれぞれ $\\alpha, \\beta, \\gamma$ とするとき、$\\cos^2\\alpha + \\cos^2\\beta + \\cos^2\\gamma$ の値を求めよ。",
+                hint: "方向余弦の性質 $\\cos^2\\alpha + \\cos^2\\beta + \\cos^2\\gamma = 1$ を利用します。ベクトルの大きさは関係ありません。",
+                answer: "$\\cos^2\\alpha + \\cos^2\\beta + \\cos^2\\gamma = 1$"
+            }
+        ]
+    },
+    {
+        title: "問題13: 空間ベクトルの内積",
+        id: "problem-set-13",
+        questions: [
+            {
+                id: "Q13-1",
+                text: "$\\vec{a} = (2, -1, 3)$, $\\vec{b} = (1, 4, -2)$ の内積とそのなす角 $\\theta$ を求めよ。",
+                hint: "空間ベクトルの内積と、なす角の公式 $\\cos\\theta = \\frac{\\vec{a} \\cdot \\vec{b}}{|\\vec{a}||\\vec{b}|}$ を利用します。",
+                answer: "内積 $\\vec{a} \\cdot \\vec{b} = -8$, $\\cos\\theta = -\\frac{4\\sqrt{6}}{21}$"
+            },
+            {
+                id: "Q13-2",
+                text: "$\\vec{a} = (1, 0, -1)$, $\\vec{b} = (0, 1, 1)$ の内積とそのなす角 $\\theta$ を求めよ。",
+                hint: "同上。",
+                answer: "内積 $\\vec{a} \\cdot \\vec{b} = -1$, $\\theta = 120^\\circ$"
+            },
+            {
+                id: "Q13-3",
+                text: "$\\vec{a} = (3, -4, 0)$, $\\vec{b} = (x, y, 5)$ が直交するとき、$3x - 4y$ の値を求めよ。",
+                hint: "2つのベクトルが直交するとき、その内積は $0$ です。",
+                answer: "$3x-4y=0$"
+            },
+            {
+                id: "Q13-4",
+                text: "$2$つのベクトル $\\vec{u} = (1, \\sqrt{2}, -1)$ と $\\vec{v} = (-2, k\\sqrt{2}, 2)$ が平行であるとき、実数 $k$ の値を求めよ。",
+                hint: "2つのベクトルが平行であるとき、 $\\vec{v} = m\\vec{u}$ となる実数 $m$ が存在します。成分ごとに比較します。",
+                answer: "$k=-2$"
+            },
+            {
+                id: "Q13-5",
+                text: "$3$点 A$(1,1,0)$, B$(2,0,1)$, C$(0,1,2)$ について、$\\vec{AB}$ と $\\vec{AC}$ のなす角を求めよ。",
+                hint: "$\\vec{AB}$ と $\\vec{AC}$ の成分を求め、なす角の公式を利用します。",
+                answer: "$\\cos\\theta = \\frac{1}{\\sqrt{15}}$"
+            }
+        ]
+    },
+    {
+        title: "問題14: 空間図形とベクトル",
+        id: "problem-set-14",
+        questions: [
+            {
+                id: "Q14-1",
+                text: "右の図の四面体 OABC において、辺 OA を $1:2$ に内分する点を D, $\\triangle OBC$ の重心を E とする。点 O に関する位置ベクトルをそれぞれ $\\vec{a}, \\vec{b}, \\vec{c}$ とするとき、$\\vec{DE}$ を $\\vec{a}, \\vec{b}, \\vec{c}$ を用いて表せ。",
+                hint: "$\\vec{DE} = \\vec{OE} - \\vec{OD}$ と表し、DとEの位置ベクトルをそれぞれ $\\vec{a}, \\vec{b}, \\vec{c}$ で表します。",
+                answer: "$\\vec{DE} = -\\frac{1}{3}\\vec{a} + \\frac{1}{3}\\vec{b} + \\frac{1}{3}\\vec{c}$"
+            },
+            {
+                id: "Q14-2",
+                text: "四面体 OABC において、$\\vec{OA} = \\vec{a}$, $\\vec{OB} = \\vec{b}$, $\\vec{OC} = \\vec{c}$ とする。線分 AB を $2:1$ に内分する点を P, 線分 PC を $3:1$ に内分する点を Q とするとき、$\\vec{OQ}$ を $\\vec{a}, \\vec{b}, \\vec{c}$ を用いて表せ。",
+                hint: "P は AB の内分点、Q は PC の内分点なので、順に位置ベクトルを求めていきます。",
+                answer: "$\\vec{OQ} = \\frac{1}{12}\\vec{a} + \\frac{1}{6}\\vec{b} + \\frac{3}{4}\\vec{c}$"
+            },
+            {
+                id: "Q14-3",
+                text: "四面体 ABCD において、辺 AB, CD の中点をそれぞれ M, N とする。$\\vec{MN} = \\frac{1}{2}(\\vec{AC} + \\vec{BD})$ であることを示せ。ただし、A, B, C, D の位置ベクトルをそれぞれ $\\vec{a}, \\vec{b}, \\vec{c}, \\vec{d}$ とする。",
+                hint: "$\\vec{MN} = \\vec{ON} - \\vec{OM}$ (Oは任意の始点) と表し、M, N の位置ベクトルを $\\vec{a}, \\vec{b}, \\vec{c}, \\vec{d}$ で表します。右辺も同様に展開して一致することを示します。",
+                answer: "証明問題（ヒント参照）<br>LHS: $\\vec{MN} = \\vec{ON} - \\vec{OM} = \\frac{\\vec{c}+\\vec{d}}{2} - \\frac{\\vec{a}+\\vec{b}}{2} = \\frac{1}{2}(\\vec{c}+\\vec{d}-\\vec{a}-\\vec{b})$<br>RHS: $\\frac{1}{2}(\\vec{AC} + \\vec{BD}) = \\frac{1}{2}( (\\vec{c}-\\vec{a}) + (\\vec{d}-\\vec{b}) ) = \\frac{1}{2}(\\vec{c}-\\vec{a}+\\vec{d}-\\vec{b})$<br>LHS = RHS."
+            },
+            {
+                id: "Q14-4",
+                text: "座標空間に$4$点 O$(0,0,0)$, A$(1,2,0)$, B$(-1,0,3)$, C$(0,1,2)$ がある。$\\triangle ABC$ の重心 G の座標を求めよ。",
+                hint: "空間における重心の座標も、各座標の平均です。",
+                answer: "G$(0, 1, \\frac{5}{3})$"
+            },
+            {
+                id: "Q14-5",
+                text: "四面体 OABC において、P は線分 OA 上の点、Q は線分 OB 上の点、R は線分 OC 上の点である。OP:PA = $1:1$, OQ:QB = $2:1$, OR:RC = $1:2$ であるとき、$\\triangle PQR$ の重心 G の位置ベクトル $\\vec{OG'}$ (G'とします) を $\\vec{OA}, \\vec{OB}, \\vec{OC}$ を用いて表せ。",
+                hint: "P, Q, R の位置ベクトルを $\\vec{OA}, \\vec{OB}, \\vec{OC}$ で表し、重心の公式を適用します。",
+                answer: "$\\vec{OG'} = \\frac{1}{6}\\vec{OA} + \\frac{2}{9}\\vec{OB} + \\frac{1}{9}\\vec{OC}$"
+            }
+        ]
+    },
+    {
+        title: "問題15: 平面とベクトル",
+        id: "problem-set-15",
+        questions: [
+            {
+                id: "Q15-1",
+                text: "$3$点 A$(1, 0, 2)$, B$(0, 1, 3)$, C$(2, 1, 1)$ の定める平面 ABC 上に点 P$(x, 2, 0)$ があるとき、$x$ の値を求めよ。",
+                hint: "点 P が平面 ABC 上にあるとき、 $\\vec{AP} = s\\vec{AB} + t\\vec{AC}$ となる実数 $s,t$ が存在します。成分で表して連立方程式を解きます。",
+                answer: "$x=3$"
+            },
+            {
+                id: "Q15-2",
+                text: "$4$点 A$(1, 1, 1)$, B$(2, 3, 0)$, C$(0, 2, 3)$, D$(k, 0, 5)$ が同一平面上にあるとき、$k$ の値を求めよ。",
+                hint: "$4$点 D, A, B, C が同一平面上にあるとき、 $\\vec{AD} = s\\vec{AB} + t\\vec{AC}$ となる実数 $s,t$ が存在します。成分で表して連立方程式を解きます。",
+                answer: "$k=-\\frac{8}{5}$"
+            },
+            {
+                id: "Q15-3",
+                text: "$3$点 A$(2, -1, 0)$, B$(1, 0, 3)$, C$(0, 2, -1)$ と点 P$(1, y, z)$ が同一平面上にある。さらに P が線分 BC を $t:(1-t)$ に内分するとき、$y, z, t$ の値を求めよ。",
+                hint: "点 P が線分 BC を内分する条件から $\\vec{OP}$ を $t$ で表し、さらに P が平面 ABC 上にある条件 ($\\vec{AP} = u\\vec{AB} + v\\vec{AC}$) を利用して $y,z,t$ を求めます。",
+                answer: "$y=0, z=3, t=0$"
+            },
+            {
+                id: "Q15-4",
+                text: "原点 O と$3$点 A$(1, 1, 0)$, B$(0, 1, 1)$, C$(1, 0, 1)$ がある。点 P が平面 ABC 上にあり、かつ $\\vec{OP} \\perp \\vec{AB}$, $\\vec{OP} \\perp \\vec{AC}$ を満たすとき、点 P の座標を求めよ。",
+                hint: "$\\vec{OP}=(x,y,z)$ とおき、 $\\vec{OP} \\cdot \\vec{AB} = 0$ および $\\vec{OP} \\cdot \\vec{AC} = 0$ の条件を利用します。また、P が平面 ABC 上にある条件 ($\\vec{AP} = s\\vec{AB} + t\\vec{AC}$ または平面の方程式) も利用します。",
+                answer: "P$(\\frac{2}{3}, \\frac{2}{3}, \\frac{2}{3})$"
+            },
+            {
+                id: "Q15-5",
+                text: "$3$点 A$(1,0,0)$, B$(0,2,0)$, C$(0,0,3)$ を通る平面の方程式を $ax + by + cz = d$ ($d\\neq0$) の形で表せ。その平面上に点 P$(2, -2, z)$ があるとき、$z$ の値を求めよ。(通常 $d=1$ とすることが多い)",
+                hint: "平面の方程式の切片形 $\\frac{x}{a'} + \\frac{y}{b'} + \\frac{z}{c'} = 1$ を利用すると簡単です。",
+                answer: "$6x+3y+2z=6$。$z=0$"
+            }
+        ]
+    }
+];
+
+document.addEventListener('DOMContentLoaded', () => {
+    const navigationUl = document.getElementById('problem-navigation').querySelector('ul');
+    const contentArea = document.getElementById('content-area');
+    const welcomeMessage = document.getElementById('welcome-message');
+
+    problemsData.forEach((problemSet, index) => {
+        const navLi = document.createElement('li');
+        const problemSetShortTitle = problemSet.title.split(':')[0].replace(`問題${index + 1}`, '').trim();
+        navLi.innerHTML = `<a href="#" data-target="${problemSet.id}" class="nav-link"><i class="material-icons nav-item-icon">description</i><span>問題 ${index + 1}: ${problemSetShortTitle || problemSet.title}</span></a>`;
+        navigationUl.appendChild(navLi);
+
+        const contentDiv = document.createElement('div');
+        contentDiv.id = problemSet.id;
+        contentDiv.className = 'problem-set hidden';
+
+        let problemSetHTML = `<h2 class="large-title primary-text problem-set-title">${problemSet.title}</h2>`;
+        problemSetHTML += `<p class="medium-text" style="margin-bottom: 1.5rem;">このセクションでは、ベクトルの基本的な性質や応用に関する問題を探求します。各問題を解くことで理解を深めましょう。</p>`;
+        
+        problemSet.questions.forEach(q => {
+            problemSetHTML += `
+                <article class="card problem-card" id="problem-card-${q.id}">
+                    <div class="padding">
+                        <h6 class="problem-card-id">${q.id}</h6>
+                        <p class="medium-text problem-text">${q.text}</p>
+                        
+                        <div class="problem-actions">
+                            <button class="chip fill small" data-action="toggle-hint" data-target-id="hint-${q.id}" aria-expanded="false" aria-controls="hint-${q.id}">
+                                <i class="material-icons">lightbulb</i>
+                                <span class="button-text">ヒントを見る</span>
+                            </button>
+                            <button class="chip fill small" data-action="toggle-answer" data-target-id="answer-${q.id}" aria-expanded="false" aria-controls="answer-${q.id}">
+                                <i class="material-icons">check_circle</i>
+                                <span class="button-text">解答を見る</span>
+                            </button>
+                        </div>
+
+                        <div id="hint-${q.id}" class="hint-content card small-padding hidden" role="region" aria-labelledby="hint-btn-${q.id}">
+                            <h6>ヒント (${q.id})</h6>
+                            <p>${q.hint}</p>
+                        </div>
+                        <div id="answer-${q.id}" class="answer-content card small-padding hidden" role="region" aria-labelledby="answer-btn-${q.id}">
+                            <h6>解答 (${q.id})</h6>
+                            <p>${q.answer}</p>
+                        </div>
+                    </div>
+                </article>
+            `;
+        });
+        contentDiv.innerHTML = problemSetHTML;
+        contentArea.appendChild(contentDiv);
+    });
+
+    navigationUl.addEventListener('click', (e) => {
+        const targetLink = e.target.closest('.nav-link');
+        if (targetLink) {
+            e.preventDefault();
+            const targetId = targetLink.dataset.target;
+
+            navigationUl.querySelectorAll('li').forEach(item => item.classList.remove('active-item'));
+            targetLink.parentElement.classList.add('active-item');
+
+            welcomeMessage.classList.add('hidden');
+
+            contentArea.querySelectorAll('.problem-set').forEach(set => {
+                set.classList.toggle('hidden', set.id !== targetId);
+            });
+
+            const activeProblemSetElement = document.getElementById(targetId);
+            if (activeProblemSetElement && window.MathJax) {
+                MathJax.typesetPromise([activeProblemSetElement]).catch((err) => console.error('MathJax typesetting error (problem set):', err));
+            }
+        }
+    });
+
+    contentArea.addEventListener('click', (e) => {
+        const button = e.target.closest('button[data-action]');
+        if (!button) return;
+
+        const action = button.dataset.action;
+        const targetId = button.dataset.targetId;
+        const contentElement = document.getElementById(targetId);
+
+        if (contentElement) {
+            const wasHidden = contentElement.classList.contains('hidden');
+            contentElement.classList.toggle('hidden');
+            button.setAttribute('aria-expanded', !wasHidden);
+
+
+            const buttonTextElement = button.querySelector('.button-text');
+            const buttonIconElement = button.querySelector('.material-icons');
+
+            if (action === 'toggle-hint') {
+                if (wasHidden) { // Content was hidden, now shown
+                    buttonTextElement.textContent = 'ヒントを隠す';
+                    buttonIconElement.textContent = 'visibility_off';
+                } else { // Content was shown, now hidden
+                    buttonTextElement.textContent = 'ヒントを見る';
+                    buttonIconElement.textContent = 'lightbulb';
+                }
+            } else if (action === 'toggle-answer') {
+                if (wasHidden) { // Content was hidden, now shown
+                    buttonTextElement.textContent = '解答を隠す';
+                    buttonIconElement.textContent = 'visibility_off';
+                } else { // Content was shown, now hidden
+                    buttonTextElement.textContent = '解答を見る';
+                    buttonIconElement.textContent = 'check_circle';
+                }
+            }
+
+            if (wasHidden && window.MathJax) { // If content was hidden and is now shown
+                MathJax.typesetPromise([contentElement]).catch((err) => console.error('MathJax typesetting error (hint/answer):', err));
+            }
+        }
+    });
+});
+</script>
+</body>
+</html>
