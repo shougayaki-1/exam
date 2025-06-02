@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>テスト問題ポータル</title>
+
+    <!-- PWA関連のmetaタグはここから削除されています -->
+    <!--
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" sizes="180x180" href="./img/pwa/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./img/pwa/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./img/pwa/favicon-16x16.png">
+    <link rel="mask-icon" href="./img/pwa/safari-pinned-tab.svg" color="#2255cc">
+    <meta name="apple-mobile-web-app-title" content="多機能デジタイマー">
+    <meta name="application-name" content="多機能デジタイマー">
+    <meta name="msapplication-TileColor" content="#2255cc">
+    <meta name="theme-color" content="#2255cc">
+    -->
+    <!-- PWA関連のmetaタグここまで削除 -->
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Remixicon CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+    <!-- MDB CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.0/mdb.min.css" rel="stylesheet"/>
+
+    <!-- Custom Styles -->
+    <!-- common-styles.css が存在し、必要なスタイル (例: .app-container) を提供していることを前提としています -->
+    <link rel="stylesheet" href="common-styles.css">
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+        }
+        .home {
+            display: grid;
+            grid-gap: 26px;
+            /* アイテム数に応じて調整 (6アイテムなので3列表示) */
+            grid-template-columns: repeat(3, 1fr);
+            margin-top: 20px;
+            margin-bottom: 50px;
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        /* 画像サイズ調整のためのスタイル (元のHTMLから流用) */
+        .home-item .bg-image {
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .home-item img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .card-title {
+            font-weight: 500;
+        }
+
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-mode .card {
+            background-color: #2c2c2c;
+            border-color: #3a3a3a;
+        }
+        body.dark-mode .card-title {
+            color: #e0e0e0;
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 992px) { /* Medium devices (tablets, less than 992px) */
+            .home {
+                grid-template-columns: repeat(2, 1fr); /* 2列表示 */
+            }
+        }
+        @media (max-width: 576px) { /* Small devices (landscape phones, less than 576px) */
+            .home {
+                grid-template-columns: 1fr; /* 1列表示 */
+            }
+            .home-item .bg-image {
+                height: 150px; /* スマホでは画像エリアの高さを少し抑える */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- .app-container のスタイルは common-styles.css で定義されている想定です -->
+    <div class="app-container">
+        <main class="mt-4">
+            <div class="home">
+                <!-- 地学 -->
+                <div class="card text-center home-item">
+                    <a href="earth.html">
+                        <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                            <!-- 元の画像を流用。適切な画像があれば差し替えてください。 -->
+                            <img src="./img/athletics.png" class="img-fluid" alt="地学">
+                            <div class="mask" style="background-color: rgba(128,128,128,0.2)"></div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">地学</h5>
+                        </div>
+                    </a>
+                </div>
+                <!-- 地学2 -->
+                <div class="card text-center home-item">
+                    <a href="earth2.html">
+                        <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                            <img src="./img/basketball.png" class="img-fluid" alt="地学2">
+                            <div class="mask" style="background-color: rgba(128,128,128,0.2)"></div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">地学2</h5>
+                        </div>
+                    </a>
+                </div>
+                <!-- 化学 -->
+                <div class="card text-center home-item">
+                    <a href="chemistry.html">
+                        <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                            <img src="./img/soccer.png" class="img-fluid" alt="化学">
+                            <div class="mask" style="background-color: rgba(128,128,128,0.2)"></div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">化学</h5>
+                        </div>
+                    </a>
+                </div>
+                <!-- 国語 -->
+                <div class="card text-center home-item">
+                    <a href="language.html">
+                        <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                            <img src="./img/volleyball.png" class="img-fluid" alt="国語">
+                            <div class="mask" style="background-color: rgba(128,128,128,0.2)"></div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">国語</h5>
+                        </div>
+                    </a>
+                </div>
+                <!-- 国語2 -->
+                <div class="card text-center home-item">
+                    <a href="language2.html">
+                        <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                            <img src="./img/tabletennis.png" class="img-fluid" alt="国語2">
+                            <div class="mask" style="background-color: rgba(128,128,128,0.2)"></div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">国語2</h5>
+                        </div>
+                    </a>
+                </div>
+                <!-- 数学 -->
+                <div class="card text-center home-item">
+                    <a href="math.html">
+                        <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                            <img src="./img/badminton.png" class="img-fluid" alt="数学">
+                            <div class="mask" style="background-color: rgba(128,128,128,0.2)"></div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">数学</h5>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- MDB JS -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.0/mdb.umd.min.js"></script>
+    <!-- Custom Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // PWAインストールプロンプト関連のコードは削除
+            // window.addEventListener('beforeinstallprompt', (e) => { ... });
+
+            // ダークモード設定
+            const userPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            // localStorageのキー名をより汎用的なものに変更 (例: 'globalTheme')
+            const localTheme = localStorage.getItem('globalTheme'); 
+
+            if (localTheme === 'dark' || (!localTheme && userPrefersDark)) {
+                document.body.classList.add('dark-mode');
+            } else {
+                document.body.classList.remove('dark-mode');
+            }
+
+            // Service Worker登録関連のコードは削除
+            // if ('serviceWorker' in navigator) { ... }
+        });
+    </script>
+</body>
+</html>
