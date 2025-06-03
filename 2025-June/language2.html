@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>インタラクティブ伊勢物語単語テスト</title>
+    <!-- Beer CSS (Linked from local file) -->
+    <link rel="stylesheet" href="../beer.css">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/beercss@3.5.1/dist/beercss.min.js"></script>
+    <!-- Material Design Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Custom Styles (after beer.css) -->
+    <style>
+        body {
+            font-family: var(--font, 'Inter', 'Noto Sans JP', sans-serif);
+        }
+        .scrollable-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .scrollable-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        header#app-header nav.primary {
+            padding: 1rem 1.5rem;
+        }
+
+        /* Sidebar Navigation List */
+        #problem-navigation ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin-top: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        #problem-navigation li {
+            position: relative;
+            border-radius: var(--border-radius, 4px);
+            transition: background-color 0.2s;
+            width: 100%;
+        }
+        #problem-navigation li::before {
+            content: none;
+        }
+
+        #problem-navigation .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            text-decoration: none;
+            color: var(--on-surface);
+            border-radius: inherit;
+            transition: background-color 0.2s, color 0.2s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        #problem-navigation .nav-link .nav-item-icon {
+            font-size: 1.25rem;
+            color: var(--on-surface-variant);
+            transition: color 0.2s;
+            flex-shrink: 0;
+        }
+        #problem-navigation .nav-link span {
+            white-space: normal;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            flex-grow: 1;
+            min-width: 0;
+        }
+
+        #problem-navigation li:not(.active-item) .nav-link:hover {
+            background-color: var(--surface-container-hover, var(--active));
+            color: var(--primary);
+        }
+        #problem-navigation li:not(.active-item) .nav-link:hover .nav-item-icon {
+            color: var(--primary);
+        }
+
+        #problem-navigation li.active-item {
+            background-color: var(--primary-container);
+            border-left: 4px solid var(--primary);
+        }
+        #problem-navigation li.active-item .nav-link {
+            color: var(--on-primary-container);
+            font-weight: 500;
+            background-color: transparent;
+        }
+        #problem-navigation li.active-item .nav-link .nav-item-icon {
+            color: var(--primary);
+        }
+
+        .chapter-content-title { /* 章段全体のタイトル */
+            border-bottom: 2px solid var(--outline-variant);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.75rem;
+            color: var(--primary);
+        }
+        .section-title { /* 「基礎問題」「充実問題」「章段解説」のタイトル */
+            font-size: 1.5rem;
+            color: var(--primary-variant);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--primary-container);
+            padding-bottom: 0.3rem;
+        }
+        .subsection-title { /* 「問1」「全文」などの小見出し */
+             font-size: 1.25rem;
+             color: var(--on-surface-variant);
+             margin-top: 1.5rem;
+             margin-bottom: 0.75rem;
+        }
+
+        .problem-card, .commentary-card, .display-card {
+            margin-bottom: 1.5rem;
+            background-color: var(--surface-container);
+        }
+        .question-text { /* Basic/Advanced Problem Question Text */
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .waka-text {
+            white-space: pre-line;
+            font-style: italic;
+            background-color: var(--surface-container-low);
+            padding: 0.75rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 0.5rem;
+            border-left: 3px solid var(--primary-container);
+        }
+        .fulltext-area {
+            background-color: var(--surface-container-lowest);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            white-space: pre-line;
+        }
+        .translation-text {
+            font-style: italic;
+            color: var(--on-surface-variant);
+        }
+
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Styles for Hint/Answer actions and content */
+        .problem-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        .problem-actions button.chip .material-icons {
+            font-size: 1.125rem;
+        }
+        .problem-actions button.chip .button-text {
+            margin-left: 0.25rem;
+        }
+
+        .hint-content, .answer-content, .explanation-content {
+            background-color: var(--surface-container-low);
+            border-left: 4px solid var(--primary);
+            margin-top: 1rem;
+        }
+        .hint-content h6, .answer-content h6, .explanation-content h6 {
+            color: var(--on-surface-variant);
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        .hint-content p, .answer-content p, .explanation-content p,
+        .hint-content div, .answer-content div, .explanation-content div {
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .answer-content strong, .hint-content strong, .explanation-content strong {
+            color: var(--primary);
+        }
+
+        /* Commentary specific styles */
+        .commentary-section h4 { /* 「和歌の解説」「章段の要約」など */
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--tertiary); /* Using tertiary for commentary subheadings */
+            border-bottom: 1px solid var(--outline-variant);
+            padding-bottom: 0.25rem;
+            font-size: 1.15rem;
+        }
+        .commentary-section ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin-bottom: 1rem;
+        }
+        .commentary-section ul li {
+            margin-bottom: 0.75rem;
+            padding-left: 1.2rem;
+            position: relative;
+        }
+        .commentary-section ul li::before {
+            content: "・"; /* Custom bullet */
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+        .commentary-section ul li strong {
+            color: var(--on-surface); /* Default text color for term */
+        }
+        .commentary-section ul li .pos { /* For POS tag */
+            font-size: 0.85em;
+            color: var(--on-surface-variant);
+            margin-left: 0.3em;
+        }
+
+
+        .waka-analysis-item {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px dashed var(--outline-variant);
+        }
+        .waka-analysis-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .waka-explanation-card {
+            background-color: var(--surface-container-lowest);
+            border-left: 3px solid var(--tertiary-container);
+            padding: 0.75rem;
+            margin-top: 0.5rem;
+            border-radius: var(--border-radius);
+        }
+        .waka-explanation-card p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .waka-explanation-card strong {
+            color: var(--tertiary);
+        }
+         .summary-card, .supplement-card {
+            background-color: var(--surface-container-lowest);
+            border: 1px solid var(--outline-variant);
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+        }
+        .summary-card h5, .supplement-card h5 {
+            color: var(--secondary);
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body data-theme="light">
+
+    <header id="app-header">
+        <nav class="primary">
+            <h1 class="large-title">インタラクティブ伊勢物語単語テスト</h1>
+            <p class="opacity-75">左のメニューから章段を選択してください。</p>
+        </nav>
+    </header>
+
+    <div id="main-grid-layout" class="grid large-padding">
+        <aside class="s12 m4 l3 xl2 padding">
+            <h6 class="medium-title">章段一覧</h6>
+            <nav id="problem-navigation" class="scrollable-container" style="max-height: calc(100vh - 200px); overflow-y: auto;">
+                <ul><!-- Navigation items will be populated here --></ul>
+            </nav>
+        </aside>
+
+        <main id="content-area" class="s12 m8 l9 xl10 padding scrollable-container">
+            <article id="welcome-message" class="card large-padding">
+                <h2 class="large-title primary-text">ようこそ！</h2>
+                <p class="medium-text">このアプリケーションは、『伊勢物語』の各章段に関する単語テストを提供するインタラクティブな学習ツールです。左のナビゲーションから章段を選択して、学習を開始してください。</p>
+            </article>
+            <!-- Chapter content will be injected here -->
+        </main>
+    </div>
+
+<script>
+const chaptersData = [
+    {
+        id: "shokubun_tango_test",
+        title: "初冠",
+        fullTitle: "第一段：初冠 単語クイズ",
+        basic_problems: [
+            {
+                id: "shokubun_tango_test-b1",
+                q_num: 1,
+                question_text: "本文の冒頭にある、ある男が行ったとされる儀式を指す言葉は何でしょう？ひらがなで答えてください。",
+                hint: "男性が成人して初めて行う儀式で、冠をつけることからこのように呼ばれます。",
+                answer: "ういこうぶり",
+                explanation: "「初冠」と書き、男子が成人して初めて冠をつける儀式、いわゆる「元服」のことです。12歳から16歳くらいで行われました。"
+            },
+            {
+                id: "shokubun_tango_test-b2",
+                q_num: 2,
+                question_text: "男が春日の里に行った理由を表す「しるよしして」の「しるよし」は、どのような意味でしょう？",
+                hint: "「しる」と「よし」それぞれの漢字と意味を考えると分かります。",
+                answer: "領地があった縁で",
+                explanation: "「しる」は【領る】と書き「領有する」という意味です。「よし」は【由】と書き「縁・ゆかり」といった意味です。全体で「土地を領有していることでできた縁で」となります。"
+            },
+            {
+                id: "shokubun_tango_test-b3",
+                q_num: 3,
+                question_text: "本文に登場する「いとなまめいたる女はらから」の「なまめいたる」は、どのような様子を表していますか？",
+                hint: "女性の様子を表す言葉で、現代語の「色っぽい」とは少し違います。",
+                answer: "若々しくて美しい、優美だ",
+                explanation: "【艶く】と書きますが、古文では、現代語のように「色っぽくふるまう」という意味で使われることは少なく、「若々しく美しい」「優美だ・上品だ」「物静かで落ち着いている」といった意味で使うほうが多いです。"
+            },
+            {
+                id: "shokubun_tango_test-b4",
+                q_num: 4,
+                question_text: "「いとなまめいたる女はらから」の「女はらから」は、どのような関係の二人を指しますか？",
+                hint: "「はらから」は「同じ腹から生まれた」という意味です。",
+                answer: "姉妹",
+                explanation: "「同胞」と書き、もともとは同じ母親から生まれた兄弟姉妹を指しました。この時代は一夫多妻制だったので、母親が違う兄弟姉妹も多くいましたが、一般的に兄弟姉妹は「はらから」というようになりました。ここでは「女」が付くので姉妹です。"
+            },
+            {
+                id: "shokubun_tango_test-b5",
+                q_num: 5,
+                question_text: "男が美しい女性と出会う方法として、本文に描かれている行動は何でしょう？漢字二字で答えてください。",
+                hint: "垣根越しにこっそりのぞき見することです。当時の貴族社会の男女の出会いの第一歩でした。",
+                answer: "垣間見",
+                explanation: "【垣間見】と書きます。「物のすき間からこっそりとのぞき見ること」という意味で、貴族の女性が男性に姿を見られないようにしていた時代の、男性側からの主な出会い方でした。"
+            },
+            {
+                id: "shokubun_tango_test-b6",
+                q_num: 6,
+                question_text: "本文で「ふるさと」が指している場所はどこでしょう？",
+                hint: "現在の都（京都）ではなく、物語の舞台となった場所です。",
+                answer: "旧都、奈良の都",
+                explanation: "古文の「ふるさと」は、現代語の「生まれ故郷」の意味のほかに「旧都」という意味があります。この物語は平安時代に書かれており、舞台は奈良なので、奈良の都（平城京）を指しています。"
+            },
+            {
+                id: "shokubun_tango_test-b7",
+                q_num: 7,
+                question_text: "本文の「思ほえず、ふるさとにいとはしたなくてありければ」の「はしたなくて」は、どのような意味でしょう？",
+                hint: "寂れた旧都に美しい姉妹がいた、その姉妹の様子を表現しています。",
+                answer: "不釣り合いだ、中途半端だ",
+                explanation: "「端なし」が語源で「中途半端」という意味になり、そこから「不釣り合いだ」「体裁が悪い・みっともない」などの意味に派生しました。ここでは、寂れた旧都には不釣り合いなほど美しい、という意味で使われています。"
+            },
+            {
+                id: "shokubun_tango_test-b8",
+                q_num: 8,
+                question_text: "男が姉妹に贈った歌「春日野の若紫のすり衣しのぶの乱れ限り知られず」の「若紫」は、何をたとえているでしょう？",
+                hint: "春日野で男が見かけた、美しくて心を乱された対象にたとえられています。",
+                answer: "いとなまめいたる女はらから（若くて美しい姉妹）",
+                explanation: "若草や、若々しい紫草にたとえられ、若くて美しい女性を指すことが多い表現です。後に『源氏物語』の巻名にもなりました。"
+            },
+            {
+                id: "shokubun_tango_test-b9",
+                q_num: 9,
+                question_text: "男が贈った歌は、「陸奥のしのぶもぢずり誰ゆゑに乱れそめにし我ならなくに」という歌の趣向を取り入れたものだとされています。この元の歌の「乱れそめにし」の「そめ」は掛詞です。どのような意味が掛けられていますか？漢字で答えてください。",
+                hint: "動詞の下について「〜し始める」という意味と、布に関連する言葉です。",
+                answer: "初め、染め",
+                explanation: "補助動詞「そむ」は「〜し始める」という意味があります。ここでは「乱れ始める（初む）」という意味と、忍ぶもぢずりの布を「染める（染め）」という意味が掛けられています。"
+            },
+            {
+                id: "shokubun_tango_test-b10",
+                q_num: 10,
+                question_text: "本文の最後で、昔の人は「かくいちはやきみやびをなむしける」と評されています。この「みやび」はどのような意味でしょう？",
+                hint: "昔の人の情熱的な振る舞いを評している言葉です。都での上品な振る舞いに関連する言葉です。",
+                answer: "風流、上品で優雅であること、都の美",
+                explanation: "ここでは、心を動かされた女性にすぐさま歌を贈るという、情熱的で雅やかな振る舞いを指しています。平安時代には、唐風に対して国風化が進み、「都の美」を意味する言葉となりました。"
+            },
+            {
+                id: "shokubun_tango_test-b11",
+                q_num: 11,
+                question_text: "本文には、強調を表す係助詞が使われています。「その男、しのぶずりの狩衣をなむ着たりける」 や「昔人は、かくいちはやきみやびをなむしける」 の「なむ」です。この係助詞は何を表し、また、この「なむ」が使われている文の文末（結び）はどのようになりますか？",
+                hint: "特定の語を強調し、文末の形に影響を与えます。",
+                answer: "強調、文末は連体形",
+                explanation: "係助詞「なむ」は、文中の語を強調する働きがあります。「なむ」が文中で使われると、文末の活用語（動詞、形容詞、助動詞など）が連体形になる「係り結び」という現象を起こします。"
+            }
+        ]
+    },
+    {
+        id: "tsukiyaranu_tango_test",
+        title: "月やあらぬ",
+        fullTitle: "第四段：月やあらぬ 単語・語句クイズ",
+        basic_problems: [
+            {
+                id: "tsukiyaranu_tango_test-b1",
+                q_num: 1,
+                question_text: "詞書の冒頭部分「昔、東の五条に、大后の宮おはしましける西の対に、住む人ありけり。それを、**本意**にはあらで、心ざし深かりける人、行きとぶらひけるを、」にある、太字の「本意」の読み方とその段落における意味はなんでしょうか？",
+                hint: "現代語訳や解説部分に読み方と意味が記載されています。",
+                answer: "読み方: ほい\n意味: かねてからの願い、本来の目的\nこの段落では、「西の対に住む女性と親交を深めたい」という男の願いのことと解釈されています。ただし、「かねてからの願い通りにはならず」という現代語訳もあり、女性には結婚相手が決まっていた成就できない恋であったことを示唆するという解説もあります。別の解釈として、男の志が深かったが、相手である藤氏の姫君の方でその志に対応しかねる様であったという意味ではないか、という説も紹介されています。",
+                explanation: "「本意（ほい）」は、本来の目的、かねてからの願いという意味です。文脈によって具体的な内容は異なりますが、この段では男が西の対の女性に対して抱いていた特別な思いや関係性を指していると考えられます。"
+            },
+            {
+                id: "tsukiyaranu_tango_test-b2",
+                q_num: 2,
+                question_text: "問題1と同じ文中の「心ざし」の意味はなんでしょうか？",
+                hint: "この語には複数の意味がありますが、ここでは文脈から「愛情」や「誠意」に関わる意味で使われています。",
+                answer: "意味: 愛情、誠意。\nここでは前者の意味で使われています。",
+                explanation: "「心ざし」は、心の向かうところ、愛情、誠意、志といった意味を持つ言葉です。ここでは男の女性に対する深い愛情を指しています。"
+            },
+            {
+                id: "tsukiyaranu_tango_test-b3",
+                q_num: 3,
+                question_text: "詞書「なほ憂しと思ひつつなむありける。」の太字「憂し」の意味は何でしょうか？",
+                hint: "この語は漢字から意味を想像できます。",
+                answer: "意味: つらい、いやだ。\n漢字の通り、憂鬱な気持ちを表す語です。",
+                explanation: "「憂し（うし）」は、つらい、情けない、いやだといったネガティブな感情を表す形容詞です。男が女性に会えないつらさを感じている様子が描かれています。"
+            },
+            {
+                id: "tsukiyaranu_tango_test-b4",
+                q_num: 4,
+                question_text: "詞書「うち泣きて、あばらなる板敷に、月の傾くまで伏せりて、」にある太字「あばらなる」の意味は何でしょうか？",
+                hint: "訪れた屋敷の様子を表す言葉です。",
+                answer: "意味: 荒れ果てているさま、隙間の多いさま。",
+                explanation: "「あばらなり」は、建物などが荒れ果てて隙間だらけになっている様子を表す形容動詞です。男が訪れた屋敷が、かつての華やかさを失っていることを示しています。"
+            },
+            {
+                id: "tsukiyaranu_tango_test-b5",
+                q_num: 5,
+                question_text: "歌「月やあらぬ 春や昔の 春ならぬ わが身ひとつは もとの身にして」における「月」や「春」は何を象徴していると考えられますか？",
+                hint: "「一首探究」の解説部分に記載があります。特に他の新古今の歌と比較して説明されています。",
+                answer: "象徴: 月は虚無、梅の香りは昔の女。\n四季歌でありながら妖艶で複雑な歌ですが、「月やあらぬ」の詞書を含んだ「物語」に感化されて詠まれた歌と理解すると、梅の香りは昔の女であり、月は虚無の象徴であることがわかると解説されています。",
+                explanation: "歌の中で月や春は、変わらないものの象徴として詠まれることが多いですが、この歌では、男の心情を反映して、それらすらも変わってしまったかのように感じられる虚無感や、失われた過去（昔の女）を象徴していると解釈できます。"
+            },
+            {
+                id: "tsukiyaranu_tango_test-b6",
+                q_num: 6,
+                question_text: "詞書「昔、東の五条に、大后の宮おはしましける西の対に、住む人ありけり。」にある太字の「おはしまし」はどのような敬語ですか？また、誰から誰への敬意を示していますか？",
+                hint: "動詞「おはします」の連用形です。他の尊敬語との比較や、主語に注目しましょう。",
+                answer: "敬語の種類: サ行変格活用動詞「おはします」の連用形。尊敬語です。\n意味: いらっしゃる、おられる、あおりになる。元の動詞「あり、をり」の尊敬語として使われています。\n敬意の方向: 作者から大后の宮への敬意。",
+                explanation: "「おはします」は「いる」「ある」の尊敬語で、身分の高い人に対して使われます。ここでは、語り手（作者）が、大后の宮という高貴な人物に対して敬意を表しています。"
+            },
+            {
+                id: "tsukiyaranu_tango_test-b7",
+                q_num: 7,
+                question_text: "詞書「昔、東の五条に、大后の宮おはしましける西の対に、住む人ありけり。」や「正月の十日ばかりのほどに、ほかに隠れにけり。」などに繰り返し出てくる助動詞「けり」は、ここではどのような意味で使われていますか？また、同じ過去の助動詞「き」との違いは何ですか？",
+                hint: "「けり」は過去を表しますが、資料の解説には特定のニュアンスが記されています。",
+                answer: "意味: 過去。\n「き」が直接過去（自身の体験）を表す場合があるのに対し、「けり」は**間接過去（他者の経験）**と分けられる場合があります（混同されている場合もあります）。この段落では、語り手（男）の体験として語られている後半部分に「詠める（詠んだ）」や「帰りにけり（帰った）」と使われており、「なむありける（過ごしていた）」も係り結びを受けて連体形になっています。",
+                explanation: "助動詞「けり」は過去の出来事を表しますが、特に伝聞や詠嘆のニュアンスを伴うことがあります。助動詞「き」が話し手自身の直接体験を表すことが多いのに対し、「けり」は間接的な過去や、気づきを表す場合に用いられる傾向があります。"
+            },
+            {
+                id: "tsukiyaranu_tango_test-b8",
+                q_num: 8,
+                question_text: "詞書「在り所は聞けど、人の行き通ふべき所にもあらざりければ、」にある、太字の「ど」と「ば」はそれぞれどのような接続助詞ですか？特に「ば」の接続とその意味は何ですか？",
+                hint: "接続助詞は直前の語の活用形に注目しましょう。「ば」には複数の意味がありますが、文脈から判断します。",
+                answer: "ど: 逆接の接続助詞。活用語の已然形に接続します。\nば: 接続助詞。直前が已然形（「ざりけれ」）なので、原因・理由（～なので）、偶然条件（～したところ）、恒常条件（～するといつも）のいずれかです。ここでは原因・理由で取ると自然であると解説されています。",
+                explanation: "「ど」は「～けれども」という逆接の意味を表します。「ば」は直前の活用形によって意味が異なります。已然形に接続する場合は原因・理由（～ので、～から）や偶然条件（～したところ）を表します。"
+            },
+            {
+                id: "tsukiyaranu_tango_test-b9",
+                q_num: 9,
+                question_text: "詞書「なほ憂しと思ひつつなむありける。」の太字「なむ」と「ありける」は、どのような文法的な関係にありますか？",
+                hint: "「なむ」は係助詞です。係助詞があれば文末（または結び）が特定の活用形になります。",
+                answer: "関係: 係り結び。\n係助詞「なむ」（ここでは強意の意味）を受けて、結びの「ありける」が連体形になっています。",
+                explanation: "係助詞「なむ」が文中にあると、文末の活用語は連体形になります。これを係り結びの法則と言います。「なむ」は強意を表します。"
+            },
+            {
+                id: "tsukiyaranu_tango_test-b10",
+                q_num: 10,
+                question_text: "歌「月やあらぬ 春や昔の 春ならぬ」に繰り返し出てくる太字「や」はどのような係助詞ですか？また、その結びとなる「あらぬ」「ならぬ」の「ぬ」はどのような助動詞で、どのような活用形になっていますか？",
+                hint: "「や」は疑問や反語を表す係助詞です。係助詞があれば結びが特定の活用形になります。",
+                answer: "や: 係助詞。ここでは疑問の意味であるという解釈が一般的です。ただし、反語とみる解釈も存在し、その場合は意味が変わってきます。\nぬ: 打消の助動詞「ず」の連体形。係助詞「や」を受けて連体形になっています（係り結び）。",
+                explanation: "係助詞「や」は疑問または反語の意味を表し、文末の活用語を連体形にします。「ぬ」は打消の助動詞「ず」の連体形です。この歌の「や」を疑問と取るか反語と取るかで、歌全体の解釈が大きく変わります。"
+            },
+            {
+                id: "tsukiyaranu_tango_test-b11",
+                q_num: 11,
+                question_text: "詞書「人の行き通ふべき所にもあらざりければ、」の太字「べき」はどのような助動詞「べし」の活用形で、ここではどのような意味で使われていますか？",
+                hint: "助動詞「べし」には多くの意味があります。文脈判断が重要です。",
+                answer: "べき: 助動詞「べし」の連体形。\n意味: 助動詞「べし」には推量、意志、可能、当然、命令、適当の意味があります。ここでは可能の意味で使われていると解説されています。つまり「人が出入りすることができるところでもなかったので」という意味になります。",
+                explanation: "助動詞「べし」は多様な意味を持ちますが、ここでは文脈から「～できる」という可能の意味で解釈するのが適切です。「べき」はその連体形です。"
+            }
+        ]
+    },
+    {
+        id: "yukuhotaru_dai45_tango_test",
+        title: "行く蛍",
+        fullTitle: "第四十五段：行く蛍 単語クイズ",
+        basic_problems: [
+            {
+                id: "yukuhotaru_dai45_tango_test-q1",
+                q_num: 1,
+                question_text: "伊勢物語第45段の冒頭、「人の娘のかしづく、いかでこの男にもの言はむと思ひけり。」 の下線部「かしづく」の現代語訳として最も適切なものを選びなさい。\nア）大切に育てている\nイ）恋い慕っている\nウ）世話を焼いている\nエ）裕福な",
+                hint: "この娘が親からどのように扱われていたかを表す言葉です。",
+                answer: "ア）大切に育てている",
+                explanation: "「かしづく」は「大切に育てる」「かわいがる」という意味です。ここでは、娘が親に大切にされていた様子が描かれています。"
+            },
+            {
+                id: "yukuhotaru_dai45_tango_test-q2",
+                q_num: 2,
+                question_text: "「いかでこの男にもの言はむと思ひけり。」 の下線部「もの言はむ」は、この文脈においてどのような意味で使われていますか説明しなさい。",
+                hint: "単に「話す」という意味ではありません。娘が男と持ちたいと思っていた関係性を表す言葉です。",
+                answer: "情を交わす、一緒になる。",
+                explanation: "「もの言ふ」は、一般的な会話という意味だけでなく、文脈によっては「情を交わす」「夫婦の関係になる」といった深い意味を持つことがあります。ここでは、娘が男と恋愛関係になりたい、一緒になりたいと思っていた気持ちが込められています。"
+            },
+            {
+                id: "yukuhotaru_dai45_tango_test-q3",
+                q_num: 3,
+                question_text: "男が娘の死後、「死にければ、つれづれと籠りをりけり。」 とありますが、下線部「つれづれと籠りをりけり」は男がどのような状態であったことを示していますか説明しなさい。",
+                hint: "単に暇で退屈していただけでなく、心の状態も表しています。",
+                answer: "心が沈み、家に籠っていた状態。",
+                explanation: "「つれづれ」には「手持ちぶさた、所在なさ」と「しんみりした寂しさ、物思いに沈むこと」という意味があり、ここでは後者の意味合いが強いとされています。娘の死という出来事によって、男が悲しみに暮れ、家に引きこもっていた様子を描写しています。"
+            },
+            {
+                id: "yukuhotaru_dai45_tango_test-q4",
+                q_num: 4,
+                question_text: "歌「暮れがたき夏のひぐらしながむればそのこととなくものぞ悲しき」 の下線部「ひぐらし」には、どのような掛詞が含まれていますか説明しなさい。",
+                hint: "夏の長い一日と、夕方によく鳴く蝉の名前を考えてみましょう。",
+                answer: "「一日中（日暮らし）」と「蝉のヒグラシ」の掛詞。",
+                explanation: "「ひぐらし」という言葉は、「日暮らし（一日中）」という意味と、夏の夕方に鳴く「蝉のヒグラシ」という虫の名前の両方の意味をかけて使われています。夏の長い一日をぼんやりと過ごす様子と、蝉のカナカナという鳴き声が、物悲しい心情と結びつけられています。"
+            },
+            {
+                id: "yukuhotaru_dai45_tango_test-q5",
+                q_num: 5,
+                question_text: "歌「ゆく蛍雲の上までいぬべくは秋風吹くと雁に告げこせ」 における「雁」は、この文脈において、どのような象徴的な意味を持っていると考えられますか説明しなさい。",
+                hint: "雁は渡り鳥であり、古代日本では特別な場所と行き来すると考えられていました。その特別な場所とは、亡くなった人々の魂が行く場所のことです。",
+                answer: "常世（死者の魂が集まる国）とこの世を行き来する鳥。亡き娘の魂との仲介役、または魂を運ぶ使者 と解釈されることが多い。",
+                explanation: "古代の人々は雁を「常世」の鳥と考えていました。常世は海の彼方にある祖先の霊が集まる国、つまり死後の世界です。雁がこの世と常世を行き来すると考えられていたことから、男は亡くなった娘の魂に思いを馳せ、その魂がいる常世への使者として雁にメッセージを託そうとした、と解釈されています。"
+            }
+        ]
+    },
+    {
+        id: "saranuwakare_dai84_tango_test",
+        title: "さらぬ別れ",
+        fullTitle: "第八十四段：さらぬ別れ 単語クイズ",
+        basic_problems: [
+            {
+                id: "saranuwakare_dai84_tango_test-q1",
+                q_num: 1,
+                question_text: "「身はいやしながら、母なむ宮なりける」という文にある、「いやし」はどういう意味ですか？",
+                hint: "主人公の「男」の身分を表す言葉です。母は「宮」でした。",
+                answer: "身分が低い。",
+                explanation: "この段の主人公である男は、身分は低いけれども、その母は皇族（宮）でした。この「いやし」という表現は、伊勢物語の「男」が貴族である在原業平であるという通説と相容れない根拠の一つとして挙げられることがあります。"
+            },
+            {
+                id: "saranuwakare_dai84_tango_test-q2",
+                q_num: 2,
+                question_text: "「子は京に宮仕へしければ」にある「宮仕へ」とは、具体的にどのような仕事ですか？",
+                hint: "子である男の勤め先と関連があります。",
+                answer: "宮中や朝廷に仕える仕事。",
+                explanation: "子（男）は平安京で宮仕えしていました。これは朝廷に仕える公務のようなものです。そのため、長岡に住む母とは離れて暮らしていました。"
+            },
+            {
+                id: "saranuwakare_dai84_tango_test-q3",
+                q_num: 3,
+                question_text: "「まうづとしけれど、しばしばえまうでず。」の「えまうでず」は、どのような状況を表していますか？",
+                hint: "「え」＋動詞の未然形＋打消しの形で用いられています。",
+                answer: "参上することができない。",
+                explanation: "「え～ず」は不可能を表す古語の定型表現です。ここでは、子が長岡の母のもとへ参上したかったけれども、たびたび参上することができなかった状況を描写しています。"
+            },
+            {
+                id: "saranuwakare_dai84_tango_test-q4",
+                q_num: 4,
+                question_text: "「ひとつ子にさへありければ」にある「さへ」は、どのようなニュアンスを加えていますか？",
+                hint: "母が息子を「たいそうかなしうしたまひけり（可愛がっていた）」理由と関連があります。",
+                answer: "その上～までも、～さえ。",
+                explanation: "子は**一人っ子（ひとつ子）**でした。母は、子が京にいてなかなか会えない上に、その上一人っ子でもあったので、たいそう息子を可愛がっていた、という文脈で用いられています。この「さへ」は、一人っ子であるという事実の重要性や、それが母の深い愛情につながる状況を強調していると考えられます。"
+            },
+            {
+                id: "saranuwakare_dai84_tango_test-q5",
+                q_num: 5,
+                question_text: "「いとかなしうしたまひけり。」の「かなしう」はどういう意味ですか？",
+                hint: "母が一人っ子の息子に対して抱いていた情愛を表します。",
+                answer: "いとしい、かわいい（たいそう可愛がっていた）。",
+                explanation: "「かなし」は「いとしい」「かわいい」といった愛情を表す言葉です。ここでは、母が一人っ子の息子をたいそう可愛がっていた心情を描写しています。"
+            },
+            {
+                id: "saranuwakare_dai84_tango_test-q6",
+                q_num: 6,
+                question_text: "「さるに、十二月ばかりに、とみのこととて、御文あり。」の「さるに」は、どのような役割をする接続表現ですか？",
+                hint: "これまでの状況を受けて、次の出来事につながる言葉です。",
+                answer: "ところが、すると、そうこうしているうちに。",
+                explanation: "「さるに」は、これまでの描写（息子が京にいてなかなか会えず、母は息子を可愛がっていた）を受けて、急な出来事（とみのこと）につながる接続詞です。この接続詞は、物語の展開において過去の描写から現在の出来事への転換点としての役割を果たしています。"
+            },
+            {
+                id: "saranuwakare_dai84_tango_test-q7",
+                q_num: 7,
+                question_text: "「さらぬ別れ」とは、どのような別れを指しますか？",
+                hint: "人間にとって避けられない、普遍的な別れです。",
+                answer: "避けられない別れ、死別。",
+                explanation: "「さらぬ」は「避けることができない」という意味です。したがって、「さらぬ別れ」は死別を指し、母が老いを感じ、死期が近いことを示唆する言葉として用いられています。"
+            },
+            {
+                id: "saranuwakare_dai84_tango_test-q8",
+                q_num: 8,
+                question_text: "母の歌「いよいよ見まくほしき君かな」の「見まくほしき」は、どのような心情を表していますか？",
+                hint: "母が息子に対して強く願っていることです。",
+                answer: "見たい、会いたい。",
+                explanation: "「見まくほし」は「見たい」「会いたい」という意味の古語表現です。母は老いと「さらぬ別れ」が近づいていることを感じ、「ますます（いよいよ）」息子に会いたい気持ちが募っていることをこの言葉で表現しています。"
+            },
+            {
+                id: "saranuwakare_dai84_tango_test-q9",
+                q_num: 9,
+                question_text: "息子の歌「世の中にさらぬ別れのなくもがな」の「もがな」は、どのような願望を表していますか？",
+                hint: "「～があればいいなあ」という願望を表す終助詞です。",
+                answer: "～があればいいなあ、～であってほしいなあ。",
+                explanation: "「もがな」は願望を表す終助詞です。息子は「世の中に避けられない別れ（死別）がなければいいのに」と詠んでいます。これは、親の長寿を願う子の一般的な気持ちを表しているとも解釈できます。ただし、母の歌の切迫感と比較すると、息子の願望表現には弱さや諦めのようなニュアンスも感じられるという指摘もあります。"
+            }
+        ]
+    }
+];
+
+document.addEventListener('DOMContentLoaded', () => {
+    const navigationUl = document.getElementById('problem-navigation').querySelector('ul');
+    const contentArea = document.getElementById('content-area');
+    const welcomeMessage = document.getElementById('welcome-message');
+
+    // サイドバーの表示順序を指定
+    const orderedChapterIds = ["shokubun_tango_test", "tsukiyaranu_tango_test", "yukuhotaru_dai45_tango_test", "saranuwakare_dai84_tango_test"];
+    const orderedChapters = orderedChapterIds.map(id => chaptersData.find(chapter => chapter.id === id)).filter(Boolean);
+
+
+    orderedChapters.forEach((chapter) => {
+        const navLi = document.createElement('li');
+        navLi.innerHTML = `<a href="#" data-target="${chapter.id}" class="nav-link"><i class="material-icons nav-item-icon">menu_book</i><span>${chapter.title}</span></a>`;
+        navigationUl.appendChild(navLi);
+
+        const contentDiv = document.createElement('div');
+        contentDiv.id = chapter.id;
+        contentDiv.className = 'chapter-content hidden';
+
+        let chapterHTML = `<h2 class="chapter-content-title">${chapter.fullTitle}</h2>`;
+
+        // --- 基礎問題セクション (単語クイズ) ---
+        if (chapter.basic_problems && chapter.basic_problems.length > 0) {
+            // chapterHTML += `<h3 class="section-title">単語クイズ</h3>`; // セクションタイトルは不要ならコメントアウト
+            chapter.basic_problems.forEach(prob => {
+                chapterHTML += `
+                    <article class="problem-card" id="problem-${prob.id}">
+                        <div class="padding">
+                            <h4 class="subsection-title" style="color: var(--primary);">クイズ${prob.q_num}</h4>
+                            <p class="question-text">${prob.question_text.replace(/\n/g, '<br>')}</p>
+                            <div class="problem-actions">
+                                <button class="chip fill small" data-action="toggle-hint" data-target-id="hint-${prob.id}" aria-expanded="false" aria-controls="hint-${prob.id}">
+                                    <i class="material-icons">lightbulb</i><span class="button-text">ヒント</span>
+                                </button>
+                                <button class="chip fill small" data-action="toggle-answer" data-target-id="answer-${prob.id}" aria-expanded="false" aria-controls="answer-${prob.id}">
+                                    <i class="material-icons">check_circle</i><span class="button-text">解答</span>
+                                </button>
+                                <button class="chip fill small" data-action="toggle-explanation" data-target-id="explanation-${prob.id}" aria-expanded="false" aria-controls="explanation-${prob.id}">
+                                    <i class="material-icons">help_outline</i><span class="button-text">解説</span>
+                                </button>
+                            </div>
+                            <div id="hint-${prob.id}" class="hint-content card small-padding hidden">
+                                <h6>ヒント</h6><p>${prob.hint.replace(/\n/g, '<br>')}</p>
+                            </div>
+                            <div id="answer-${prob.id}" class="answer-content card small-padding hidden">
+                                <h6>解答</h6><p>${prob.answer.replace(/\n/g, '<br>')}</p>
+                            </div>
+                            <div id="explanation-${prob.id}" class="explanation-content card small-padding hidden">
+                                <h6>解説</h6><p>${prob.explanation.replace(/\n/g, '<br>')}</p>
+                            </div>
+                        </div>
+                    </article>`;
+            });
+        }
+
+
+        contentDiv.innerHTML = chapterHTML;
+        contentArea.appendChild(contentDiv);
+    });
+
+    navigationUl.addEventListener('click', (e) => {
+        const targetLink = e.target.closest('.nav-link');
+        if (targetLink) {
+            e.preventDefault();
+            const targetId = targetLink.dataset.target;
+
+            navigationUl.querySelectorAll('li').forEach(item => item.classList.remove('active-item'));
+            targetLink.parentElement.classList.add('active-item');
+
+            welcomeMessage.classList.add('hidden');
+
+            contentArea.querySelectorAll('.chapter-content').forEach(set => {
+                set.classList.toggle('hidden', set.id !== targetId);
+            });
+             // Scroll to the top of the content area
+            contentArea.scrollTop = 0;
+        }
+    });
+
+    contentArea.addEventListener('click', (e) => {
+        const button = e.target.closest('button[data-action]');
+        if (!button) return;
+
+        const action = button.dataset.action;
+        const targetId = button.dataset.targetId;
+        const contentElement = document.getElementById(targetId);
+
+        if (contentElement) {
+            const wasHidden = contentElement.classList.contains('hidden');
+            contentElement.classList.toggle('hidden');
+            button.setAttribute('aria-expanded', !wasHidden);
+
+            const buttonTextElement = button.querySelector('.button-text');
+            const buttonIconElement = button.querySelector('.material-icons');
+
+            if (action === 'toggle-hint') {
+                buttonTextElement.textContent = wasHidden ? 'ヒントを隠す' : 'ヒント';
+                buttonIconElement.textContent = wasHidden ? 'visibility_off' : 'lightbulb';
+            } else if (action === 'toggle-answer') {
+                buttonTextElement.textContent = wasHidden ? '解答を隠す' : '解答';
+                buttonIconElement.textContent = wasHidden ? 'visibility_off' : 'check_circle';
+            } else if (action === 'toggle-explanation') {
+                buttonTextElement.textContent = wasHidden ? '解説を隠す' : '解説';
+                buttonIconElement.textContent = wasHidden ? 'visibility_off' : 'help_outline';
+            }
+        }
+    });
+});
+</script>
+</body>
+</html>
