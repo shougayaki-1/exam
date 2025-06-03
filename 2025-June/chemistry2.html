@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>化学練習問題 (物質の状態変化、気体、溶液) - LaTeX版</title>
+  <!-- beer.css を直接読み込む -->
+  <link rel="stylesheet" href="../beer.css"> <!-- Assuming beer.css is in a parent directory -->
+  <!-- Material Symbols Outlined (beer.cssで推奨されるアイコンフォント) -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <style>
+    body {
+      font-family: var(--font); /* beer.cssのフォント変数を適用 */
+    }
+    .precautions ul {
+      list-style-position: inside;
+      padding-left: 0;
+    }
+    .precautions li {
+      margin-bottom: 0.5rem;
+    }
+    .main-question {
+      margin-bottom: 2rem;
+    }
+    .sub-question {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--outline-variant);
+    }
+    .sub-question:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .question-text {
+      margin-bottom: 0.8rem;
+      line-height: 1.6;
+    }
+    details summary {
+      cursor: pointer;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    /* ヒントボタンと解答ボタンの間のスペース */
+    details + details {
+      margin-top: 0.5rem;
+    }
+    details .content {
+      padding: 0.8rem;
+      border-radius: var(--_round, 0.25rem); /* beer.cssの変数を使うか、固定値 */
+      background-color: var(--surface-container-lowest);
+      border: 1px solid var(--outline-variant);
+    }
+    .formula {
+      /* font-family: "Times New Roman", Times, serif;  MathJax will handle font */
+      font-size: 1.1em; /* Adjust if needed after MathJax rendering */
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+      display: block; /* Ensure p takes full width for centering */
+      text-align: center; /* Center the p block, MathJax will center its content */
+    }
+    .graph-placeholder {
+      padding: 1rem;
+      border: 1px dashed var(--outline);
+      text-align: center;
+      color: var(--on-surface-variant);
+      background-color: var(--surface-variant);
+      border-radius: var(--_round, 0.25rem);
+      margin-top: 0.5rem;
+    }
+    h1, h2, h3 {
+      margin-bottom: 1rem;
+    }
+    .text-center {
+      text-align: center;
+    }
+    .content h4 { /* For "解答" and "解説" subheadings */
+        margin-top: 0.8rem;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+    }
+  </style>
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+  <script type="text/javascript" id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+  </script>
+</head>
+<body>
+  <header class="responsive padding">
+    <h1 class="center-align">化学 練習問題 - LaTeX版</h1>
+    <div class="grid">
+      <div class="s12 m6 l6">
+        <p><strong>出題範囲:</strong> 物質の状態変化, 気体の性質, 溶液の性質 (凝固点降下など)</p>
+      </div>
+      <div class="s12 m6 l6">
+        <p><strong>試験時間:</strong> 60分 (目安)</p>
+        <p><strong>満点:</strong> 100点 (目安: 第1問 24点, 第2問 36点, 第3問 40点)</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="responsive padding">
+    <article class="surface-container-low padding round">
+      <h2>注意事項</h2>
+      <ul class="precautions">
+        <li>計算問題は、特に指示がない限り有効数字2桁で答えなさい。ただし、問題中の数値の有効数字も考慮すること。</li>
+        <li>原子量は、$H=1.0, C=12, N=14, O=16$ を用いなさい。その他必要に応じて $Na=23, S=32, Cl=35.5, K=39, Cu=63.5$ を使用可。</li>
+        <li>気体定数 $R = 8.31 \times 10^3 \text{ Pa} \cdot \text{L/(K} \cdot \text{mol)}$</li>
+        <li>必要であれば、答案用紙の裏面も使用して良い。(このウェブページでは不要)</li>
+      </ul>
+    </article>
+
+    <article class="main-question">
+      <header>
+        <h2>第1問 物質の状態変化 (計24点)</h2>
+      </header>
+      
+      <div class="sub-question">
+        <p class="question-text">以下の文章の ( ア ) 〜 ( ク ) に最も適切な語句を答えなさい。(各3点 × 8 = 24点)</p>
+        <p class="question-text">(1) 液体が蒸発して気体になるとき、その気体が示す圧力を ( ア ) という。特に、液体と気体が平衡状態にあるときのこの圧力を ( イ ) という。</p>
+        <p class="question-text">(2) ( イ ) が外圧と等しくなったときの温度を ( ウ ) といい、この現象を ( エ ) という。</p>
+        <p class="question-text">(3) 固体が液体にならずに直接気体になる現象、またはその逆の現象を ( オ ) という。</p>
+        <p class="question-text">(4) 物質が固体、液体、気体の三つの状態が共存して平衡状態にある特定の温度と圧力を ( カ ) という。</p>
+        <p class="question-text">(5) 水の状態図において、圧力を加えると融点が ( キ ) する。これは、氷が水になると体積が ( ク ) するためである。</p>
+        <details>
+          <summary class="button small-text responsive">ヒントを見る</summary>
+          <div class="content">
+            <p>(ア), (イ) 蒸気、飽和という言葉が関連します。</p>
+            <p>(ウ), (エ) 沸騰という現象と関連する温度です。</p>
+            <p>(オ) ドライアイスが代表的な例です。</p>
+            <p>(カ) 状態図上の特別な一点です。</p>
+            <p>(キ), (ク) スケートの刃の下で氷が溶ける現象を思い出してみましょう。水の特異性も考慮してください。</p>
+          </div>
+        </details>
+        <details>
+          <summary class="button small-text responsive">解答と解説を見る</summary>
+          <div class="content">
+            <h4>解答</h4>
+            <p>(ア) 蒸気圧</p>
+            <p>(イ) 飽和蒸気圧</p>
+            <p>(ウ) 沸点</p>
+            <p>(エ) 沸騰</p>
+            <p>(オ) 昇華</p>
+            <p>(カ) 三重点</p>
+            <p>(キ) 低下（または 下がる）</p>
+            <p>(ク) 減少（または 小さくなる）</p>
+            <h4>解説</h4>
+            <p>(1) 液体が蒸発すると気体（蒸気）となり、その蒸気が示す圧力が蒸気圧です。密閉容器中で蒸発と凝縮の速度が等しくなり、見かけ上変化がなくなった状態（気液平衡）での蒸気圧を飽和蒸気圧といいます。</p>
+            <p>(2) 液体の飽和蒸気圧が周囲の圧力（外圧）と等しくなると、液体内部からも気化が起こり始めます。この現象が沸騰であり、そのときの温度が沸点です。</p>
+            <p>(3) 昇華は、固体⇔気体の直接的な状態変化を指します。例：ドライアイス（固体二酸化炭素）、ヨウ素、ナフタレン。</p>
+            <p>(4) 三重点は、物質の三態が安定に共存できる唯一の温度と圧力の組み合わせです。</p>
+            <p>(5) 水は特異な物質で、氷（固体）よりも水（液体）の方が密度が大きいため、氷が水になると体積が減少します。ルシャトリエの原理により、圧力を加えると体積が減少する方向（融解）へ平衡が移動するため、融点が低下します。</p>
+          </div>
+        </details>
+      </div>
+    </article>
+
+    <article class="main-question">
+      <header>
+        <h2>第2問 気体の性質 (計36点)</h2>
+      </header>
+      
+      <div class="sub-question">
+        <p class="question-text">27℃において、2.0 L の容器Aに酸素 ($O_2$) が $3.0 \times 10^5 \text{ Pa}$、3.0 L の容器Bに窒素 ($N_2$) が $2.0 \times 10^5 \text{ Pa}$ で入っている。容器Aと容器Bをコックでつなぎ、コックを開いて両気体を混合した。混合後の気体の温度は 27℃ に保たれているものとする。気体定数は $R = 8.31 \times 10^3 \text{ Pa} \cdot \text{L/(K} \cdot \text{mol)}$ とする。</p>
+        <p class="question-text">(1) 混合前の容器Aに入っている酸素の物質量 [mol] を求めなさい。(8点)</p>
+        <p class="question-text">(2) 混合後の酸素の分圧 [Pa] を求めなさい。(9点)</p>
+        <p class="question-text">(3) 混合後の窒素の分圧 [Pa] を求めなさい。(9点)</p>
+        <p class="question-text">(4) 混合気体の全圧 [Pa] を求めなさい。(10点)</p>
+        <details>
+          <summary class="button small-text responsive">ヒントを見る</summary>
+          <div class="content">
+            <p>(1) 理想気体の状態方程式 $PV = nRT$ を利用します。温度の単位に注意 (℃ → K)。</p>
+            <p>(2) 混合後の酸素の体積は、容器Aと容器Bの合計体積になります。温度と物質量は変化しないとして、ボイルの法則 $P_1V_1 = P_2V_2$ を利用できます。または、(1)で求めた物質量と混合後の全容積、温度から状態方程式で計算することも可能です。</p>
+            <p>(3) 窒素についても(2)と同様に考えます。</p>
+            <p>(4) ドルトンの分圧の法則を利用します (全圧 = 各成分気体の分圧の和)。</p>
+          </div>
+        </details>
+        <details>
+          <summary class="button small-text responsive">解答と解説を見る</summary>
+          <div class="content">
+            <h4>解答</h4>
+            <p>(1) 酸素の物質量 $n_{O_2}$</p>
+            <p class="formula">$$T = 27 + 273 = 300 \text{ K}$$</p>
+            <p class="formula">$$P_{O_2}V_A = n_{O_2}RT \text{ より、}$$</p>
+            <p class="formula">$$n_{O_2} = \frac{P_{O_2}V_A}{RT} = \frac{3.0 \times 10^5 \text{ Pa} \times 2.0 \text{ L}}{8.31 \times 10^3 \text{ Pa} \cdot \text{L/(K} \cdot \text{mol)} \times 300 \text{ K}}$$</p>
+            <p class="formula">$$n_{O_2} = \frac{6.0 \times 10^5}{2.493 \times 10^6} \text{ mol} \approx 0.2406... \text{ mol} \approx 0.24 \text{ mol}$$</p>
+            
+            <p>(2) 混合後の酸素の分圧 $P'_{O_2}$</p>
+            <p class="formula">$$\text{混合後の全容積 } V_{\text{total}} = 2.0 \text{ L} + 3.0 \text{ L} = 5.0 \text{ L}$$</p>
+            <p class="formula">$$\text{ボイルの法則 } P_1V_1 = P_2V_2 \text{ より (温度、物質量一定):}$$</p>
+            <p class="formula">$$P_{O_2}V_A = P'_{O_2}V_{\text{total}}$$</p>
+            <p class="formula">$$(3.0 \times 10^5 \text{ Pa}) \times (2.0 \text{ L}) = P'_{O_2} \times (5.0 \text{ L})$$</p>
+            <p class="formula">$$P'_{O_2} = \frac{6.0 \times 10^5 \text{ Pa} \cdot \text{L}}{5.0 \text{ L}} = 1.2 \times 10^5 \text{ Pa}$$</p>
+
+            <p>(3) 混合後の窒素の分圧 $P'_{N_2}$</p>
+            <p class="formula">$$\text{ボイルの法則 } P_1V_1 = P_2V_2 \text{ より:}$$</p>
+            <p class="formula">$$P_{N_2}V_B = P'_{N_2}V_{\text{total}}$$</p>
+            <p class="formula">$$(2.0 \times 10^5 \text{ Pa}) \times (3.0 \text{ L}) = P'_{N_2} \times (5.0 \text{ L})$$</p>
+            <p class="formula">$$P'_{N_2} = \frac{6.0 \times 10^5 \text{ Pa} \cdot \text{L}}{5.0 \text{ L}} = 1.2 \times 10^5 \text{ Pa}$$</p>
+
+            <p>(4) 混合気体の全圧 $P_{\text{total}}$</p>
+            <p class="formula">$$\text{ドルトンの分圧の法則より } P_{\text{total}} = P'_{O_2} + P'_{N_2}$$</p>
+            <p class="formula">$$P_{\text{total}} = (1.2 \times 10^5 \text{ Pa}) + (1.2 \times 10^5 \text{ Pa}) = 2.4 \times 10^5 \text{ Pa}$$</p>
+            
+            <h4>解説</h4>
+            <p>(1) 理想気体の状態方程式 $PV=nRT$ を用いて物質量を計算します。圧力はPa、体積はL、温度はK (ケルビン) に変換して代入します。 $T = 27℃ + 273 = 300 \text{ K}$。計算結果は有効数字2桁で答えます。</p>
+            <p>(2) コックを開くと、酸素は容器Aと容器Bを合わせた体積 ($2.0 \text{ L} + 3.0 \text{ L} = 5.0 \text{ L}$) に拡散します。温度と酸素の物質量は変化しないので、ボイルの法則 ($P_1V_1 = P_2V_2$) が適用できます。</p>
+            <p>(3) 窒素についても同様に、混合後の体積は $5.0 \text{ L}$ となり、ボイルの法則を適用して分圧を計算します。</p>
+            <p>(4) ドルトンの分圧の法則により、混合気体の全圧は各成分気体の分圧の和に等しくなります。</p>
+          </div>
+        </details>
+      </div>
+    </article>
+
+    <article class="main-question">
+      <header>
+        <h2>第3問 溶液の性質 (凝固点降下) (計40点)</h2>
+      </header>
+
+      <div class="sub-question">
+        <p class="question-text">水 200 g に非電解質の物質X 5.80 g を溶かした水溶液の凝固点は -0.930 ℃ であった。水のモル凝固点降下を $K_f = 1.86 \text{ K} \cdot \text{kg/mol}$ とする。原子量は $H=1.0, C=12, O=16$ とする。</p>
+        <p class="question-text">(1) この水溶液の凝固点降下度 $\Delta T_f$ [K] を求めなさい。(6点)</p>
+        <p class="question-text">(2) この水溶液の質量モル濃度 $m$ [mol/kg] を求めなさい。(7点)</p>
+        <p class="question-text">(3) 物質Xのモル質量 $M$ [g/mol] を求めなさい。(8点)</p>
+        <p class="question-text">(4) 物質Xがグルコース ($C_6H_{12}O_6$) であると仮定した場合、上記の実験結果と矛盾するかどうかを、計算によって示しなさい。(9点)</p>
+        <p class="question-text">(5) もし物質Xが電解質で、水溶液中で2つのイオンに電離すると仮定した場合 (例: $AB \rightarrow A^+ + B^-$、電離度1)、同じ質量 (5.80 g) を溶かしたときの凝固点降下度は、非電解質の場合と比べて理論上何倍になると考えられるか。また、その場合の物質Xの真のモル質量は、(3)で求めた値と比較してどのようになると予想されるか。理由とともに述べなさい。(10点)</p>
+        <details>
+          <summary class="button small-text responsive">ヒントを見る</summary>
+          <div class="content">
+            <p>(1) 水の凝固点は0℃です。凝固点降下度は、純溶媒の凝固点と溶液の凝固点の差で求めます。</p>
+            <p>(2) 凝固点降下度 $\Delta T_f = K_f \times m$ の関係式を利用します。</p>
+            <p>(3) 質量モル濃度 $m = \frac{\text{溶質の物質量 [mol]}}{\text{溶媒の質量 [kg]}}$ です。溶質の物質量 = $\frac{\text{溶質の質量 [g]}}{\text{モル質量 M [g/mol]}}$ であることを利用して M を求めます。</p>
+            <p>(4) グルコースの分子式からモル質量を計算し、(3)で求めた実験値と比較します。</p>
+            <p>(5) 電離により溶質粒子数が増加することを考慮します。凝固点降下は粒子数に比例します。見かけのモル質量と真のモル質量の関係を考えましょう。</p>
+          </div>
+        </details>
+        <details>
+          <summary class="button small-text responsive">解答と解説を見る</summary>
+          <div class="content">
+            <h4>解答</h4>
+            <p>(1) 凝固点降下度 $\Delta T_f$</p>
+            <p class="formula">$$\text{水の凝固点は } 0 \text{ ℃ なので、} \Delta T_f = 0 \text{ ℃} - (-0.930 \text{ ℃}) = 0.930 \text{ ℃}$$</p>
+            <p class="formula">$$\text{温度差なので、ケルビン(K)単位でも同じ値です。 } \Delta T_f = 0.930 \text{ K}$$</p>
+
+            <p>(2) 質量モル濃度 $m$</p>
+            <p class="formula">$$\Delta T_f = K_f \times m \text{ より、} m = \frac{\Delta T_f}{K_f}$$</p>
+            <p class="formula">$$m = \frac{0.930 \text{ K}}{1.86 \text{ K} \cdot \text{kg/mol}} = 0.500 \text{ mol/kg}$$</p>
+
+            <p>(3) 物質Xのモル質量 $M$</p>
+            <p class="formula">$$\text{溶媒(水)の質量} = 200 \text{ g} = 0.200 \text{ kg}$$</p>
+            <p class="formula">$$\text{溶質の物質量 } n_X = m \times (\text{溶媒の質量}) = 0.500 \text{ mol/kg} \times 0.200 \text{ kg} = 0.100 \text{ mol}$$</p>
+            <p class="formula">$$\text{モル質量 } M = \frac{\text{物質Xの質量}}{n_X} = \frac{5.80 \text{ g}}{0.100 \text{ mol}} = 58.0 \text{ g/mol}$$</p>
+
+            <p>(4) 物質Xがグルコース ($C_6H_{12}O_6$) であるかの検証</p>
+            <p class="formula">$$\text{グルコースのモル質量 } M_{\text{glucose}} = (12.0 \times 6) + (1.0 \times 12) + (16.0 \times 6) = 72.0 + 12.0 + 96.0 = 180 \text{ g/mol}$$</p>
+            <p>実験から求めた物質Xのモル質量 ($58.0 \text{ g/mol}$) は、グルコースのモル質量 ($180 \text{ g/mol}$) と大きく異なるため、物質Xがグルコースであるという仮定は実験結果と矛盾する。</p>
+
+            <p>(5) 電解質の場合の考察</p>
+            <p>凝固点降下度：非電解質の場合に比べて理論上<strong>2倍</strong>になると考えられる。</p>
+            <p>理由：凝固点降下は溶液中の溶質粒子数に比例する。非電解質は1分子が1粒子として働くが、物質Xが2つのイオンに電離する場合 ($AB \rightarrow A^+ + B^-$)、1分子が2粒子として働くため。</p>
+            <p>物質Xの真のモル質量：(3)で求めた値 ($58.0 \text{ g/mol}$) の<strong>2倍</strong> (すなわち $116 \text{ g/mol}$) になると予想される。</p>
+            <p>理由：(3)で求めたモル質量は、物質Xが非電解質であると仮定して計算した「見かけのモル質量」である。もし物質Xが電離して粒子数が2倍になる場合 (ファントホッフ係数 $i=2$)、同じ凝固点降下度を示すのに必要な物質の「真のモル質量」は、見かけのモル質量の2倍となる。希薄溶液の凝固点降下は $\Delta T_f = i \cdot K_f \cdot \frac{w}{M_{\text{true}} \cdot W_{\text{solvent}}}$ で表される (ここで $w$ は溶質の質量、$W_{\text{solvent}}$ は溶媒の質量(kg))。非電解質として計算した見かけのモル質量 $M_{\text{apparent}} = \frac{K_f \cdot w}{\Delta T_f \cdot W_{\text{solvent}}}$。したがって、$M_{\text{true}} = i \cdot M_{\text{apparent}}$ の関係が成り立つ。</p>
+            
+            <h4>解説</h4>
+            <p>(1) 凝固点降下度は、純溶媒の凝固点と溶液の凝固点の差です。$\Delta T_f$ の単位はKでも℃でも同じ値となります（温度差なので）。</p>
+            <p>(2) 凝固点降下の公式 $\Delta T_f = K_f \times m$ を利用します。$m$ は質量モル濃度 [mol/kg] です。有効数字は、与えられた値 ($0.930 \text{ K}, 1.86 \text{ K} \cdot \text{kg/mol}$) が3桁なので、結果も3桁とします。</p>
+            <p>(3) 質量モル濃度 $m = \frac{\text{溶質の物質量}}{\text{溶媒の質量[kg]}}$。また、溶質の物質量 = $\frac{\text{溶質の質量}}{\text{モル質量 M}}$。これらの関係からモル質量 M を求めます。溶媒の質量を g から kg に変換することに注意してください ($200 \text{ g} = 0.200 \text{ kg}$)。</p>
+            <p>(4) まずグルコースの分子式 $C_6H_{12}O_6$ からモル質量を計算します。この理論値と、(3)で実験データから算出したモル質量を比較し、矛盾するかどうかを判断します。</p>
+            <p>(5) 凝固点降下のような希薄溶液の束一的性質は、溶質の種類によらず、溶媒中の溶質粒子数に比例します。電解質が電離すると、溶媒中の粒子数が増加するため、非電解質に比べて大きな凝固点降下を示します。もし、観測された凝固点降下度に基づいて非電解質と仮定してモル質量を計算した場合 (これが(3)の値)、実際には電離によって粒子数が $i$ 倍になっているならば、真のモル質量はその計算値の $i$ 倍になります。</p>
+          </div>
+        </details>
+      </div>
+    </article>
+    
+  </main>
+  <footer class="responsive padding center-align">
+    <p><small>© 化学練習問題作成</small></p>
+  </footer>
+</body>
+</html>
