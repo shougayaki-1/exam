@@ -191,7 +191,7 @@ const problemsData = [
                 id: "Q1-1",
                 text: "平行四辺形 ABCD において、辺 BC を $2:1$ に内分する点を E, 辺 CD を $1:2$ に内分する点を F とする。$\\vec{AB} = \\vec{b}$, $\\vec{AD} = \\vec{d}$ とするとき、$\\vec{AE}$, $\\vec{AF}$ を $\\vec{b}$, $\\vec{d}$ を用いて表せ。",
                 hint: "内分点の公式と平行四辺形の性質 ( $\\vec{AC} = \\vec{AB} + \\vec{AD}$ ) を利用します。",
-                answer: "$\\vec{AE} = \\vec{b} + \\frac{2}{3}\\vec{d}$, $\\vec{AF} = \\frac{2}{3}\\vec{b} + \\frac{1}{3}\\vec{d}$"
+                answer: "$\\vec{AE} = \\vec{b} + \\frac{2}{3}\\vec{d}$, $\\vec{AF} = \\frac{2}{3}\\vec{b} + \\vec{d}$"
             },
             {
                 id: "Q1-2",
@@ -203,19 +203,19 @@ const problemsData = [
                 id: "Q1-3",
                 text: "三角形 ABC において、辺 AB の中点を D, 辺 AC を $2:3$ に内分する点を E, 線分 CD と線分 BE の交点を P とする。$\\vec{AB} = \\vec{b}$, $\\vec{AC} = \\vec{c}$ とするとき、$\\vec{AP}$ を $\\vec{b}$, $\\vec{c}$ を用いて表せ。",
                 hint: "交点の位置ベクトルを2通りで表し、係数を比較します。メネラウスの定理やチェバの定理も有効です。",
-                answer: "$\\vec{AP} = \\frac{3}{7}\\vec{b} + \\frac{2}{7}\\vec{c}$"
+                answer: "$\\vec{AP} = \\frac{3}{8}\\vec{b} + \\frac{1}{4}\\vec{c}$"
             },
             {
                 id: "Q1-4",
                 text: "平行四辺形 ABCD において、$\\vec{AE} = \\frac{2}{3}\\vec{AB} + \\frac{1}{3}\\vec{AD}$, $\\vec{AF} = \\frac{1}{2}\\vec{AB} + \\frac{1}{2}\\vec{AC}$ であるとき、$3$点 D, E, F が一直線上にあるか調べよ。(もし一直線上にある場合は DE:EF を求めよ。)",
                 hint: "$\\vec{DE}$ と $\\vec{DF}$ を $\\vec{AB}$ と $\\vec{AD}$ で表し、 $\\vec{DF} = k \\vec{DE}$ となる実数 k が存在するかを確認します。 $\\vec{AC} = \\vec{AB} + \\vec{AD}$ を利用します。",
-                answer: "一直線上にある。DE:EF = 1:2"
+                answer: "一直線上にない。"
             },
             {
                 id: "Q1-5",
                 text: "平行六面体 ABCD-EFGH において、$\\vec{AB} = \\vec{a}$, $\\vec{AD} = \\vec{b}$, $\\vec{AE} = \\vec{c}$ とする。対角線 AG の中点を M, 辺 FG を $1:2$ に内分する点を N とするとき、$\\vec{MN}$ を $\\vec{a}$, $\\vec{b}$, $\\vec{c}$ を用いて表せ。",
                 hint: "空間における中点と内分点の公式、およびベクトルの差 ( $\\vec{MN} = \\vec{ON} - \\vec{OM}$ ) を利用します。平行六面体の頂点の位置関係を把握します。",
-                answer: "$\\vec{MN} = -\\frac{1}{2}\\vec{a} + \\frac{1}{6}\\vec{b} - \\frac{1}{2}\\vec{c}$"
+                answer: "$\\vec{MN} = \\frac{1}{2}\\vec{a} - \\frac{1}{6}\\vec{b} + \\frac{1}{2}\\vec{c}$"
             }
         ]
     },
@@ -239,7 +239,7 @@ const problemsData = [
                 id: "Q2-3",
                 text: "$\\vec{a} = (2, 1, -3)$, $\\vec{b} = (-1, 3, 2)$ とする。$k\\vec{a} + l\\vec{b} = (7, -4, -13)$ を満たす実数 $k, l$ が存在するか調べよ。存在する場合はその値を求めよ。",
                 hint: "成分ごとに連立方程式を立て、その連立方程式に解が存在するかを調べます。",
-                answer: "存在する。$k=2, l=-3$"
+                answer: "連立方程式 $2k-l=7, k+3l=-4, -3k+2l=-13$ は解を持たないため、そのような実数 $k, l$ は存在しない。"
             },
             {
                 id: "Q2-4",
@@ -407,7 +407,7 @@ const problemsData = [
                 id: "Q7-1",
                 text: "$3$点 A$(\\vec{a})$, B$(\\vec{b})$, C$(\\vec{c})$ を頂点とする $\\triangle ABC$ において、辺 AB を $1:3$ に内分する点を P, 辺 BC の中点を M, 辺 CA を $3:2$ に外分する点を Q とする。$\\vec{p}, \\vec{m}, \\vec{q}$ をそれぞれ $\\vec{a}, \\vec{b}, \\vec{c}$ を用いて表せ。",
                 hint: "内分点・外分点の公式を適用します。",
-                answer: "$\\vec{p} = \\frac{3\\vec{a} + \\vec{b}}{4}, \\vec{m} = \\frac{\\vec{b} + \\vec{c}}{2}, \\vec{q} = -2\\vec{a} + 3\\vec{c}$"
+                answer: "$\\vec{p} = \\frac{3\\vec{a} + \\vec{b}}{4}, \\vec{m} = \\frac{\\vec{b} + \\vec{c}}{2}, \\vec{q} = 3\\vec{a} - 2\\vec{c}$"
             },
             {
                 id: "Q7-2",
@@ -443,7 +443,7 @@ const problemsData = [
                 id: "Q8-1",
                 text: "$\\triangle OAB$ において、辺 OA を $3:1$ に内分する点を C, 辺 OB を $2:3$ に内分する点を D とする。線分 AD と線分 BC の交点を P とし、$\\vec{OA} = \\vec{a}$, $\\vec{OB} = \\vec{b}$ とするとき、$\\vec{OP}$ を $\\vec{a}, \\vec{b}$ を用いて表せ。",
                 hint: "交点 P は線分 AD 上にあるので $\\vec{OP} = (1-s)\\vec{OA} + s\\vec{OD}$ と表せ、線分 BC 上にあるので $\\vec{OP} = (1-t)\\vec{OB} + t\\vec{OC}$ と表せます (始点をOに統一)。係数比較を行います。",
-                answer: "$\\vec{OP} = \\frac{3}{7}\\vec{a} + \\frac{2}{7}\\vec{b}$"
+                answer: "$\\vec{OP} = \\frac{9}{14}\\vec{a} + \\frac{1}{7}\\vec{b}$"
             },
             {
                 id: "Q8-2",
@@ -467,7 +467,7 @@ const problemsData = [
                 id: "Q8-5",
                 text: "$\\triangle OAB$ において、直線 OP が線分 AB を $3:4$ に内分する点 Q を通る。O, P, Q は同一直線上にある。$\\vec{OQ}$ を $\\vec{OA}$ と $\\vec{OB}$ で表し、さらに $\\vec{OP} = k\\vec{OQ}$ であるとき、$\\vec{OP}$ を $\\vec{OA}, \\vec{OB}, k$ で表せ。",
                 hint: "点 Q は線分 AB を $3:4$ に内分する点なので、内分点の公式で $\\vec{OQ}$ を表します。O, P, Q が同一直線上にあることから $\\vec{OP} = k\\vec{OQ}$ となります。",
-                answer: "$\\vec{OQ} = \\frac{4\\vec{OA} + 3\\vec{OB}}{7}, \\vec{OP} = k(\\frac{4\\vec{OA} + 3\\vec{OB}}{7})$"
+                answer: "$\\vec{OQ} = \\frac{4\\vec{OA} + 3\\vec{OB}}{7}, \\vec{OP} = k\\left(\\frac{4\\vec{OA} + 3\\vec{OB}}{7}\\right)$"
             }
         ]
     },
@@ -515,7 +515,7 @@ const problemsData = [
                 id: "Q10-1",
                 text: "$2$直線 $x + 2y - 1 = 0$, $3x - y + 4 = 0$ のなす鋭角 $\\alpha$ を求めよ。",
                 hint: "各直線の法線ベクトルを求め、そのなす角から直線のなす角を計算します。",
-                answer: "$\\cos\\alpha = \\frac{\\sqrt{2}}{2}, \\alpha = 45^\\circ$"
+                answer: "$\\cos\\alpha = \\frac{\\sqrt{2}}{10}, \\alpha = \\arccos\\left(\\frac{\\sqrt{2}}{10}\\right)$"
             },
             {
                 id: "Q10-2",
@@ -557,7 +557,7 @@ const problemsData = [
                 id: "Q11-2",
                 text: "$2$点 A$(-3, 2)$, B$(5, 0)$ を直径の両端とする円の方程式をベクトルを用いて表し、さらに $x, y$ の方程式で表せ。",
                 hint: "直径の両端 A, B が与えられている場合、中心は AB の中点、半径は AB の長さの半分です。または、点 P が円周上にあるとき、 $\\vec{PA} \\cdot \\vec{PB} = 0$ となります。",
-                answer: "ベクトル方程式: $(\\vec{p} - \\vec{a}) \\cdot (\\vec{p} - \\vec{b}) = 0$。$x,y$ の方程式: $(x-1)^2 + (y-1)^2 = 17$"
+                answer: "ベクトル方程式: $(\\vec{p} - \\vec{a}) \\cdot (\\vec{p} - \\vec{b}) = 0$ (ここで $\\vec{a}=(-3,2), \\vec{b}=(5,0)$)。$x,y$ の方程式: $(x-1)^2 + (y-1)^2 = 17$"
             },
             {
                 id: "Q11-3",
