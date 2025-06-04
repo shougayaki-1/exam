@@ -722,6 +722,102 @@ const problemsData = [
                 answer: "$6x+3y+2z=6$。$z=0$"
             }
         ]
+    },
+    {
+        title: "問題16: 位置ベクトルと図形の応用 (問題7類似)",
+        id: "problem-set-16",
+        questions: [
+            {
+                id: "Q16-1",
+                text: "3点 P($\\vec{p}$), Q($\\vec{q}$), R($\\vec{r}$) を頂点とする$\\triangle$PQR において, 辺QR を $1:4$ に内分する点を S, 辺QR を $3:1$ に外分する点を T, $\\triangle$PQR の重心を U とする. 次のベクトルを $\\vec{p}$, $\\vec{q}$, $\\vec{r}$ を用いて表せ.<br>(1) $\\vec{PS}$<br>(2) $\\vec{PT}$<br>(3) $\\vec{PU}$<br>(4) $\\vec{US}$",
+                hint: "基準点を原点Oとし、S, T, Uの各点の位置ベクトルを $\\vec{p}, \\vec{q}, \\vec{r}$ で表します (例: $\\vec{OS} = \\vec{s}$)。その後、例えば $\\vec{PS} = \\vec{s} - \\vec{p}$ のように計算します。内分点: $\\frac{n\\vec{A}+m\\vec{B}}{m+n}$, 外分点: $\\frac{-n\\vec{A}+m\\vec{B}}{m-n}$ (または $\\frac{n\\vec{A}-m\\vec{B}}{n-m}$), 重心: $\\frac{\\vec{A}+\\vec{B}+\\vec{C}}{3}$ の公式を利用してください。",
+                answer: "(1) $\\vec{PS} = \\frac{-5\\vec{p} + 4\\vec{q} + \\vec{r}}{5}$ <br>(2) $\\vec{PT} = \\frac{-2\\vec{p} - \\vec{q} + 3\\vec{r}}{2}$ <br>(3) $\\vec{PU} = \\frac{-2\\vec{p} + \\vec{q} + \\vec{r}}{3}$ <br>(4) $\\vec{US} = \\frac{-5\\vec{p} + 7\\vec{q} - 2\\vec{r}}{15}$"
+            },
+            {
+                id: "Q16-2",
+                text: "3点 X($\\vec{x}$), Y($\\vec{y}$), Z($\\vec{z}$) を頂点とする$\\triangle$XYZ において, 辺YZ を $3:2$ に内分する点を A, 辺YZ を $2:5$ に外分する点を B, $\\triangle$XYZ の重心を C とする. 次のベクトルを $\\vec{x}$, $\\vec{y}$, $\\vec{z}$ を用いて表せ.<br>(1) $\\vec{XA}$<br>(2) $\\vec{XB}$<br>(3) $\\vec{XC}$<br>(4) $\\vec{CA}$",
+                hint: "基準点を原点Oとし、A, B, Cの各点の位置ベクトルを $\\vec{x}, \\vec{y}, \\vec{z}$ で表します。その後、例えば $\\vec{XA} = \\vec{a} - \\vec{x}$ のように計算します。内分点・外分点・重心の公式を正しく適用してください。",
+                answer: "(1) $\\vec{XA} = \\frac{-5\\vec{x} + 2\\vec{y} + 3\\vec{z}}{5}$ <br>(2) $\\vec{XB} = \\frac{-3\\vec{x} + 5\\vec{y} - 2\\vec{z}}{3}$ <br>(3) $\\vec{XC} = \\frac{-2\\vec{x} + \\vec{y} + \\vec{z}}{3}$ <br>(4) $\\vec{CA} = \\frac{-5\\vec{x} + \\vec{y} + 4\\vec{z}}{15}$"
+            },
+            {
+                id: "Q16-3",
+                text: "3点 L($\\vec{l}$), M($\\vec{m}$), N($\\vec{n}$) を頂点とする$\\triangle$LMN において, 辺MN を $1:1$ に内分する点を P (つまり中点), 辺MN を $1:3$ に外分する点を Q, $\\triangle$LMN の重心を R とする. 次のベクトルを $\\vec{l}$, $\\vec{m}$, $\\vec{n}$ を用いて表せ.<br>(1) $\\vec{LP}$<br>(2) $\\vec{LQ}$<br>(3) $\\vec{LR}$<br>(4) $\\vec{RQ}$",
+                hint: "中点は内分点の比が $1:1$ の場合です。外分点の公式の符号に注意してください。各点の位置ベクトルを求めてから、指定されたベクトルを計算します。",
+                answer: "(1) $\\vec{LP} = \\frac{-2\\vec{l} + \\vec{m} + \\vec{n}}{2}$ <br>(2) $\\vec{LQ} = \\frac{-2\\vec{l} + 3\\vec{m} - \\vec{n}}{2}$ <br>(3) $\\vec{LR} = \\frac{-2\\vec{l} + \\vec{m} + \\vec{n}}{3}$ <br>(4) $\\vec{RQ} = \\frac{-2\\vec{l} + 7\\vec{m} - 5\\vec{n}}{6}$"
+            }
+        ]
+    },
+    {
+        title: "問題17: ベクトルの交点の応用 (問題8類似)",
+        id: "problem-set-17",
+        questions: [
+            {
+                id: "Q17-1",
+                text: "$\\triangle$OXY において, 辺OX を $2:3$ に内分する点を C, 辺OY を $1:3$ に内分する点を D とする. 線分XD と線分CY の交点を P とし, 直線OP と辺XY の交点を Q とする. $\\vec{OX} = \\vec{x}$, $\\vec{OY} = \\vec{y}$ とするとき, 次のベクトルを $\\vec{x}$, $\\vec{y}$ を用いて表せ.<br>(1) $\\vec{OP}$<br>(2) $\\vec{OQ}$",
+                hint: "点C, Dの位置ベクトルは $\\vec{OC} = \\frac{2}{5}\\vec{x}$, $\\vec{OD} = \\frac{1}{4}\\vec{y}$ となります。(1) Pは線分XD上の点、かつ線分CY上の点として $\\vec{OP}$ を2通りに表し、係数比較します。(2) Qは直線OP上の点、かつ辺XY上の点として $\\vec{OQ}$ を表し、係数比較します。",
+                answer: "(1) $\\vec{OP} = \\frac{1}{3}\\vec{x} + \\frac{1}{6}\\vec{y}$ <br>(2) $\\vec{OQ} = \\frac{2}{3}\\vec{x} + \\frac{1}{3}\\vec{y}$"
+            },
+            {
+                id: "Q17-2",
+                text: "$\\triangle$OPQ において, 辺OP を $3:1$ に内分する点を R, 辺OQ を $1:2$ に内分する点を S とする. 線分PS と線分QR の交点を T とし, 直線OT と辺PQ の交点を U とする. $\\vec{OP} = \\vec{p}$, $\\vec{OQ} = \\vec{q}$ とするとき, 次のベクトルを $\\vec{p}$, $\\vec{q}$ を用いて表せ.<br>(1) $\\vec{OT}$<br>(2) $\\vec{OU}$",
+                hint: "点R, Sの位置ベクトルは $\\vec{OR} = \\frac{1}{4}\\vec{p}$, $\\vec{OS} = \\frac{1}{3}\\vec{q}$ です。(1) Tは線分PS上、かつ線分QR上の点として $\\vec{OT}$ を2通りに表し係数比較します。(2) Uは直線OT上、かつ辺PQ上の点として $\\vec{OU}$ を表し係数比較します。",
+                answer: "(1) $\\vec{OT} = \\frac{2}{11}\\vec{p} + \\frac{3}{11}\\vec{q}$ <br>(2) $\\vec{OU} = \\frac{2}{5}\\vec{p} + \\frac{3}{5}\\vec{q}$"
+            },
+            {
+                id: "Q17-3",
+                text: "$\\triangle$OEF において, 辺OE の中点を G, 辺OF を $3:2$ に内分する点を H とする. 線分EH と線分FG の交点を I とし, 直線OI と辺EF の交点を J とする. $\\vec{OE} = \\vec{e}$, $\\vec{OF} = \\vec{f}$ とするとき, 次のベクトルを $\\vec{e}$, $\\vec{f}$ を用いて表せ.<br>(1) $\\vec{OI}$<br>(2) $\\vec{OJ}$",
+                hint: "点G, Hの位置ベクトルは $\\vec{OG} = \\frac{1}{2}\\vec{e}$, $\\vec{OH} = \\frac{2}{5}\\vec{f}$ です。(1) Iは線分EH上、かつ線分FG上の点として $\\vec{OI}$ を2通りに表し係数比較します。(2) Jは直線OI上、かつ辺EF上の点として $\\vec{OJ}$ を表し係数比較します。",
+                answer: "(1) $\\vec{OI} = \\frac{3}{8}\\vec{e} + \\frac{1}{4}\\vec{f}$ <br>(2) $\\vec{OJ} = \\frac{3}{5}\\vec{e} + \\frac{2}{5}\\vec{f}$"
+            }
+        ]
+    },
+    {
+        title: "問題18: 点の存在範囲の応用 (問題9類似)",
+        id: "problem-set-18",
+        questions: [
+            {
+                id: "Q18-1",
+                text: "O を原点として, $\\vec{OA}=(1, 2)$, $\\vec{OB}=(-3, 1)$ とする. 実数 $s, t$ が次の条件を満たしながら変わるとき, 等式 $\\vec{OP}=s\\vec{OA}+t\\vec{OB}$ で表される点 P の存在範囲を図示の概要とともに答えよ.<br>(1) $s+2t=4$<br>(2) $0 \\le s+t \\le 2$, $s \\ge 0$, $t \\ge 0$",
+                hint: "(1) $s+2t=4$ を変形し、$\\vec{OP} = s'(k_1\\vec{OA}) + t'(k_2\\vec{OB})$ ($s'+t'=1$) の形にします。これは特定の2点を通る直線を表します。(2) $s+t=k$ とおき、kの範囲で考えます。$s \\ge 0, t \\ge 0$ より、基本的な領域は平行四辺形です。",
+                answer: "(1) 点Pは、点 $4\\vec{OA}=(4,8)$ と点 $2\\vec{OB}=(-6,2)$ を通る直線。<br>(2) 点Pの存在範囲は、原点Oと、点 $2\\vec{OA}=(2,4)$、点 $2\\vec{OB}=(-6,2)$、点 $2(\\vec{OA}+\\vec{OB})=(-4,6)$ を頂点とする平行四辺形の周および内部。"
+            },
+            {
+                id: "Q18-2",
+                text: "O を原点として, $\\vec{OA}=(4, 0)$, $\\vec{OB}=(0, 5)$ とする. 実数 $s, t$ が次の条件を満たしながら変わるとき, 等式 $\\vec{OP}=s\\vec{OA}+t\\vec{OB}$ で表される点 P の存在範囲を図示の概要とともに答えよ.<br>(1) $2s+5t=10$<br>(2) $0 \\le s+2t \\le 4$, $s \\ge 0$, $t \\ge 0$",
+                hint: "(1) $2s+5t=10$ を $s'/k_1 + t'/k_2 = 1$ の形にします。点Pの軌跡は直線です。(2) $s \\ge 0, t \\ge 0$ の条件と $s+2t=k$ ($0 \\le k \\le 4$) の条件から領域を特定します。",
+                answer: "(1) 点Pは、点 $5\\vec{OA}=(20,0)$ と点 $2\\vec{OB}=(0,10)$ を通る直線。<br>(2) 点Pの存在範囲は、原点O(0,0)と、点 $4\\vec{OA}=(16,0)$、点 $2\\vec{OB}=(0,10)$ を頂点とする三角形の周および内部。"
+            },
+            {
+                id: "Q18-3",
+                text: "O を原点として, $\\vec{OA}=(-2, 3)$, $\\vec{OB}=(5, -1)$ とする. 実数 $s, t$ が次の条件を満たしながら変わるとき, 等式 $\\vec{OP}=s\\vec{OA}+t\\vec{OB}$ で表される点 P の存在範囲を図示の概要とともに答えよ.<br>(1) $s-t=1$<br>(2) $0 \\le s+t \\le 3$, $s \\ge 0$, $t \\ge 0$",
+                hint: "(1) $s-t=1$ は $s+(-t)=1$ と考え、$\\vec{OP} = s\\vec{OA} + (-t)(-\\vec{OB})$ と変形します。(2) $s+t=k$ ($0 \\le k \\le 3$) と $s \\ge 0, t \\ge 0$ の条件から領域を特定します。",
+                answer: "(1) 点Pは、点 $\\vec{OA}=(-2,3)$ と点 $-\\vec{OB}=(-5,1)$ を通る直線。<br>(2) 点Pの存在範囲は、原点Oと、点 $3\\vec{OA}=(-6,9)$、点 $3\\vec{OB}=(15,-3)$、点 $3(\\vec{OA}+\\vec{OB})=(9,6)$ を頂点とする平行四辺形の周および内部。"
+            }
+        ]
+    },
+    {
+        title: "問題19: 直線の方程式の応用 (問題10類似)",
+        id: "problem-set-19",
+        questions: [
+            {
+                id: "Q19-1",
+                text: "2直線 $x+\\sqrt{3}y-1=0$, $x-\\sqrt{3}y+3=0$ のなす鋭角 $\\alpha$ を求めよ.",
+                hint: "各直線の法線ベクトル $\\vec{n_1}, \\vec{n_2}$ を求め、そのなす角 $\\theta$ を $\\cos\\theta = \\frac{|\\vec{n_1} \\cdot \\vec{n_2}|}{|\\vec{n_1}| |\\vec{n_2}|}$ から求めます。あるいは、各直線の傾き $m_1, m_2$ を求め、$\\tan\\alpha = \\left|\\frac{m_1 - m_2}{1 + m_1 m_2}\\right|$ を利用します。",
+                answer: "$\\alpha = 60^\\circ$ (または $\\frac{\\pi}{3}$)"
+            },
+            {
+                id: "Q19-2",
+                text: "2直線 $x-y+5=0$, $x+y-2=0$ のなす鋭角 $\\alpha$ を求めよ.",
+                hint: "法線ベクトルを比較するか、傾きを比較します。法線ベクトルの内積が0、または傾きの積が-1の場合、直線は直交します。",
+                answer: "$\\alpha = 90^\\circ$ (または $\\frac{\\pi}{2}$)"
+            },
+            {
+                id: "Q19-3",
+                text: "2直線 $y=2x+1$, $y=-\\frac{1}{3}x+4$ のなす鋭角 $\\alpha$ を求めよ.",
+                hint: "各直線の傾き $m_1, m_2$ を求め、$\\tan\\alpha = \\left|\\frac{m_1 - m_2}{1 + m_1 m_2}\\right|$ を利用します。または、直線を一般形 $ax+by+c=0$ に直し、法線ベクトルを利用します。",
+                answer: "$\\tan\\alpha = 7$ (よって $\\alpha = \\arctan(7)$)。または $\\cos\\alpha = \\frac{\\sqrt{2}}{10}$。"
+            }
+        ]
     }
 ];
 
@@ -733,7 +829,16 @@ document.addEventListener('DOMContentLoaded', () => {
     problemsData.forEach((problemSet, index) => {
         const navLi = document.createElement('li');
         const problemSetShortTitle = problemSet.title.split(':')[0].replace(`問題${index + 1}`, '').trim();
-        navLi.innerHTML = `<a href="#" data-target="${problemSet.id}" class="nav-link"><i class="material-icons nav-item-icon">description</i><span>問題 ${index + 1}: ${problemSetShortTitle || problemSet.title}</span></a>`;
+        // Display original title if short title logic results in empty or just "問題"
+        let displayTitle = problemSetShortTitle || problemSet.title;
+        if (problemSetShortTitle && !problemSetShortTitle.includes(problemSet.title.split(':')[1].trim().substring(0,5))) { // if short title is just "問題" or "問題X"
+             displayTitle = problemSet.title; // use full title
+        } else if (problemSetShortTitle) {
+            displayTitle = `問題 ${index + 1}: ${problemSetShortTitle}`;
+        }
+
+
+        navLi.innerHTML = `<a href="#" data-target="${problemSet.id}" class="nav-link"><i class="material-icons nav-item-icon">description</i><span>${displayTitle}</span></a>`;
         navigationUl.appendChild(navLi);
 
         const contentDiv = document.createElement('div');
@@ -741,7 +846,7 @@ document.addEventListener('DOMContentLoaded', () => {
         contentDiv.className = 'problem-set hidden';
 
         let problemSetHTML = `<h2 class="large-title primary-text problem-set-title">${problemSet.title}</h2>`;
-        problemSetHTML += `<p class="medium-text" style="margin-bottom: 1.5rem;">このセクションでは、ベクトルの基本的な性質や応用に関する問題を探求します。各問題を解くことで理解を深めましょう。</p>`;
+        problemSetHTML += `<p class="medium-text" style="margin-bottom: 1.5rem;">このセクションでは、ベクトルに関する様々な問題を探求します。各問題を解くことで理解を深めましょう。</p>`;
         
         problemSet.questions.forEach(q => {
             problemSetHTML += `
