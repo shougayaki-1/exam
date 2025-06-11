@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>インタラクティブ平面上の曲線問題集</title>
+    <!-- Beer CSS (Linked from local file) -->
+    <link rel="stylesheet" href="../beer.css">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/beercss@3.5.1/dist/beercss.min.js"></script>
+    <!-- Material Design Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    <!-- Custom Styles (after beer.css) -->
+    <style>
+        body {
+            font-family: var(--font, 'Inter', 'Noto Sans JP', sans-serif);
+        }
+        .math-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .math-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        header#app-header nav.primary {
+            padding: 1rem 1.5rem;
+        }
+
+        /* Sidebar Navigation List */
+        #problem-navigation ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin-top: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        #problem-navigation li {
+            position: relative;
+            border-radius: var(--border-radius, 4px);
+            transition: background-color 0.2s;
+            width: 100%;
+        }
+        #problem-navigation li::before {
+            content: none;
+        }
+
+        #problem-navigation .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            text-decoration: none;
+            color: var(--on-surface);
+            border-radius: inherit;
+            transition: background-color 0.2s, color 0.2s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        #problem-navigation .nav-link .nav-item-icon {
+            font-size: 1.25rem;
+            color: var(--on-surface-variant);
+            transition: color 0.2s;
+            flex-shrink: 0;
+        }
+        #problem-navigation .nav-link span {
+            white-space: normal;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            flex-grow: 1;
+            min-width: 0;
+        }
+
+        #problem-navigation li:not(.active-item) .nav-link:hover {
+            background-color: var(--surface-container-hover, var(--active));
+            color: var(--primary);
+        }
+        #problem-navigation li:not(.active-item) .nav-link:hover .nav-item-icon {
+            color: var(--primary);
+        }
+
+        #problem-navigation li.active-item {
+            background-color: var(--primary-container);
+            border-left: 4px solid var(--primary);
+        }
+        #problem-navigation li.active-item .nav-link {
+            color: var(--on-primary-container);
+            font-weight: 500;
+            background-color: transparent;
+        }
+        #problem-navigation li.active-item .nav-link .nav-item-icon {
+            color: var(--primary);
+        }
+
+        .problem-set-title {
+            border-bottom: 2px solid var(--outline-variant);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .problem-card {
+            margin-bottom: 1.5rem;
+            background-color: var(--surface-container);
+        }
+        .problem-card-id {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Styles for Hint/Answer actions and content */
+        .problem-actions {
+            display: flex;
+            gap: 0.5rem; /* 8px */
+            margin-top: 1rem; /* 16px */
+            flex-wrap: wrap; /* Small screens */
+        }
+        .problem-actions button.chip .material-icons {
+            font-size: 1.125rem; /* 18px */
+        }
+        .problem-actions button.chip .button-text {
+            margin-left: 0.25rem; /* 4px */
+        }
+
+        .hint-content, .answer-content {
+            background-color: var(--surface-container-low); /* Slightly different background */
+            border-left: 4px solid var(--primary);
+            margin-top: 1rem; /* 16px */
+        }
+        .hint-content h6, .answer-content h6 {
+            color: var(--on-surface-variant);
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem; /* 14px */
+            font-weight: 500;
+        }
+        .hint-content p, .answer-content p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        /* For point summary, hide hint/answer buttons if not needed */
+        .point-summary-card .problem-actions {
+            display: none;
+        }
+    </style>
+</head>
+<body data-theme="light">
+
+    <header id="app-header">
+        <nav class="primary">
+            <h1 class="large-title">インタラクティブ平面上の曲線問題集</h1>
+            <p class="opacity-75">左のメニューから問題セットまたはポイント整理を選択してください。</p>
+        </nav>
+    </header>
+
+    <div id="main-grid-layout" class="grid large-padding">
+        <aside class="s12 m4 l3 xl2 padding">
+            <h6 class="medium-title">コンテンツ一覧</h6>
+            <nav id="problem-navigation" class="math-container" style="max-height: calc(100vh - 200px); overflow-y: auto;">
+                <ul><!-- Navigation items will be populated here --></ul>
+            </nav>
+        </aside>
+
+        <main id="content-area" class="s12 m8 l9 xl10 padding math-container">
+            <article id="welcome-message" class="card large-padding">
+                <h2 class="large-title primary-text">ようこそ！</h2>
+                <p class="medium-text">このアプリケーションは、平面上の曲線に関する様々な問題やポイント整理を提供するインタラクティブな学習ツールです。左のナビゲーションからコンテンツを選択して、学習を開始してください。</p>
+            </article>
+            <!-- Problem sets will be injected here -->
+        </main>
+    </div>
+
+<script>
+const problemsData = [
+    {
+        title: "ポイント整理",
+        id: "curves-points-summary",
+        questions: [
+            {
+                id: "CPS-Summary",
+                text: `
+                    <h3 class="medium-title" style="margin-top:0; color: var(--primary);">第1節 二次曲線</h3>
+                    <h4>1. 放物線</h4>
+                    <ul>
+                        <li><strong>定義:</strong> 定点 F (焦点) と定直線 $l$ (準線) からの距離が等しい点 P の軌跡。</li>
+                        <li><strong>標準形:</strong>
+                            <ol style="list-style-type: lower-alpha; padding-left: 20px;">
+                                <li style="margin-bottom: 0.5rem;">$y^2 = 4px$
+                                    <ul style="padding-left: 20px; margin-top: 0.25rem;">
+                                        <li>焦点: F$(p,0)$</li>
+                                        <li>準線: $x = -p$</li>
+                                        <li>頂点: 原点 $(0,0)$</li>
+                                        <li>軸: $x$ 軸 ($y=0$)</li>
+                                    </ul>
+                                </li>
+                                <li style="margin-bottom: 0.5rem;">$x^2 = 4py$
+                                    <ul style="padding-left: 20px; margin-top: 0.25rem;">
+                                        <li>焦点: F$(0,p)$</li>
+                                        <li>準線: $y = -p$</li>
+                                        <li>頂点: 原点 $(0,0)$</li>
+                                        <li>軸: $y$ 軸 ($x=0$)</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </li>
+                    </ul>
+                    <h4>2. 楕円</h4>
+                    <ul>
+                        <li><strong>定義:</strong> 2つの定点 F, F' (焦点) かららの距離の和が一定である点 P の軌跡 ($PF + PF' = 2a$)。</li>
+                        <li><strong>標準形:</strong> $\\frac{x^2}{a^2} + \\frac{y^2}{b^2} = 1$
+                            <ol style="list-style-type: lower-alpha; padding-left: 20px;">
+                                <li style="margin-bottom: 0.5rem;">$a > b > 0$ のとき (焦点が $x$ 軸上)
+                                    <ul style="padding-left: 20px; margin-top: 0.25rem;">
+                                        <li>焦点: F$(\\pm \\sqrt{a^2-b^2}, 0)$ または $(\\pm c, 0)$ ただし $c^2 = a^2-b^2$</li>
+                                        <li>長軸の長さ: $2a$ (頂点 $(\\pm a, 0)$)</li>
+                                        <li>短軸の長さ: $2b$ (頂点 $(0, \\pm b)$)</li>
+                                        <li>中心: 原点 $(0,0)$</li>
+                                    </ul>
+                                </li>
+                                <li style="margin-bottom: 0.5rem;">$b > a > 0$ のとき (焦点が $y$ 軸上)
+                                    <ul style="padding-left: 20px; margin-top: 0.25rem;">
+                                        <li>焦点: F$(0, \\pm \\sqrt{b^2-a^2})$ または $(0, \\pm c)$ ただし $c^2 = b^2-a^2$</li>
+                                        <li>長軸の長さ: $2b$ (頂点 $(0, \\pm b)$)</li>
+                                        <li>短軸の長さ: $2a$ (頂点 $(\\pm a, 0)$)</li>
+                                        <li>中心: 原点 $(0,0)$</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </li>
+                    </ul>
+                    <h4>3. 双曲線</h4>
+                    <ul>
+                        <li><strong>定義:</strong> 2つの定点 F, F' (焦点) からの距離の差の絶対値が一定である点 P の軌跡 ($|PF - PF'| = 2a$)。</li>
+                        <li><strong>標準形:</strong>
+                            <ol style="list-style-type: lower-alpha; padding-left: 20px;">
+                                <li style="margin-bottom: 0.5rem;">$\\frac{x^2}{a^2} - \\frac{y^2}{b^2} = 1$ (焦点が $x$ 軸上)
+                                    <ul style="padding-left: 20px; margin-top: 0.25rem;">
+                                        <li>焦点: F$(\\pm \\sqrt{a^2+b^2}, 0)$ または $(\\pm c, 0)$ ただし $c^2 = a^2+b^2$</li>
+                                        <li>頂点: $(\\pm a, 0)$</li>
+                                        <li>中心: 原点 $(0,0)$</li>
+                                        <li>漸近線: $y = \\pm \\frac{b}{a}x$</li>
+                                    </ul>
+                                </li>
+                                <li style="margin-bottom: 0.5rem;">$\\frac{x^2}{a^2} - \\frac{y^2}{b^2} = -1$ (または $\\frac{y^2}{b^2} - \\frac{x^2}{a^2} = 1$) (焦点が $y$ 軸上)
+                                    <ul style="padding-left: 20px; margin-top: 0.25rem;">
+                                        <li>焦点: F$(0, \\pm \\sqrt{a^2+b^2})$ または $(0, \\pm c)$ ただし $c^2 = a^2+b^2$</li>
+                                        <li>頂点: $(0, \\pm b)$</li>
+                                        <li>中心: 原点 $(0,0)$</li>
+                                        <li>漸近線: $y = \\pm \\frac{b}{a}x$</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </li>
+                    </ul>
+                    <h4>4. 二次曲線の平行移動</h4>
+                    <ul>
+                        <li>$x$ を $x-p$ に、$y$ を $y-q$ に置き換えると、図形は $x$ 軸方向に $p$、$y$ 軸方向に $q$ だけ平行移動する。</li>
+                        <li>例: 楕円 $\\frac{(x-p)^2}{a^2} + \\frac{(y-q)^2}{b^2} = 1$ は中心 $(p,q)$。</li>
+                    </ul>
+                    <h4>5. 二次曲線と直線の共有点</h4>
+                    <ul>
+                        <li>二次曲線の方程式と直線の方程式を連立させ、一方の変数を消去して得られる二次方程式の実数解の個数で判断。</li>
+                        <li>判別式 $D$ を用いて、
+                            <ul style="padding-left: 20px; margin-top: 0.25rem;">
+                                <li>$D > 0$: 共有点2個 (交わる)</li>
+                                <li>$D = 0$: 共有点1個 (接する)</li>
+                                <li>$D < 0$: 共有点0個 (交わらない)</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <h4>6. 二次曲線の接線</h4>
+                    <ul>
+                        <li><strong>曲線上の点 $(x_1, y_1)$ における接線:</strong>
+                            <ul style="padding-left: 20px; margin-top: 0.25rem;">
+                                <li>放物線 $y^2=4px$: $y_1y = 2p(x+x_1)$</li>
+                                <li>楕円 $\\frac{x^2}{a^2} + \\frac{y^2}{b^2} = 1$: $\\frac{x_1x}{a^2} + \\frac{y_1y}{b^2} = 1$</li>
+                                <li>双曲線 $\\frac{x^2}{a^2} - \\frac{y^2}{b^2} = 1$: $\\frac{x_1x}{a^2} - \\frac{y_1y}{b^2} = 1$</li>
+                            </ul>
+                        </li>
+                        <li><strong>傾き $m$ の接線:</strong>
+                            <ul style="padding-left: 20px; margin-top: 0.25rem;">
+                                <li>放物線 $y^2=4px$: $y = mx + \\frac{p}{m}$</li>
+                                <li>楕円 $\\frac{x^2}{a^2} + \\frac{y^2}{b^2} = 1$: $y = mx \\pm \\sqrt{a^2m^2+b^2}$</li>
+                                <li>双曲線 $\\frac{x^2}{a^2} - \\frac{y^2}{b^2} = 1$: $y = mx \\pm \\sqrt{a^2m^2-b^2}$ (ただし $a^2m^2-b^2 > 0$)</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <h4>7. 二次曲線の離心率</h4>
+                    <ul>
+                        <li><strong>定義:</strong> 曲線上の点 P から焦点 F までの距離 PF と、P から準線 $l$ までの距離 PH の比 $e = \\frac{PF}{PH}$。</li>
+                        <li><strong>分類:</strong>
+                            <ul style="padding-left: 20px; margin-top: 0.25rem;">
+                                <li>放物線: $e = 1$</li>
+                                <li>楕円: $0 < e < 1$</li>
+                                <li>双曲線: $e > 1$</li>
+                            </ul>
+                        </li>
+                        <li><strong>公式例:</strong>
+                            <ul style="padding-left: 20px; margin-top: 0.25rem;">
+                                <li>楕円 $\\frac{x^2}{a^2}+\\frac{y^2}{b^2}=1 (a>b)$: $e = \\frac{\\sqrt{a^2-b^2}}{a} = \\frac{c}{a}$</li>
+                                <li>双曲線 $\\frac{x^2}{a^2}-\\frac{y^2}{b^2}=1$: $e = \\frac{\\sqrt{a^2+b^2}}{a} = \\frac{c}{a}$</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <hr style="margin: 2rem 0;">
+                    <h3 class="medium-title" style="color: var(--primary);">第2節 曲線の表示と極座標</h3>
+                    <h4>1. 曲線の媒介変数表示</h4>
+                    <ul>
+                        <li>座標 $(x, y)$ をパラメータ $t$ (または $\\theta$) を用いて $x = f(t), y = g(t)$ と表す方法。</li>
+                        <li>パラメータを消去することで、$x, y$ の関係式（直交座標の方程式）が得られる。</li>
+                        <li><strong>主な例:</strong>
+                            <ul style="padding-left: 20px; margin-top: 0.25rem;">
+                                <li>円 (中心 $(x_0, y_0)$, 半径 $r$): $x = x_0 + r\\cos\\theta, \\quad y = y_0 + r\\sin\\theta$</li>
+                                <li>楕円 $\\frac{x^2}{a^2} + \\frac{y^2}{b^2} = 1$: $x = a\\cos\\theta, \\quad y = b\\sin\\theta$</li>
+                                <li>サイクロイド (半径 $a$ の円が $x$ 軸上を転がる): $x = a(\\theta - \\sin\\theta), \\quad y = a(1 - \\cos\\theta)$</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <h4>2. 極座標と直交座標</h4>
+                    <ul>
+                        <li>点 P の極座標を $(r, \\theta)$、直交座標を $(x, y)$ とする。</li>
+                        <li><strong>極座標から直交座標へ:</strong>
+                            <ul style="padding-left: 20px; margin-top: 0.25rem;">
+                                <li>$x = r \\cos\\theta$</li>
+                                <li>$y = r \\sin\\theta$</li>
+                            </ul>
+                        </li>
+                        <li><strong>直交座標から極座標へ:</strong>
+                            <ul style="padding-left: 20px; margin-top: 0.25rem;">
+                                <li>$r = \\sqrt{x^2 + y^2}$ (通常 $r \\ge 0$)</li>
+                                <li>$\\cos\\theta = \\frac{x}{r}, \\sin\\theta = \\frac{y}{r}$ (または $\\tan\\theta = \\frac{y}{x}$ で、象限を考慮して $\\theta$ を決定)</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <h4>3. 極方程式と図形</h4>
+                    <ul>
+                        <li><strong>主な例:</strong>
+                            <ul style="padding-left: 20px; margin-top: 0.25rem;">
+                                <li>原点を通る直線: $\\theta = \\alpha$ ($\\alpha$ は定数)</li>
+                                <li>原点中心の円: $r = a$ ($a$ は半径)</li>
+                                <li>直線 $x=a$: $r\\cos\\theta = a$</li>
+                                <li>直線 $y=b$: $r\\sin\\theta = b$</li>
+                                <li>原点を通り $x$ 軸に接する円 (中心 $(a,0)$): $r = 2a\\cos\\theta$</li>
+                                <li>原点を通り $y$ 軸に接する円 (中心 $(0,b)$): $r = 2b\\sin\\theta$</li>
+                                <li>二次曲線 (焦点が極、準線が極軸に垂直/平行):
+                                    <ul style="padding-left: 20px; margin-top: 0.25rem;">
+                                        <li>$r = \\frac{l}{1 \\pm e \\cos\\theta}$ (準線が $x = \\pm d$)</li>
+                                        <li>$r = \\frac{l}{1 \\pm e \\sin\\theta}$ (準線が $y = \\pm d$)</li>
+                                    </ul>
+                                    ($e$ は離心率、$l$ は半直弦)
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                `,
+                hint: "",
+                answer: ""
+            }
+        ],
+        isSummary: true // ポイント整理用のフラグ
+    },
+    {
+        title: "第1節 二次曲線 (問題)",
+        id: "curves-set-1-secondary-curves",
+        questions: [
+            {
+                id: "C1-A1",
+                text: "焦点が $F(2,0)$ で、準線が直線 $x=-2$ である放物線の方程式を求めなさい。",
+                hint: "放物線の定義より、$P(x,y)$ とすると $PF=PH$。焦点 F$(2,0)$、準線 $x=-2$ は、$y^2=4px$ の形。",
+                answer: "$y^2 = 8x$<br><b>解説:</b> 焦点が $(p,0)$、準線が $x=-p$ の放物線の方程式は $y^2=4px$。与えられた条件より $p=2$ なので、求める方程式は $y^2 = 4(2)x = 8x$。"
+            },
+            {
+                id: "C1-A2",
+                text: "2つの焦点 $F(0,3)$, $F'(0,-3)$ からの距離の和が $10$ である楕円の方程式を求めなさい。",
+                hint: "焦点が $y$ 軸上にある楕円。$2c=6 \\Rightarrow c=3$。距離の和 $2a'=10 \\Rightarrow a'=5$。関係式 $(a')^2=b^2+c^2$ を使う（ここでは $a'$ が長半径に対応する）。",
+                answer: "$\\frac{x^2}{16} + \\frac{y^2}{25} = 1$<br><b>解説:</b> 焦点 F$(0,3)$, F'$(0,-3)$ は $y$ 軸上にある。中心は原点。焦点間の距離の半分を $c$ とすると、$c=3$。焦点からの距離の和を $2a'$ とすると、$2a'=10 \\Rightarrow a'=5$。楕円の焦点が $y$ 軸上にある場合、標準形は $\\frac{x^2}{b^2} + \\frac{y^2}{(a')^2} = 1$ ($a'>b$)。$(a')^2 = b^2 + c^2$ より、$b^2 = (a')^2 - c^2 = 5^2 - 3^2 = 25 - 9 = 16$。よって、求める楕円の方程式は $\\frac{x^2}{16} + \\frac{y^2}{25} = 1$。"
+            },
+            {
+                id: "C1-A3",
+                text: "双曲線 $\\frac{x^2}{9} - \\frac{y^2}{16} = 1$ の焦点の座標と漸近線の方程式を求めなさい。",
+                hint: "双曲線 $\\frac{x^2}{a^2} - \\frac{y^2}{b^2} = 1$ の焦点は $(\\pm\\sqrt{a^2+b^2},0)$、漸近線は $y=\\pm\\frac{b}{a}x$.",
+                answer: "焦点 $(\\pm 5, 0)$、漸近線 $y = \\pm \\frac{4}{3}x$<br><b>解説:</b> 与えられた双曲線の方程式は $\\frac{x^2}{9} - \\frac{y^2}{16} = 1$。$a^2=9, b^2=16$ より $a=3, b=4$。焦点の座標は $(\\pm c,0)$ で、$c^2 = a^2+b^2 = 9+16=25 \\Rightarrow c=5$。よって焦点は $(\\pm 5, 0)$。漸近線の方程式は $y=\\pm\\frac{b}{a}x=\\pm\\frac{4}{3}x$。"
+            },
+            {
+                id: "C1-A4",
+                text: "楕円 $x^2 + 4y^2 + 4x - 8y + 4 = 0$ の中心の座標と長軸の長さ、短軸の長さを求めなさい。",
+                hint: "$x,y$ についてそれぞれ平方完成し、楕円の標準形 $\\frac{(x-p)^2}{A^2} + \\frac{(y-q)^2}{B^2} = 1$ に変形する。",
+                answer: "中心 $(-2, 1)$、長軸の長さ $4$、短軸の長さ $2$<br><b>解説:</b> $x^2 + 4y^2 + 4x - 8y + 4 = 0 \\Rightarrow (x^2 + 4x) + 4(y^2 - 2y) + 4 = 0 \\Rightarrow \\{(x+2)^2 - 4\\} + 4\\{(y-1)^2 - 1\\} + 4 = 0 \\Rightarrow (x+2)^2 - 4 + 4(y-1)^2 - 4 + 4 = 0 \\Rightarrow (x+2)^2 + 4(y-1)^2 = 4 \\Rightarrow \\frac{(x+2)^2}{4} + \\frac{(y-1)^2}{1} = 1$。これは中心が $(-2, 1)$ の楕円。$A^2=4, B^2=1$ より $A=2, B=1$。長軸の長さは $2A = 4$。短軸の長さは $2B = 2$。"
+            },
+            {
+                id: "C1-A5",
+                text: "放物線 $y^2 = -8x$ と直線 $y = x + k$ が接するとき、定数 $k$ の値を求めなさい。また、そのときの接点の座標を求めなさい。",
+                hint: "連立してできる二次方程式の判別式 $D=0$ を使う。",
+                answer: "$k = -2$, 接点の座標 $(-2, -4)$<br><b>解説:</b> $y=x+k$ を $y^2=-8x$ に代入すると $(x+k)^2=-8x \Rightarrow x^2+2kx+k^2=-8x \Rightarrow x^2+(2k+8)x+k^2=0$。接するので判別式 $D=(2k+8)^2-4k^2=0 \Rightarrow 4k^2+32k+64-4k^2=0 \Rightarrow 32k+64=0 \Rightarrow k=-2$。このとき $x^2+(-4+8)x+(-2)^2=0 \Rightarrow x^2+4x+4=0 \Rightarrow (x+2)^2=0 \Rightarrow x=-2$。$y=x+k=-2+(-2)=-4$。よって接点の座標は $(-2,-4)$。"
+            },
+            {
+                id: "C1-A6",
+                text: "楕円 $\\frac{x^2}{8} + \\frac{y^2}{2} = 1$ 上の点 P$(2, 1)$ における接線の方程式を求めなさい。",
+                hint: "楕円 $\\frac{x^2}{a^2} + \\frac{y^2}{b^2} = 1$ 上の点 $(x_1, y_1)$ における接線の方程式は $\\frac{x_1 x}{a^2} + \\frac{y_1 y}{b^2} = 1$.",
+                answer: "$x + 2y = 4$ (または $\\frac{x}{4} + \\frac{y}{2} = 1$)<br><b>解説:</b> 楕円 $\\frac{x^2}{8} + \\frac{y^2}{2} = 1$ 上の点 P$(2, 1)$ における接線の方程式は、$\\frac{2x}{8} + \\frac{1y}{2} = 1 \\Rightarrow \\frac{x}{4} + \\frac{y}{2} = 1$。両辺を4倍して、$x + 2y = 4$。"
+            },
+            {
+                id: "C1-B1",
+                text: "2つの定点 A$(0,0)$, B$(6,0)$ がある。点 P の座標を $(x,y)$ とするとき、$|PA-PB|=4$ を満たす点 P の軌跡の方程式を求め、どのような図形か答えなさい。計算過程も詳細に記述すること。",
+                hint: "双曲線の定義「2定点からの距離の差の絶対値が一定である点の軌跡」を利用する。2定点が焦点となる。",
+                answer: "$\\frac{(x-3)^2}{4} - \\frac{y^2}{5} = 1$。図形の種類：<b>双曲線</b>。<br><b>計算過程:</b> 点 P$(x,y)$ とし、A$(0,0)$, B$(6,0)$ とする。$|PA-PB|=4$ より、これは2点 A, B を焦点とする双曲線である。焦点は $F_1(0,0), F_2(6,0)$。中心は線分 $F_1F_2$ の中点 C で、C$(3,0)$。中心から焦点までの距離 $c'=3$。距離の差の絶対値が $2a=4$ より $a=2$。双曲線の関係式 $(c')^2 = a^2 + b^2$ より $b^2 = (c')^2 - a^2 = 3^2 - 2^2 = 9 - 4 = 5$。この双曲線の中心は $(3,0)$ なので、求める方程式は $\\frac{(x-3)^2}{a^2} - \\frac{(y-0)^2}{b^2} = 1 \\Rightarrow \\frac{(x-3)^2}{4} - \\frac{y^2}{5} = 1$。"
+            },
+            {
+                id: "C1-B2",
+                text: "方程式 $x^2 - 6x + 4y + 13 = 0$ が表す放物線について、以下の問いに答えなさい。<br>(1) この放物線の頂点、焦点、準線の方程式を求めなさい。<br>(2) この放物線の概形を図示しなさい。(頂点、焦点、準線を明記すること)",
+                hint: "(1) $x$ について平方完成し、$(x-p)^2 = 4q(y-r)$ の形に変形する。(2) (1) の情報をもとにグラフを描く。",
+                answer: "(1) 頂点: $(3,-1)$、焦点: $(3,-2)$、準線: $y=0$<br>(2) [図示：$x$軸、$y$軸、原点を明記。頂点$(3,-1)$、焦点$(3,-2)$、準線 $y=0$ ($x$軸) を描く。放物線は頂点を通り、軸 $x=3$ に関して対称で、下に開いた形を描く。]<br><b>解説:</b> (1) $x^2 - 6x + 4y + 13 = 0 \Rightarrow (x^2 - 6x) = -4y - 13 \Rightarrow (x-3)^2 - 9 = -4y - 13 \Rightarrow (x-3)^2 = -4y - 4 \Rightarrow (x-3)^2 = -4(y+1)$。これは放物線 $X^2=-4Y$ ($4p'=-4 \Rightarrow p'=-1$) を $X$軸方向に$3$, $Y$軸方向に$-1$平行移動したもの。元の頂点$(0,0)$、焦点$(0,-1)$、準線$Y=1$。移動後の頂点$(3,-1)$、焦点$(3,-2)$、準線$y+1=1 \Rightarrow y=0$。"
+            },
+            {
+                id: "C1-B3",
+                text: "二次曲線 $\\frac{x^2}{25} + \\frac{y^2}{9} = 1$ について、以下の問いに答えなさい。<br>(1) この二次曲線の種類を答えなさい。<br>(2) この二次曲線の離心率 $e$ を求めなさい。<br>(3) この二次曲線の焦点を求めなさい。",
+                hint: "(1) 式の形から判断。(2) 標準形 $\\frac{x^2}{a^2} + \\frac{y^2}{b^2}=1$ で $a>b$ の場合、$e=\\frac{\\sqrt{a^2-b^2}}{a}$ を使う。(3) 焦点は $(\\pm ae,0)$ または $(\\pm c,0)$。",
+                answer: "(1) <b>楕円</b><br>(2) 離心率 $e=\\frac{4}{5}$<br>(3) 焦点 $F(\\pm 4,0)$<br><b>解説:</b> (1) 式の形から楕円。(2) $a^2=25, b^2=9$ より $a=5, b=3$ ($a>b$)。$c=\\sqrt{a^2-b^2} = \\sqrt{25-9} = \\sqrt{16} = 4$。離心率 $e=\\frac{c}{a}=\\frac{4}{5}$。(3) 焦点は $(\\pm c,0)$ なので $F(\\pm 4,0)$。"
+            }
+        ]
+    },
+    {
+        title: "第2節 曲線の表示と極座標 (問題)",
+        id: "curves-set-2-parametric-polar",
+        questions: [
+            {
+                id: "C2-A7",
+                text: "次の媒介変数表示で表される曲線の方程式を、$x,y$ を用いた形で表しなさい。<br>$x = 2t - 1, \\quad y = t^2 + 3$",
+                hint: "$t = \\frac{x+1}{2}$ として、$y = t^2+3$ に代入する。",
+                answer: "$y = \\left(\\frac{x+1}{2}\\right)^2 + 3$ (または $y = \\frac{1}{4}(x+1)^2 + 3$)<br><b>解説:</b> $x = 2t - 1 \\Rightarrow t = \\frac{x+1}{2}$。これを $y = t^2 + 3$ に代入すると、$y = \\left(\\frac{x+1}{2}\\right)^2 + 3$。これは頂点が $(-1,3)$ で $y$ 軸の正方向に開く放物線。"
+            },
+            {
+                id: "C2-A8",
+                text: "直交座標が $(1, -\\sqrt{3})$ である点を、極座標 $(r,\\theta)$ で表しなさい。ただし、$r \\ge 0, 0 \\le \\theta < 2\\pi$ とする。",
+                hint: "$r=\\sqrt{x^2+y^2}$, $\\cos\\theta = x/r$, $\\sin\\theta = y/r$. $x>0,y<0$ なので第4象限の角。",
+                answer: "$(2, \\frac{5}{3}\\pi)$<br><b>解説:</b> $x=1, y=-\\sqrt{3}$。$r=\\sqrt{1^2 + (-\\sqrt{3})^2} = \\sqrt{1+3} = 2$。$\\cos\\theta = \\frac{1}{2}, \\sin\\theta = -\\frac{\\sqrt{3}}{2}$。これを満たす $\\theta$ ($0 \\le \\theta < 2\\pi$) は $\\theta = \\frac{5}{3}\\pi$。"
+            },
+            {
+                id: "C2-A9",
+                text: "極座標が $(4, \\frac{2}{3}\\pi)$ である点を、直交座標 $(x, y)$ で表しなさい。",
+                hint: "$x=r\\cos\\theta, y=r\\sin\\theta$.",
+                answer: "$(-2, 2\\sqrt{3})$<br><b>解説:</b> $r=4, \\theta = \\frac{2}{3}\\pi$。$x = 4\\cos(\\frac{2}{3}\\pi) = 4(-\\frac{1}{2}) = -2$。$y = 4\\sin(\\frac{2}{3}\\pi) = 4(\\frac{\\sqrt{3}}{2}) = 2\\sqrt{3}$。"
+            },
+            {
+                id: "C2-B4",
+                text: "極方程式 $r = \\frac{6}{2-\\cos\\theta}$ で表される曲線の概形を、$xy$ 平面上に図示しなさい。その際、以下の手順に従うこと。<br>(1) この極方程式を直交座標の方程式に直しなさい。<br>(2) (1)で得られた方程式から、どのような図形であるか述べなさい（種類、中心、焦点、頂点など図形の特徴がわかる情報）。<br>(3) $\\theta = 0, \\frac{\\pi}{2}, \\pi, \\frac{3\\pi}{2}$ のときの点の極座標と直交座標を求め、(2)で述べた図形と整合することを確認しつつ、図中にプロットし、曲線の概形を描きなさい。",
+                hint: "(1) $r(2-\\cos\\theta)=6 \\Rightarrow 2r - r\\cos\\theta = 6$. $r=\\sqrt{x^2+y^2}$ と $x=r\\cos\\theta$ を使う。(2) (1) の式を平方完成する。(3) 指示に従い点をプロットする。",
+                answer: "(1) $\\frac{(x-2)^2}{16} + \\frac{y^2}{12} = 1$<br>(2) <b>楕円</b>。中心 $(2,0)$、焦点 $(0,0)$ と $(4,0)$、頂点 $(-2,0), (6,0), (2, \\pm 2\\sqrt{3})$。<br>(3) $\\theta=0: (r,\\theta)=(6,0)$, $(x,y)=(6,0)$。$\\theta=\\pi/2: (r,\\theta)=(3,\\pi/2)$, $(x,y)=(0,3)$。$\\theta=\\pi: (r,\\theta)=(2,\\pi)$, $(x,y)=(-2,0)$。$\\theta=3\\pi/2: (r,\\theta)=(3,3\\pi/2)$, $(x,y)=(0,-3)$。<br>[図示：$x$軸、$y$軸、原点を明記。上記特徴を持つ楕円と、プロットした4点を描く。]<br><b>解説:</b> (1) $2r - r\\cos\\theta = 6 \Rightarrow 2\\sqrt{x^2+y^2} - x = 6 \Rightarrow 2\\sqrt{x^2+y^2} = x+6$。両辺2乗して整理すると $3x^2-12x+4y^2=36 \Rightarrow 3(x-2)^2+4y^2=48 \Rightarrow \\frac{(x-2)^2}{16} + \\frac{y^2}{12} = 1$。(2) これは楕円。中心$(2,0)$, $a=4, b=2\\sqrt{3}$. $c=\\sqrt{16-12}=2$. 焦点は $(2\\pm 2, 0)$ で $(0,0)$ と $(4,0)$。極方程式 $r = \\frac{3}{1-(1/2)\\cos\\theta}$ より焦点の一つが極。"
+            },
+            {
+                id: "C2-B5",
+                text: "曲線 $C: x = 3\\cos\\theta, y = 2\\sin\\theta$ ($0 \\le \\theta < 2\\pi$) について、以下の問いに答えなさい。<br>(1) 媒介変数 $\\theta$ を消去して、$x$ と $y$ の関係式を求めなさい。また、この曲線はどのような図形か答えなさい。<br>(2) この曲線 $C$ 上の $\\theta=\\frac{\\pi}{6}$ に対応する点における接線の方程式を求めなさい。",
+                hint: "(1) $\\cos\\theta = x/3$, $\\sin\\theta = y/2$ として $\\cos^2\\theta + \\sin^2\\theta = 1$ を利用する。(2) $\\frac{dy}{dx} = \\frac{dy/d\\theta}{dx/d\\theta}$ を利用し、$\\theta=\\frac{\\pi}{6}$ のときの $x,y$ 座標と接線の傾きを求めるか、公式を利用。",
+                answer: "(1) $\\frac{x^2}{9} + \\frac{y^2}{4} = 1$。この曲線は<b>楕円</b>である。<br>(2) $y = -\\frac{2\\sqrt{3}}{3}x + 4$ (または $2\\sqrt{3}x + 3y = 12$)<br><b>解説:</b> (1) $\\cos\\theta = x/3, \\sin\\theta = y/2$ より $(\\frac{x}{3})^2+(\\frac{y}{2})^2=1 \Rightarrow \\frac{x^2}{9} + \\frac{y^2}{4} = 1$。これは中心が原点、長半径3、短半径2の楕円。(2) $\\theta=\\pi/6$ のとき、接点 $(\\frac{3\\sqrt{3}}{2}, 1)$。接線公式 $\\frac{x_1x}{a^2}+\\frac{y_1y}{b^2}=1$ より $\\frac{(3\\sqrt{3}/2)x}{9} + \\frac{1y}{4} = 1 \Rightarrow \\frac{\\sqrt{3}x}{6} + \\frac{y}{4} = 1$。整理して $2\\sqrt{3}x+3y=12$ または $y = -\\frac{2\\sqrt{3}}{3}x+4$。"
+            }
+        ]
+    }
+];
+
+document.addEventListener('DOMContentLoaded', () => {
+    const navigationUl = document.getElementById('problem-navigation').querySelector('ul');
+    const contentArea = document.getElementById('content-area');
+    const welcomeMessage = document.getElementById('welcome-message');
+
+    problemsData.forEach((problemSet, index) => {
+        const navLi = document.createElement('li');
+        // Display problemSet.title directly
+        navLi.innerHTML = `<a href="#" data-target="${problemSet.id}" class="nav-link"><i class="material-icons nav-item-icon">description</i><span>${problemSet.title}</span></a>`;
+        navigationUl.appendChild(navLi);
+
+        const contentDiv = document.createElement('div');
+        contentDiv.id = problemSet.id;
+        contentDiv.className = 'problem-set hidden';
+        
+        let problemSetIntroText = "";
+        if (problemSet.isSummary) {
+            problemSetIntroText = `<p class="medium-text" style="margin-bottom: 1.5rem;">このセクションでは、平面上の曲線の重要ポイントをまとめています。学習の参考にしてください。</p>`;
+        } else {
+            problemSetIntroText = `<p class="medium-text" style="margin-bottom: 1.5rem;">このセクションでは、平面上の曲線に関する様々な問題を探求します。各問題を解くことで理解を深めましょう。</p>`;
+        }
+
+        let problemSetHTML = `<h2 class="large-title primary-text problem-set-title">${problemSet.title}</h2>`;
+        problemSetHTML += problemSetIntroText;
+        
+        problemSet.questions.forEach(q => {
+            // Add a class to the card if it's part of a point summary
+            const cardClass = problemSet.isSummary ? "card problem-card point-summary-card" : "card problem-card";
+            problemSetHTML += `
+                <article class="${cardClass}" id="problem-card-${q.id}">
+                    <div class="padding">
+                        <h6 class="problem-card-id">${q.id}</h6>
+                        <div class="medium-text problem-text">${q.text}</div> <!-- Changed p to div for complex HTML in text -->
+                        
+                        <div class="problem-actions">
+                            <button class="chip fill small" data-action="toggle-hint" data-target-id="hint-${q.id}" aria-expanded="false" aria-controls="hint-${q.id}">
+                                <i class="material-icons">lightbulb</i>
+                                <span class="button-text">ヒントを見る</span>
+                            </button>
+                            <button class="chip fill small" data-action="toggle-answer" data-target-id="answer-${q.id}" aria-expanded="false" aria-controls="answer-${q.id}">
+                                <i class="material-icons">check_circle</i>
+                                <span class="button-text">解答を見る</span>
+                            </button>
+                        </div>
+
+                        <div id="hint-${q.id}" class="hint-content card small-padding hidden" role="region" aria-labelledby="hint-btn-${q.id}">
+                            <h6>ヒント (${q.id})</h6>
+                            <p>${q.hint}</p>
+                        </div>
+                        <div id="answer-${q.id}" class="answer-content card small-padding hidden" role="region" aria-labelledby="answer-btn-${q.id}">
+                            <h6>解答 (${q.id})</h6>
+                            <p>${q.answer}</p>
+                        </div>
+                    </div>
+                </article>
+            `;
+        });
+        contentDiv.innerHTML = problemSetHTML;
+        contentArea.appendChild(contentDiv);
+    });
+
+    navigationUl.addEventListener('click', (e) => {
+        const targetLink = e.target.closest('.nav-link');
+        if (targetLink) {
+            e.preventDefault();
+            const targetId = targetLink.dataset.target;
+
+            navigationUl.querySelectorAll('li').forEach(item => item.classList.remove('active-item'));
+            targetLink.parentElement.classList.add('active-item');
+
+            welcomeMessage.classList.add('hidden');
+
+            contentArea.querySelectorAll('.problem-set').forEach(set => {
+                set.classList.toggle('hidden', set.id !== targetId);
+            });
+
+            const activeProblemSetElement = document.getElementById(targetId);
+            if (activeProblemSetElement && window.MathJax) {
+                MathJax.typesetPromise([activeProblemSetElement]).catch((err) => console.error('MathJax typesetting error (problem set):', err));
+            }
+        }
+    });
+
+    contentArea.addEventListener('click', (e) => {
+        const button = e.target.closest('button[data-action]');
+        if (!button) return;
+
+        // Prevent action if part of point-summary-card (buttons are hidden by CSS but this is a fallback)
+        if (button.closest('.point-summary-card')) {
+             const problemCard = button.closest('.point-summary-card');
+             const problemActions = problemCard.querySelector('.problem-actions');
+             if (problemActions && problemActions.style.display === 'none') return; // Double check if CSS hid it
+        }
+
+        const action = button.dataset.action;
+        const targetId = button.dataset.targetId;
+        const contentElement = document.getElementById(targetId);
+
+        if (contentElement) {
+            const wasHidden = contentElement.classList.contains('hidden');
+            contentElement.classList.toggle('hidden');
+            button.setAttribute('aria-expanded', !wasHidden);
+
+
+            const buttonTextElement = button.querySelector('.button-text');
+            const buttonIconElement = button.querySelector('.material-icons');
+
+            if (action === 'toggle-hint') {
+                if (wasHidden) { // Content was hidden, now shown
+                    buttonTextElement.textContent = 'ヒントを隠す';
+                    buttonIconElement.textContent = 'visibility_off';
+                } else { // Content was shown, now hidden
+                    buttonTextElement.textContent = 'ヒントを見る';
+                    buttonIconElement.textContent = 'lightbulb';
+                }
+            } else if (action === 'toggle-answer') {
+                if (wasHidden) { // Content was hidden, now shown
+                    buttonTextElement.textContent = '解答を隠す';
+                    buttonIconElement.textContent = 'visibility_off';
+                } else { // Content was shown, now hidden
+                    buttonTextElement.textContent = '解答を見る';
+                    buttonIconElement.textContent = 'check_circle';
+                }
+            }
+
+            if (wasHidden && window.MathJax) { // If content was hidden and is now shown
+                MathJax.typesetPromise([contentElement]).catch((err) => console.error('MathJax typesetting error (hint/answer):', err));
+            }
+        }
+    });
+});
+</script>
+</body>
+</html>
