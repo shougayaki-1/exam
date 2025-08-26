@@ -1,0 +1,14 @@
+[
+  {
+    "id": "earth_science",
+    "title": "地学",
+    "icon": "menu_book",
+    "file": "earth_science.json"
+  },
+  {
+    "id": "202509-bio",
+    "title": "生物",
+    "icon": "menu_book",
+    "file": "202509-bio.json"
+  }
+]

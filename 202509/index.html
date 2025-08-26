@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>インタラクティブ問題集</title>
+    <link rel="stylesheet" href="../beer.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script>
+        MathJax = {
+          tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+          svg: { fontCache: 'global' }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    <style>
+        body {
+            background-color: var(--surface);
+            font-family: var(--font);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden; /* ページ全体のスクロールバーを無効化 */
+        }
+        #page-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--outline-variant);
+            flex-shrink: 0; /* ヘッダーの高さを固定 */
+        }
+        .main-container {
+            display: flex;
+            flex-grow: 1; /* 残りの高さいっぱいに広がる */
+            overflow: hidden; /* コンテナからはみ出さないように */
+        }
+        
+        /* カラム表示エリア全体 */
+        #column-view-container {
+            display: flex;
+            flex-shrink: 0; /* カラムエリアが縮まないように */
+            background-color: var(--surface-container);
+            border-right: 1px solid var(--outline-variant);
+            /* カラムが画面幅を超えたら横スクロール */
+            overflow-x: auto; 
+            max-width: 50%; /* 横幅が広がりすぎないように制限 */
+        }
+
+        /* 各カラムのスタイル */
+        .column {
+            width: 240px; /* カラムの幅を固定 */
+            flex-shrink: 0;
+            border-right: 1px solid var(--outline-variant);
+            overflow-y: auto; /* 縦に長い場合はカラム内をスクロール */
+            padding: 0.5rem;
+        }
+        .column-title {
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: var(--on-surface-variant);
+            padding: 0.5rem 0.75rem;
+            text-transform: uppercase;
+        }
+        .column ul { list-style: none; padding: 0; margin: 0; }
+        .column .list-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem 0.75rem;
+            border-radius: 0.3rem;
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .column .list-item:hover { background-color: var(--active); }
+        .column .list-item.active {
+            background-color: var(--primary);
+            color: var(--on-primary);
+        }
+        /* アイコンのスタイル調整 */
+        .column .list-item i { font-size: 1.25rem; }
+        .column .list-item.active i { font-variation-settings: "FILL" 1; }
+
+        /* 問題表示エリア */
+        #content-panel {
+            flex-grow: 1; /* 残りの幅をすべて使用 */
+            padding: 2rem;
+            overflow-y: auto; /* 問題が長い場合はここをスクロール */
+        }
+        .hidden { display: none !important; }
+        .problem-card { border-bottom: 1px solid var(--outline-variant); padding: 1.5rem 0; }
+        .problem-card:last-child { border-bottom: none; }
+        .question-text { line-height: 1.7; }
+        .problem-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
+        .hint-content, .answer-content, .explanation-content { margin-top: 1rem; padding: 1rem; background-color: var(--surface-container); border-radius: 0.5rem; border-left: 4px solid var(--primary); }
+    </style>
+</head>
+<body>
+    <header id="page-header">
+        <h1 class="center-align large-title no-margin">インタラクティブ問題集</h1>
+    </header>
+
+    <div class="main-container">
+        <!-- Finder風カラムナビゲーション -->
+        <div id="column-view-container">
+            <!-- JavaScriptによってカラムが動的に追加されます -->
+        </div>
+
+        <!-- 問題詳細表示エリア -->
+        <main id="content-panel">
+            <article id="welcome-message">
+                <h2 class="large-title primary-text">ようこそ！</h2>
+                <p class="medium-text">左のメニューから学習したい教科を選択してください。</p>
+            </article>
+        </main>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
