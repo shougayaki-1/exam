@@ -28,11 +28,35 @@
             padding: 1.5rem 2rem;
             border-bottom: 1px solid var(--outline-variant);
             flex-shrink: 0; /* ヘッダーの高さを固定 */
+            display: flex;
+            align-items: center;
         }
+        #page-header h1 {
+            flex-grow: 1; /* 中央のスペースを確保 */
+        }
+        .sidebar-toggle-button {
+            background-color: transparent;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--on-surface);
+            margin-right: 1rem; /* タイトルとの間隔 */
+        }
+        .sidebar-toggle-button:hover {
+            background-color: var(--active);
+        }
+
         .main-container {
             display: flex;
             flex-grow: 1; /* 残りの高さいっぱいに広がる */
             overflow: hidden; /* コンテナからはみ出さないように */
+            /* ▼▼▼ 追加: この1行でスクロールの問題が解決します ▼▼▼ */
+            min-height: 0;
         }
         
         /* カラム表示エリア全体 */
@@ -44,6 +68,11 @@
             /* カラムが画面幅を超えたら横スクロール */
             overflow-x: auto; 
             max-width: 50%; /* 横幅が広がりすぎないように制限 */
+        }
+
+        /* サイドバー非表示時のスタイル */
+        .main-container.sidebar-hidden #column-view-container {
+            display: none;
         }
 
         /* 各カラムのスタイル */
@@ -99,7 +128,10 @@
 </head>
 <body>
     <header id="page-header">
-        <h1 class="center-align large-title no-margin">インタラクティブ問題集</h1>
+        <button id="toggle-sidebar-btn" class="sidebar-toggle-button" title="サイドバーの表示切替">
+            <span class="material-symbols-outlined">menu</span>
+        </button>
+        <h1 class="center-align title no-margin">インタラクティブ問題集</h1>
     </header>
 
     <div class="main-container">

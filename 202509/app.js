@@ -3,6 +3,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const contentPanel = document.getElementById('content-panel');
     const welcomeMessage = document.getElementById('welcome-message');
 
+    // ▼▼▼ 追加 ▼▼▼
+    const mainContainer = document.querySelector('.main-container');
+    const toggleSidebarBtn = document.getElementById('toggle-sidebar-btn');
+
+    // サイドバー表示切替ボタンのイベントリスナー
+    if (toggleSidebarBtn && mainContainer) {
+        toggleSidebarBtn.addEventListener('click', () => {
+            mainContainer.classList.toggle('sidebar-hidden');
+
+            // アイコンも切り替えて分かりやすくする
+            const icon = toggleSidebarBtn.querySelector('.material-symbols-outlined');
+            if (icon) {
+                icon.textContent = mainContainer.classList.contains('sidebar-hidden') ? 'menu_open' : 'menu';
+            }
+        });
+    }
+    // ▲▲▲ 追加 ▲▲▲
+
     let subjectsManifest = [];
     const loadedSubjectData = {};
 
