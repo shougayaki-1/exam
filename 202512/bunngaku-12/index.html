@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>漢文 定期テスト対策問題集</title>
+    <style>
+        body {
+            font-family: "Yu Mincho", "YuMincho", "Hiragino Mincho ProN", "HGS Mincho E", serif;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .question-block {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            background-color: #2c3e50;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 1.2em;
+            margin-top: 0;
+        }
+
+        .kanbun-text {
+            background-color: #f9f7ef;
+            border-left: 5px solid #8e44ad;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 1.1em;
+            white-space: pre-wrap;
+        }
+
+        .kanbun-text strong {
+            color: #d35400;
+            border-bottom: 1px solid #d35400;
+        }
+
+        .question-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #ccc;
+        }
+
+        .question-item:last-child {
+            border-bottom: none;
+        }
+
+        .btn-answer {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s;
+            margin-top: 5px;
+        }
+
+        .btn-answer:hover {
+            background-color: #2980b9;
+        }
+
+        .answer-area {
+            display: none;
+            background-color: #e8f6f3;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #1abc9c;
+        }
+
+        .answer-label {
+            font-weight: bold;
+            color: #16a085;
+        }
+
+        .comment {
+            font-size: 0.9em;
+            color: #555;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>漢文 定期テスト対策問題集</h1>
+        <p style="text-align: center;">動画の解説ポイントを確認しましょう。<br>太字の部分が設問箇所です。</p>
+
+        <!-- 第1問 -->
+        <div class="question-block">
+            <h2>第1問：矛盾（韓非子）</h2>
+            <div class="kanbun-text">
+                楚人有<strong>鬻</strong>盾与矛者。誉之曰、「吾盾之堅、<strong>莫能陥也</strong>。」又誉其矛曰、「吾矛之利、<strong>於物無不陥也</strong>。」或曰、「以子之矛、陥子之盾、何如。」<strong>其人弗能応也</strong>。夫不可陥之盾、与無不陥之矛、不可同世而立。
+            </div>
+
+            <div class="question-item">
+                <p>(1) 傍線部「鬻」の読みと意味を答えよ。</p>
+                <button class="btn-answer" onclick="toggleAnswer('a1-1')">解答を表示</button>
+                <div id="a1-1" class="answer-area">
+                    <span class="answer-label">読み：</span>ひさ（ぐ）<br>
+                    <span class="answer-label">意味：</span>売る
+                </div>
+            </div>
+
+            <div class="question-item">
+                <p>(2) 傍線部「莫能陥也」の4文字について、書き下し文と意味を答えよ。</p>
+                <button class="btn-answer" onclick="toggleAnswer('a1-2')">解答を表示</button>
+                <div id="a1-2" class="answer-area">
+                    <span class="answer-label">書き下し：</span>よくとおすものなきなり<br>
+                    <span class="answer-label">意味：</span>突き通せるものはないのだ<br>
+                    <div class="comment">※「莫能（よく～ものなし）」は不可能の強調表現です。</div>
+                </div>
+            </div>
+
+            <div class="question-item">
+                <p>(3) 傍線部「於物無不陥也」には「無不（不～無）」という二重否定が使われているが、どのような意味になるか説明せよ。</p>
+                <button class="btn-answer" onclick="toggleAnswer('a1-3')">解答を表示</button>
+                <div id="a1-3" class="answer-area">
+                    <span class="answer-label">書き下し：</span>ものにおいてとおさざるものなきなり。と。<br>
+                    <span class="answer-label">説明：</span>どんなものでも突き通さないことはない（すべて突き通すことができる）<br>
+                    <div class="comment">※二重否定は強い肯定を表します。</div>
+                </div>
+            </div>
+
+            <div class="question-item">
+                <p>(4) 傍線部「其人弗能応也」の6文字について、書き下し文と意味を答えよ。</p>
+                <button class="btn-answer" onclick="toggleAnswer('a1-4')">解答を表示</button>
+                <div id="a1-4" class="answer-area">
+                    <span class="answer-label">書き下し：</span>そのひとこたふるあたはざるなり<br>
+                    <span class="answer-label">意味：</span>その人は答えることができなかった<br>
+                    <div class="comment">※「弗能（～することあたはず）」は不可能を表します。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第2問 -->
+        <div class="question-block">
+            <h2>第2問：朝三暮四（列子）</h2>
+            <div class="kanbun-text">
+                宋有狙公者。愛狙、養之成群。<strong>能解</strong>狙之意、狙亦得公之心。損其家口、充狙之欲。<strong>俄而匱焉</strong>、<strong>将限其食</strong>。恐衆狙之不馴於己也、先誑之曰、「与若<strong>芧</strong>、朝三而暮四、<strong>足乎</strong>。」衆狙皆起而怒。俄而曰、「与若芧、朝四而暮三、足乎。」衆狙皆伏而喜。
+            </div>
+
+            <div class="question-item">
+                <p>(1) 傍線部「能解」について、「能」の読み方は、返り点がついている場合どう読むか答えよ。</p>
+                <button class="btn-answer" onclick="toggleAnswer('a2-1')">解答を表示</button>
+                <div id="a2-1" class="answer-area">
+                    <span class="answer-label">読み：</span>あた（ふ）<br>
+                    <div class="comment">※返り点がない場合は「よ（く）」と読みます。</div>
+                </div>
+            </div>
+
+            <div class="question-item">
+                <p>(2) 傍線部「俄而匱焉」の書き下し文と意味を答えよ。</p>
+                <button class="btn-answer" onclick="toggleAnswer('a2-2')">解答を表示</button>
+                <div id="a2-2" class="answer-area">
+                    <span class="answer-label">書き下し：</span>にわかにしてとぼし<br>
+                    <span class="answer-label">意味：</span>急に（食料が）尽きてしまった
+                </div>
+            </div>
+
+            <div class="question-item">
+                <p>(3) 傍線部「将限其食」の書き下し文と意味を答えよ。</p>
+                <button class="btn-answer" onclick="toggleAnswer('a2-3')">解答を表示</button>
+                <div id="a2-3" class="answer-area">
+                    <span class="answer-label">書き下し：</span>まさにそのしょくをかぎらんとす<br>
+                    <span class="answer-label">意味：</span>今にもその食事を制限しようとした<br>
+                    <div class="comment">※「将（まさに～んとす）」は再読文字で未来・意思を表します。</div>
+                </div>
+            </div>
+
+            <div class="question-item">
+                <p>(4) 本文中の「芧」とは何のことか答えよ。</p>
+                <button class="btn-answer" onclick="toggleAnswer('a2-4')">解答を表示</button>
+                <div id="a2-4" class="answer-area">
+                    <span class="answer-label">答え：</span>どんぐり（栃の実）
+                </div>
+            </div>
+
+            <div class="question-item">
+                <p>(5) 狙公の発言にある「足乎」の意味を答えよ。</p>
+                <button class="btn-answer" onclick="toggleAnswer('a2-5')">解答を表示</button>
+                <div id="a2-5" class="answer-area">
+                    <span class="answer-label">意味：</span>足りますか
+                </div>
+            </div>
+        </div>
+
+        <!-- 第3問 -->
+        <div class="question-block">
+            <h2>第3問：無の用（老子）</h2>
+            <div class="kanbun-text">
+                三十輻共一轂。当其無、有車之用。埏埴以<strong>為</strong>器。当其無、有器之用。鑿戸牖以<strong>為</strong>室。当其無、有室之用。故有之以<strong>為</strong>利、無之以<strong>為</strong>用。
+            </div>
+
+            <div class="question-item">
+                <p>(1) 本文中に複数回出てくる「為」について、文脈による読み分けを答えよ。</p>
+                <button class="btn-answer" onclick="toggleAnswer('a3-1')">解答を表示</button>
+                <div id="a3-1" class="answer-area">
+                    <span class="answer-label">「埏埴以為器」「鑿戸牖以為室」の読み：</span>つく（る）<br>
+                    <span class="answer-label">「有之以為利」「無之以為用」の読み：</span>な（す）
+                </div>
+            </div>
+
+            <div class="question-item">
+                <p>(2) この文章で述べられている「無（何もない空間）」の役割について、簡潔に説明せよ。</p>
+                <button class="btn-answer" onclick="toggleAnswer('a3-2')">解答を表示</button>
+                <div id="a3-2" class="answer-area">
+                    <span class="answer-label">説明：</span>車輪の穴や器の中の空洞など、形のない「無」の部分こそが、実際の役に立つ働きをするということ。
+                </div>
+            </div>
+        </div>
+
+        <!-- 第4問 -->
+        <div class="question-block">
+            <h2>第4問：性善（孟子）</h2>
+            <div class="kanbun-text">告子曰、「<strong>性猶湍水也</strong>。決諸東方則東流、決諸西方則西流。人性之無分於善不善也、猶水之無分於東西也。」
+                孟子曰、「水信無分於東西。無分於上下乎。人性之善也、猶水之就下也。人無有不善、水無有不下。今夫水、搏而躍之、<strong>可使過顙</strong>、激而行之、<strong>可使在山</strong>。是<strong>豈水之性哉</strong>。其勢則然也。人之可使為不善、其性亦猶是也。」
+            </div>
+
+            <div class="question-item">
+                <p>(1) 傍線部「性猶湍水也」の書き下し文と意味を答えよ。</p>
+                <button class="btn-answer" onclick="toggleAnswer('a4-1')">解答を表示</button>
+                <div id="a4-1" class="answer-area">
+                    <span class="answer-label">書き下し：</span>せいはなほたんすいのごときなり<br>
+                    <span class="answer-label">意味：</span>人間の本性は、まるで渦を巻いて流れる水のようなものだ<br>
+                    <div class="comment">※「猶～のごとし」は比況の句形です。</div>
+                </div>
+            </div>
+
+            <div class="question-item">
+                <p>(2) 傍線部「可使過顙」と「可使在山」の書き下し文と意味をそれぞれ答えよ。</p>
+                <button class="btn-answer" onclick="toggleAnswer('a4-2')">解答を表示</button>
+                <div id="a4-2" class="answer-area">
+                    <span class="answer-label">「可使過顙」書き下し：</span>ひたいをすごさしむべく<br>
+                    <span class="answer-label">意味：</span>（水を打って）額を越えさせることができるし<br><br>
+                    <span class="answer-label">「可使在山」書き下し：</span>やまにあらしむべし<br>
+                    <span class="answer-label">意味：</span>（水を逆流させて）山の上に留まらせることもできる<br>
+                    <div class="comment">※「可使（～をして～せしむべし）」は使役＋可能の句形です。</div>
+                </div>
+            </div>
+
+            <div class="question-item">
+                <p>(3) 傍線部「豈水之性哉」の書き下し文と意味を答えよ。</p>
+                <button class="btn-answer" onclick="toggleAnswer('a4-3')">解答を表示</button>
+                <div id="a4-3" class="answer-area">
+                    <span class="answer-label">書き下し：</span>あにみずのせいならんや<br>
+                    <span class="answer-label">意味：</span>どうしてこれが水の本性であろうか、いや本性ではない<br>
+                    <div class="comment">※「豈～哉（あに～らんや）」は反語の句形です。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第5問 -->
+        <div class="question-block">
+            <h2>第5問：性悪（荀子）</h2>
+            <div class="kanbun-text">
+                人之性悪、其善者<strong>偽</strong>也。今人之性、生而<strong>有好利</strong>焉。順是、故争奪生而辞譲亡焉。生而有<strong>疾悪</strong>焉。順是、故残賊生而忠信亡焉。生而有<strong>耳目之欲</strong>、有好声色焉。順是、故淫乱生而礼義文理亡焉。然則従人之性、順人之情、必出于争奪、合于犯分乱理、而帰于暴。故必将有<strong>師法</strong>之化、<strong>礼義</strong>之道、然後出于辞譲、合于文理、而帰于治。<strong>用此観之</strong>、然則人之性悪明矣。其善者<strong>偽</strong>也。
+            </div>
+
+            <div class="question-item">
+                <p>(1) 傍線部「偽」の、ここでの意味を答えよ。（現代語の「ニセモノ」とは異なります）</p>
+                <button class="btn-answer" onclick="toggleAnswer('a5-1')">解答を表示</button>
+                <div id="a5-1" class="answer-area">
+                    <span class="answer-label">意味：</span>人の作為、後天的な努力（人為的な矯正）
+                </div>
+            </div>
+
+            <div class="question-item">
+                <p>(2) 傍線部「好利」「疾悪」「耳目之欲」は、荀子が考える人間のどのような性質を示しているか。</p>
+                <button class="btn-answer" onclick="toggleAnswer('a5-2')">解答を表示</button>
+                <div id="a5-2" class="answer-area">
+                    <span class="answer-label">説明：</span>生まれながらにして利益を好み、他人をねたみ憎み、感覚的な欲望（目や耳の欲）に従うという性質。
+                </div>
+            </div>
+
+            <div class="question-item">
+                <p>(3) 人間が「治（平和に治まった状態）」に至るために必要だと荀子が述べているものを、本文中から2つ抜き出して答えよ。</p>
+                <button class="btn-answer" onclick="toggleAnswer('a5-3')">解答を表示</button>
+                <div id="a5-3" class="answer-area">
+                    <span class="answer-label">答え：</span>師法 / 礼義
+                </div>
+            </div>
+
+            <div class="question-item">
+                <p>(4) 傍線部「用此観之」の書き下し文を答えよ。</p>
+                <button class="btn-answer" onclick="toggleAnswer('a5-4')">解答を表示</button>
+                <div id="a5-4" class="answer-area">
+                    <span class="answer-label">書き下し：</span>こ（れ）をもち（て）こ（れ）をみ（れば）
+                </div>
+            </div>
+        </div>
+
+        <!-- 第6問 -->
+        <div class="question-block">
+            <h2>第6問：無用の用（荘子）</h2>
+            <div class="kanbun-text">惠子謂荘子曰、「<strong>子</strong>言無用。」
+                荘子曰、「知無用而始可与言用矣。
+                <strong>夫</strong>地<strong>非不</strong>広且大也。
+                人之所用、容足<strong>耳</strong>。
+                <strong>然則</strong>側足而<strong>塾</strong>之致<strong>黄泉</strong>、人尚有用<strong>乎</strong>。」
+                惠子曰、「無用。」
+                荘子曰、「然則無用之為用也<strong>亦</strong>明矣。」
+            </div>
+
+            <div class="question-item">
+                <p>(1) 傍線部「子」は誰を指しているか答えよ。</p>
+                <button class="btn-answer" onclick="toggleAnswer('a6-1')">解答を表示</button>
+                <div id="a6-1" class="answer-area">
+                    <span class="answer-label">答え：</span>荘子
+                </div>
+            </div>
+
+            <div class="question-item">
+                <p>(2) 傍線部「夫」の読みと意味を答えよ。</p>
+                <button class="btn-answer" onclick="toggleAnswer('a6-2')">解答を表示</button>
+                <div id="a6-2" class="answer-area">
+                    <span class="answer-label">読み：</span>そ（れ）<br>
+                    <span class="answer-label">意味：</span>そもそも
+                </div>
+            </div>
+
+            <div class="question-item">
+                <p>(3) 傍線部「非不」の句法（文法事項）を答えよ。</p>
+                <button class="btn-answer" onclick="toggleAnswer('a6-3')">解答を表示</button>
+                <div id="a6-3" class="answer-area">
+                    <span class="answer-label">句法：</span>二重否定
+                </div>
+            </div>
+
+            <div class="question-item">
+                <p>(4) 傍線部「耳」の読みを答えよ。</p>
+                <button class="btn-answer" onclick="toggleAnswer('a6-4')">解答を表示</button>
+                <div id="a6-4" class="answer-area">
+                    <span class="answer-label">読み：</span>のみ
+                </div>
+            </div>
+
+            <div class="question-item">
+                <p>(5) 傍線部「然則」の意味を答えよ。</p>
+                <button class="btn-answer" onclick="toggleAnswer('a6-5')">解答を表示</button>
+                <div id="a6-5" class="answer-area">
+                    <span class="answer-label">意味：</span>そうであるならば
+                </div>
+            </div>
+
+            <div class="question-item">
+                <p>(6) 傍線部「塾」の意味を答えよ。</p>
+                <button class="btn-answer" onclick="toggleAnswer('a6-6')">解答を表示</button>
+                <div id="a6-6" class="answer-area">
+                    <span class="answer-label">意味：</span>掘り（dig）
+                </div>
+            </div>
+
+            <div class="question-item">
+                <p>(7) 傍線部「黄泉」の意味を答えよ。</p>
+                <button class="btn-answer" onclick="toggleAnswer('a6-7')">解答を表示</button>
+                <div id="a6-7" class="answer-area">
+                    <span class="answer-label">意味：</span>黄泉（あの世、地下深く）
+                </div>
+            </div>
+
+            <div class="question-item">
+                <p>(8) 傍線部「乎」の句法（文法事項）を答えよ。</p>
+                <button class="btn-answer" onclick="toggleAnswer('a6-8')">解答を表示</button>
+                <div id="a6-8" class="answer-area">
+                    <span class="answer-label">句法：</span>反語
+                </div>
+            </div>
+
+            <div class="question-item">
+                <p>(9) 傍線部「亦」の読みを答えよ。</p>
+                <button class="btn-answer" onclick="toggleAnswer('a6-9')">解答を表示</button>
+                <div id="a6-9" class="answer-area">
+                    <span class="answer-label">読み：</span>また
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function toggleAnswer(id) {
+            var x = document.getElementById(id);
+            if (x.style.display === "none" || x.style.display === "") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+        }
+    </script>
+</body>
+
+</html>
