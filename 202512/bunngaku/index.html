@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>漢文 定期テスト対策問題集</title>
+    <title>漢文・国語 定期テスト対策問題集</title>
     <style>
         body {
             font-family: "Yu Mincho", "YuMincho", "Hiragino Mincho ProN", "HGS Mincho E", serif;
             background-color: #f4f4f4;
             color: #333;
-            line-height: 1.6;
+            line-height: 1.8;
             margin: 0;
             padding: 20px;
         }
@@ -32,8 +32,8 @@
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            margin-bottom: 30px;
+            padding: 30px;
+            margin-bottom: 40px;
         }
 
         h2 {
@@ -41,27 +41,29 @@
             color: #fff;
             padding: 10px 15px;
             border-radius: 5px;
-            font-size: 1.2em;
+            font-size: 1.3em;
             margin-top: 0;
         }
 
         .kanbun-text {
             background-color: #f9f7ef;
             border-left: 5px solid #8e44ad;
-            padding: 15px;
-            margin: 15px 0;
+            padding: 20px;
+            margin: 20px 0;
             font-size: 1.1em;
             white-space: pre-wrap;
+            line-height: 2;
         }
 
         .kanbun-text strong {
             color: #d35400;
-            border-bottom: 1px solid #d35400;
+            border-bottom: 2px solid #d35400;
+            font-weight: bold;
         }
 
         .question-item {
-            margin-bottom: 15px;
-            padding-bottom: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
             border-bottom: 1px dashed #ccc;
         }
 
@@ -69,16 +71,22 @@
             border-bottom: none;
         }
 
+        .question-text {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
         .btn-answer {
             background-color: #3498db;
             color: white;
             border: none;
-            padding: 8px 16px;
+            padding: 10px 20px;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 0.9em;
+            font-size: 1em;
             transition: background-color 0.3s;
-            margin-top: 5px;
+            display: block;
+            margin-top: 10px;
         }
 
         .btn-answer:hover {
@@ -88,8 +96,8 @@
         .answer-area {
             display: none;
             background-color: #e8f6f3;
-            padding: 15px;
-            margin-top: 10px;
+            padding: 20px;
+            margin-top: 15px;
             border-radius: 5px;
             border: 1px solid #1abc9c;
         }
@@ -100,9 +108,15 @@
         }
 
         .comment {
-            font-size: 0.9em;
+            font-size: 0.95em;
             color: #555;
-            margin-top: 5px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #b2dfdb;
+        }
+
+        .comment strong {
+            color: #e67e22;
         }
     </style>
 </head>
@@ -110,8 +124,8 @@
 <body>
 
     <div class="container">
-        <h1>漢文 定期テスト対策問題集</h1>
-        <p style="text-align: center;">動画の解説ポイントを確認しましょう。<br>太字の部分が設問箇所です。</p>
+        <h1>漢文・国語 定期テスト対策問題集</h1>
+        <p style="text-align: center;">動画の解説ポイント（緑色の文字など）を網羅した予想問題です。<br>太字の部分が設問箇所です。</p>
 
         <!-- 第1問 -->
         <div class="question-block">
@@ -121,7 +135,7 @@
             </div>
 
             <div class="question-item">
-                <p>(1) 傍線部「鬻」の読みと意味を答えよ。</p>
+                <p class="question-text">(1) 傍線部「鬻」の読みと意味を答えよ。</p>
                 <button class="btn-answer" onclick="toggleAnswer('a1-1')">解答を表示</button>
                 <div id="a1-1" class="answer-area">
                     <span class="answer-label">読み：</span>ひさ（ぐ）<br>
@@ -130,7 +144,7 @@
             </div>
 
             <div class="question-item">
-                <p>(2) 傍線部「莫能陥也」の4文字について、書き下し文と意味を答えよ。</p>
+                <p class="question-text">(2) 傍線部「莫能陥也」の4文字について、書き下し文と意味を答えよ。</p>
                 <button class="btn-answer" onclick="toggleAnswer('a1-2')">解答を表示</button>
                 <div id="a1-2" class="answer-area">
                     <span class="answer-label">書き下し：</span>よくとおすものなきなり<br>
@@ -140,20 +154,19 @@
             </div>
 
             <div class="question-item">
-                <p>(3) 傍線部「於物無不陥也」には「無不（不～無）」という二重否定が使われているが、どのような意味になるか説明せよ。</p>
+                <p class="question-text">(3) 傍線部「於物無不陥也」には「無不（不～無）」という二重否定が使われているが、どのような意味になるか説明せよ。</p>
                 <button class="btn-answer" onclick="toggleAnswer('a1-3')">解答を表示</button>
                 <div id="a1-3" class="answer-area">
-                    <span class="answer-label">書き下し：</span>ものにおいてとおさざるものなきなり。と。<br>
                     <span class="answer-label">説明：</span>どんなものでも突き通さないことはない（すべて突き通すことができる）<br>
                     <div class="comment">※二重否定は強い肯定を表します。</div>
                 </div>
             </div>
 
             <div class="question-item">
-                <p>(4) 傍線部「其人弗能応也」の6文字について、書き下し文と意味を答えよ。</p>
+                <p class="question-text">(4) 傍線部「其人弗能応也」の6文字について、書き下し文と意味を答えよ。</p>
                 <button class="btn-answer" onclick="toggleAnswer('a1-4')">解答を表示</button>
                 <div id="a1-4" class="answer-area">
-                    <span class="answer-label">書き下し：</span>そのひとこたふるあたはざるなり<br>
+                    <span class="answer-label">書き下し：</span>そのひとこたふることあたはざるなり<br>
                     <span class="answer-label">意味：</span>その人は答えることができなかった<br>
                     <div class="comment">※「弗能（～することあたはず）」は不可能を表します。</div>
                 </div>
@@ -168,7 +181,7 @@
             </div>
 
             <div class="question-item">
-                <p>(1) 傍線部「能解」について、「能」の読み方は、返り点がついている場合どう読むか答えよ。</p>
+                <p class="question-text">(1) 傍線部「能解」について、「能」の読み方は、返り点がついている場合どう読むか答えよ。</p>
                 <button class="btn-answer" onclick="toggleAnswer('a2-1')">解答を表示</button>
                 <div id="a2-1" class="answer-area">
                     <span class="answer-label">読み：</span>あた（ふ）<br>
@@ -177,16 +190,16 @@
             </div>
 
             <div class="question-item">
-                <p>(2) 傍線部「俄而匱焉」の書き下し文と意味を答えよ。</p>
+                <p class="question-text">(2) 傍線部「俄而匱焉」の書き下し文と意味を答えよ。</p>
                 <button class="btn-answer" onclick="toggleAnswer('a2-2')">解答を表示</button>
                 <div id="a2-2" class="answer-area">
                     <span class="answer-label">書き下し：</span>にわかにしてとぼし<br>
-                    <span class="answer-label">意味：</span>急に（食料が）尽きてしまった
+                    <span class="answer-label">意味：</span>やがて（食料が）尽きてしまった
                 </div>
             </div>
 
             <div class="question-item">
-                <p>(3) 傍線部「将限其食」の書き下し文と意味を答えよ。</p>
+                <p class="question-text">(3) 傍線部「将限其食」の書き下し文と意味を答えよ。</p>
                 <button class="btn-answer" onclick="toggleAnswer('a2-3')">解答を表示</button>
                 <div id="a2-3" class="answer-area">
                     <span class="answer-label">書き下し：</span>まさにそのしょくをかぎらんとす<br>
@@ -196,7 +209,7 @@
             </div>
 
             <div class="question-item">
-                <p>(4) 本文中の「芧」とは何のことか答えよ。</p>
+                <p class="question-text">(4) 本文中の「芧」とは何のことか答えよ。</p>
                 <button class="btn-answer" onclick="toggleAnswer('a2-4')">解答を表示</button>
                 <div id="a2-4" class="answer-area">
                     <span class="answer-label">答え：</span>どんぐり（栃の実）
@@ -204,7 +217,7 @@
             </div>
 
             <div class="question-item">
-                <p>(5) 狙公の発言にある「足乎」の意味を答えよ。</p>
+                <p class="question-text">(5) 狙公の発言にある「足乎」の意味を答えよ。</p>
                 <button class="btn-answer" onclick="toggleAnswer('a2-5')">解答を表示</button>
                 <div id="a2-5" class="answer-area">
                     <span class="answer-label">意味：</span>足りますか
@@ -220,7 +233,7 @@
             </div>
 
             <div class="question-item">
-                <p>(1) 本文中に複数回出てくる「為」について、文脈による読み分けを答えよ。</p>
+                <p class="question-text">(1) 本文中に複数回出てくる「為」について、文脈による読み分けを答えよ。</p>
                 <button class="btn-answer" onclick="toggleAnswer('a3-1')">解答を表示</button>
                 <div id="a3-1" class="answer-area">
                     <span class="answer-label">「埏埴以為器」「鑿戸牖以為室」の読み：</span>つく（る）<br>
@@ -229,7 +242,7 @@
             </div>
 
             <div class="question-item">
-                <p>(2) この文章で述べられている「無（何もない空間）」の役割について、簡潔に説明せよ。</p>
+                <p class="question-text">(2) この文章で述べられている「無（何もない空間）」の役割について、簡潔に説明せよ。</p>
                 <button class="btn-answer" onclick="toggleAnswer('a3-2')">解答を表示</button>
                 <div id="a3-2" class="answer-area">
                     <span class="answer-label">説明：</span>車輪の穴や器の中の空洞など、形のない「無」の部分こそが、実際の役に立つ働きをするということ。
@@ -245,7 +258,7 @@
             </div>
 
             <div class="question-item">
-                <p>(1) 傍線部「性猶湍水也」の書き下し文と意味を答えよ。</p>
+                <p class="question-text">(1) 傍線部「性猶湍水也」の書き下し文と意味を答えよ。</p>
                 <button class="btn-answer" onclick="toggleAnswer('a4-1')">解答を表示</button>
                 <div id="a4-1" class="answer-area">
                     <span class="answer-label">書き下し：</span>せいはなほたんすいのごときなり<br>
@@ -255,10 +268,10 @@
             </div>
 
             <div class="question-item">
-                <p>(2) 傍線部「可使過顙」と「可使在山」の書き下し文と意味をそれぞれ答えよ。</p>
+                <p class="question-text">(2) 傍線部「可使過顙」と「可使在山」の書き下し文と意味をそれぞれ答えよ。</p>
                 <button class="btn-answer" onclick="toggleAnswer('a4-2')">解答を表示</button>
                 <div id="a4-2" class="answer-area">
-                    <span class="answer-label">「可使過顙」書き下し：</span>ひたいをすごさしむべく<br>
+                    <span class="answer-label">「可使過顙」書き下し：</span>ひたいをすげしむべく<br>
                     <span class="answer-label">意味：</span>（水を打って）額を越えさせることができるし<br><br>
                     <span class="answer-label">「可使在山」書き下し：</span>やまにあらしむべし<br>
                     <span class="answer-label">意味：</span>（水を逆流させて）山の上に留まらせることもできる<br>
@@ -267,7 +280,7 @@
             </div>
 
             <div class="question-item">
-                <p>(3) 傍線部「豈水之性哉」の書き下し文と意味を答えよ。</p>
+                <p class="question-text">(3) 傍線部「豈水之性哉」の書き下し文と意味を答えよ。</p>
                 <button class="btn-answer" onclick="toggleAnswer('a4-3')">解答を表示</button>
                 <div id="a4-3" class="answer-area">
                     <span class="answer-label">書き下し：</span>あにみずのせいならんや<br>
@@ -285,7 +298,7 @@
             </div>
 
             <div class="question-item">
-                <p>(1) 傍線部「偽」の、ここでの意味を答えよ。（現代語の「ニセモノ」とは異なります）</p>
+                <p class="question-text">(1) 傍線部「偽」の、ここでの意味を答えよ。（現代語の「ニセモノ」とは異なります）</p>
                 <button class="btn-answer" onclick="toggleAnswer('a5-1')">解答を表示</button>
                 <div id="a5-1" class="answer-area">
                     <span class="answer-label">意味：</span>人の作為、後天的な努力（人為的な矯正）
@@ -293,7 +306,7 @@
             </div>
 
             <div class="question-item">
-                <p>(2) 傍線部「好利」「疾悪」「耳目之欲」は、荀子が考える人間のどのような性質を示しているか。</p>
+                <p class="question-text">(2) 傍線部「好利」「疾悪」「耳目之欲」は、荀子が考える人間のどのような性質を示しているか。</p>
                 <button class="btn-answer" onclick="toggleAnswer('a5-2')">解答を表示</button>
                 <div id="a5-2" class="answer-area">
                     <span class="answer-label">説明：</span>生まれながらにして利益を好み、他人をねたみ憎み、感覚的な欲望（目や耳の欲）に従うという性質。
@@ -301,7 +314,7 @@
             </div>
 
             <div class="question-item">
-                <p>(3) 人間が「治（平和に治まった状態）」に至るために必要だと荀子が述べているものを、本文中から2つ抜き出して答えよ。</p>
+                <p class="question-text">(3) 人間が「治（平和に治まった状態）」に至るために必要だと荀子が述べているものを、本文中から2つ抜き出して答えよ。</p>
                 <button class="btn-answer" onclick="toggleAnswer('a5-3')">解答を表示</button>
                 <div id="a5-3" class="answer-area">
                     <span class="answer-label">答え：</span>師法 / 礼義
@@ -309,7 +322,7 @@
             </div>
 
             <div class="question-item">
-                <p>(4) 傍線部「用此観之」の書き下し文を答えよ。</p>
+                <p class="question-text">(4) 傍線部「用此観之」の書き下し文を答えよ。</p>
                 <button class="btn-answer" onclick="toggleAnswer('a5-4')">解答を表示</button>
                 <div id="a5-4" class="answer-area">
                     <span class="answer-label">書き下し：</span>こ（れ）をもち（て）こ（れ）をみ（れば）
@@ -330,7 +343,7 @@
             </div>
 
             <div class="question-item">
-                <p>(1) 傍線部「子」は誰を指しているか答えよ。</p>
+                <p class="question-text">(1) 傍線部「子」は誰を指しているか答えよ。</p>
                 <button class="btn-answer" onclick="toggleAnswer('a6-1')">解答を表示</button>
                 <div id="a6-1" class="answer-area">
                     <span class="answer-label">答え：</span>荘子
@@ -338,7 +351,7 @@
             </div>
 
             <div class="question-item">
-                <p>(2) 傍線部「夫」の読みと意味を答えよ。</p>
+                <p class="question-text">(2) 傍線部「夫」の読みと意味を答えよ。</p>
                 <button class="btn-answer" onclick="toggleAnswer('a6-2')">解答を表示</button>
                 <div id="a6-2" class="answer-area">
                     <span class="answer-label">読み：</span>そ（れ）<br>
@@ -347,7 +360,7 @@
             </div>
 
             <div class="question-item">
-                <p>(3) 傍線部「非不」の句法（文法事項）を答えよ。</p>
+                <p class="question-text">(3) 傍線部「非不」の句法（文法事項）を答えよ。</p>
                 <button class="btn-answer" onclick="toggleAnswer('a6-3')">解答を表示</button>
                 <div id="a6-3" class="answer-area">
                     <span class="answer-label">句法：</span>二重否定
@@ -355,7 +368,7 @@
             </div>
 
             <div class="question-item">
-                <p>(4) 傍線部「耳」の読みを答えよ。</p>
+                <p class="question-text">(4) 傍線部「耳」の読みを答えよ。</p>
                 <button class="btn-answer" onclick="toggleAnswer('a6-4')">解答を表示</button>
                 <div id="a6-4" class="answer-area">
                     <span class="answer-label">読み：</span>のみ
@@ -363,7 +376,7 @@
             </div>
 
             <div class="question-item">
-                <p>(5) 傍線部「然則」の意味を答えよ。</p>
+                <p class="question-text">(5) 傍線部「然則」の意味を答えよ。</p>
                 <button class="btn-answer" onclick="toggleAnswer('a6-5')">解答を表示</button>
                 <div id="a6-5" class="answer-area">
                     <span class="answer-label">意味：</span>そうであるならば
@@ -371,7 +384,7 @@
             </div>
 
             <div class="question-item">
-                <p>(6) 傍線部「塾」の意味を答えよ。</p>
+                <p class="question-text">(6) 傍線部「塾」の意味を答えよ。</p>
                 <button class="btn-answer" onclick="toggleAnswer('a6-6')">解答を表示</button>
                 <div id="a6-6" class="answer-area">
                     <span class="answer-label">意味：</span>掘り（dig）
@@ -379,7 +392,7 @@
             </div>
 
             <div class="question-item">
-                <p>(7) 傍線部「黄泉」の意味を答えよ。</p>
+                <p class="question-text">(7) 傍線部「黄泉」の意味を答えよ。</p>
                 <button class="btn-answer" onclick="toggleAnswer('a6-7')">解答を表示</button>
                 <div id="a6-7" class="answer-area">
                     <span class="answer-label">意味：</span>黄泉（あの世、地下深く）
@@ -387,7 +400,7 @@
             </div>
 
             <div class="question-item">
-                <p>(8) 傍線部「乎」の句法（文法事項）を答えよ。</p>
+                <p class="question-text">(8) 傍線部「乎」の句法（文法事項）を答えよ。</p>
                 <button class="btn-answer" onclick="toggleAnswer('a6-8')">解答を表示</button>
                 <div id="a6-8" class="answer-area">
                     <span class="answer-label">句法：</span>反語
@@ -395,10 +408,54 @@
             </div>
 
             <div class="question-item">
-                <p>(9) 傍線部「亦」の読みを答えよ。</p>
+                <p class="question-text">(9) 傍線部「亦」の読みを答えよ。</p>
                 <button class="btn-answer" onclick="toggleAnswer('a6-9')">解答を表示</button>
                 <div id="a6-9" class="answer-area">
                     <span class="answer-label">読み：</span>また
+                </div>
+            </div>
+        </div>
+
+        <!-- 第7問 -->
+        <div class="question-block">
+            <h2>第7問：山月記（中島敦）</h2>
+            <div class="kanbun-text">
+                己は口先では、必ず自分は後世に名を成すと言いながら、進んで師に就いたり、友と切磋琢磨したりすることをしなかった。かといって、また、俗物と伍して切磋琢磨することにも潔しとしなかった。共に、我が<strong>臆病な自尊心</strong>と、<strong>尊大な羞恥心</strong>との所為である。己の珠に非ざることを惧れるが故に、敢えて刻苦して磨こうともせず、また、己の珠なるべきを半ば信ずるが故に、碌々として瓦礫と伍することもできなかった。……人間は誰でも猛獣使であり、その猛獣に当たるのが、各人の性情だと言う。己の場合、この<strong>尊大な羞恥心</strong>が猛獣だった。虎だったのだ。
+            </div>
+
+            <div class="question-item">
+                <p class="question-text">(1) 傍線部「臆病な自尊心と、尊大な羞恥心」とは、具体的にどのような心理状態か。</p>
+                <button class="btn-answer" onclick="toggleAnswer('a7-1')">解答を表示</button>
+                <div id="a7-1" class="answer-area">
+                    <span
+                        class="answer-label">説明：</span>自分には才能があるはずだという高いプライド（自尊心）を持ちながら、もし才能がないと判明してしまうことを極度に恐れる（臆病・羞恥心）あまり、努力もせず、他者とも関わろうとしない矛盾した心理状態。
+                </div>
+            </div>
+
+            <div class="question-item">
+                <p class="question-text">(2) 李徴が虎になった原因について、物語の当初と最後で李徴の認識はどう変化したか。</p>
+                <button class="btn-answer" onclick="toggleAnswer('a7-2')">解答を表示</button>
+                <div id="a7-2" class="answer-area">
+                    <span
+                        class="answer-label">変化：</span>当初は「理由もわからず外から押し付けられた運命」だと考えていたが、最後は「全て自分の行いや心（臆病な自尊心と尊大な羞恥心）に原因がある」と、自分の責任であることを認めるようになった。
+                </div>
+            </div>
+
+            <div class="question-item">
+                <p class="question-text">(3) この作品のタイトル『山月記』にある「山」と「月」は、それぞれ誰を象徴しているか。</p>
+                <button class="btn-answer" onclick="toggleAnswer('a7-3')">解答を表示</button>
+                <div id="a7-3" class="answer-area">
+                    <span class="answer-label">山：</span>李徴（暗く険しい、虎として下にいる）<br>
+                    <span class="answer-label">月：</span>袁傪（明るく美しい、役人として上にいる）
+                </div>
+            </div>
+
+            <div class="question-item">
+                <p class="question-text">(4) 李徴が虎になった自分を「しあわせ」と表現する際、傍点（・・・・）が振られている理由は何か。</p>
+                <button class="btn-answer" onclick="toggleAnswer('a7-4')">解答を表示</button>
+                <div id="a7-4" class="answer-area">
+                    <span
+                        class="answer-label">理由：</span>それは本当の幸福ではなく、人間としての心を失うことによって、自分の現状に対する苦しみや後悔から逃れられるという「死」にも等しい悲劇的な状態を指しているから。
                 </div>
             </div>
         </div>
