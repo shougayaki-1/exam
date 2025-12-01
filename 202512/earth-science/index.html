@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高校地学基礎：地表の変化と地球の歴史</title>
+    <style>
+        :root {
+            --primary-color: #008080;
+            /* Teal */
+            --secondary-color: #4682B4;
+            /* SteelBlue */
+            --accent-color: #CD5C5C;
+            /* IndianRed */
+            --bg-color: #f0f4f8;
+            --text-color: #333;
+            --card-bg: #ffffff;
+            --cloze-bg: #ddd;
+            --cloze-active: #d1fae5;
+            --cloze-text-revealed: #006400;
+        }
+
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header & Nav */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.6rem;
+        }
+
+        p.subtitle {
+            margin-top: 0.5rem;
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .tab {
+            flex: 1;
+            max-width: 200px;
+            text-align: center;
+            padding: 1rem;
+            cursor: pointer;
+            font-weight: bold;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            color: #666;
+        }
+
+        .tab:hover {
+            background-color: #f9f9f9;
+        }
+
+        .tab.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+            background-color: #fff;
+        }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Mode Sections */
+        .mode-section {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .mode-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Card Styling */
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        h2 {
+            border-left: 5px solid var(--primary-color);
+            padding-left: 1rem;
+            color: var(--primary-color);
+            font-size: 1.4rem;
+        }
+
+        h3 {
+            color: var(--secondary-color);
+            margin-top: 1.5rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .keyword {
+            font-weight: bold;
+            color: var(--accent-color);
+            background: linear-gradient(transparent 70%, #ffdecb 70%);
+        }
+
+        ul {
+            padding-left: 1.2rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Test Mode Styling */
+        .question-block {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #e0e0e0;
+        }
+
+        .q-title {
+            font-weight: bold;
+            color: #fff;
+            background-color: var(--secondary-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .question-image {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            margin: 1rem auto;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        /* Cloze (Bug-eating) Style */
+        .cloze {
+            display: inline-block;
+            min-width: 50px;
+            padding: 2px 6px;
+            margin: 0 2px;
+            background-color: var(--cloze-bg);
+            border-radius: 4px;
+            cursor: pointer;
+            color: transparent;
+            /* Text hidden initially */
+            user-select: none;
+            border-bottom: 2px solid #999;
+            transition: all 0.2s;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .cloze:hover {
+            background-color: #ccc;
+        }
+
+        .cloze.revealed {
+            background-color: var(--cloze-active);
+            color: var(--cloze-text-revealed);
+            border-bottom: 2px solid var(--primary-color);
+            cursor: default;
+        }
+
+        /* Explanation Styling (New) */
+        .explanation-wrapper {
+            margin-top: 1rem;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 5px 0;
+            display: flex;
+            align-items: center;
+            outline: none;
+        }
+
+        .toggle-btn:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+        .explanation-content {
+            display: none;
+            /* Default hidden */
+            margin-top: 0.5rem;
+            animation: slideDown 0.3s ease;
+        }
+
+        .explanation-content.visible {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .note {
+            font-size: 0.85rem;
+            color: #555;
+            background-color: #f1f8ff;
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #888;
+            font-size: 0.8rem;
+            border-top: 1px solid #eee;
+        }
+
+        @media (max-width: 600px) {
+            .tab {
+                padding: 0.8rem;
+                font-size: 0.9rem;
+            }
+
+            h1 {
+                font-size: 1.3rem;
+            }
+
+            .card {
+                padding: 1.2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>高校地学基礎 対策</h1>
+        <p class="subtitle">地表の変化・地層・地球の歴史</p>
+    </header>
+
+    <nav class="nav-tabs">
+        <div class="tab active" onclick="switchMode('understanding')">📖 要点まとめ</div>
+        <div class="tab" onclick="switchMode('test')">📝 実践テスト</div>
+    </nav>
+
+    <main class="container">
+
+        <!-- =========================
+         理解モード (Understanding)
+         ========================= -->
+        <div id="mode-understanding" class="mode-section active">
+
+            <div class="card">
+                <h2>1. 地表の変化と地形</h2>
+                <h3>風化作用</h3>
+                <ul>
+                    <li><strong><span class="keyword">物理的風化</span></strong>: 温度変化や水の凍結で岩石が砕ける（寒冷・乾燥地帯）。</li>
+                    <li><strong><span class="keyword">化学的風化</span></strong>:
+                        水や酸で岩石が溶ける・変質させる（高温多湿）。<br>例：石灰岩の溶食による<strong>カルスト地形</strong>。</li>
+                </ul>
+
+                <h3>流水の働き</h3>
+                <ul>
+                    <li><strong>V字谷</strong>: 上流の急流による下方侵食。</li>
+                    <li><strong>扇状地</strong>: 山地から平野に出るところで土砂が堆積。</li>
+                    <li><strong>三角州（デルタ）</strong>: 河口付近で泥や砂が堆積。</li>
+                    <li><strong>河岸段丘</strong>: 土地の隆起や海面低下により、かつての川底が段状に残ったもの。</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>2. 地層と地質調査</h2>
+                <h3>岩石の種類</h3>
+                <ul>
+                    <li><strong>続成作用</strong>: 砂や泥が固まって岩石になること。</li>
+                    <li><strong>礫岩・砂岩・泥岩</strong>: 粒の大きさで区別する（礫＞砂＞泥）。</li>
+                    <li><strong>チャート</strong>: 放散虫などSiO₂の殻。非常に硬い。</li>
+                    <li><strong>石灰岩</strong>: サンゴやフズリナなどCaCO₃の殻。塩酸で泡が出る。</li>
+                </ul>
+
+                <h3>地層の観察</h3>
+                <ul>
+                    <li><strong>クリノメーター</strong>: 走向（層理面と水平面の交線の方位）と傾斜（最大傾斜）を測る。</li>
+                    <li><strong>不整合</strong>: 地層の間に大きな時間の隔たりがある関係。</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>3. 地質年代と生命の歴史</h2>
+                <h3>年代の決め方</h3>
+                <ul>
+                    <li><strong>相対年代</strong>: 地層の上下関係や化石を使って新旧を決める。
+                        <br><em>※示準化石：生存期間が短く、分布が広い生物（例：三葉虫、アンモナイト）。</em>
+                    </li>
+                    <li><strong>絶対年代（放射年代）</strong>: 放射性同位体の半減期を利用して数値を出す。</li>
+                </ul>
+
+                <h3>生命の進化</h3>
+                <ul>
+                    <li><strong>先カンブリア時代</strong>: シアノバクテリア（ストロマトライト）による酸素放出 → オゾン層形成。</li>
+                    <li><strong>古生代</strong>: カンブリア爆発、植物の上陸、脊椎動物（両生類）の上陸、巨大昆虫。</li>
+                    <li><strong>中生代</strong>: 温暖。恐竜・アンモナイトの繁栄。</li>
+                    <li><strong>新生代</strong>: 哺乳類の繁栄、人類の出現。</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- =========================
+         テストモード (Test)
+         ========================= -->
+        <div id="mode-test" class="mode-section">
+            <p style="text-align:center; color:#666; margin-bottom:1.5rem; font-size:0.9rem;">
+                灰色のボックスをクリックすると正解が表示されます。
+            </p>
+
+            <!-- 第1問 -->
+            <div class="question-block">
+                <span class="q-title">第1問 用語の穴埋め</span>
+                <p><strong>(1) 地表の変化</strong><br>
+                    地表の岩石が崩壊・分解する現象を（<span class="cloze" onclick="reveal(this)">風化</span>）という。
+                    水が凍結して体積が増えることで岩石を割る作用を（<span class="cloze"
+                        onclick="reveal(this)">物理的</span>）風化といい、寒冷地で進みやすい。一方、雨水などが岩石を溶かす作用を（<span class="cloze"
+                        onclick="reveal(this)">化学的</span>）風化といい、高温多湿な地域で進みやすい。後者の例として、石灰岩地帯に見られる（<span class="cloze"
+                        onclick="reveal(this)">カルスト</span>）地形がある。</p>
+
+                <p><strong>(2) 流水の働き</strong><br>
+                    川が山地から平野に出る場所では、流速が落ちて土砂が扇形に広がり（<span class="cloze"
+                        onclick="reveal(this)">扇状地</span>）ができる。河口付近では（<span class="cloze"
+                        onclick="reveal(this)">三角州</span>）が形成される。また、土地の隆起などにより、かつての谷底が階段状に残された地形を（<span class="cloze"
+                        onclick="reveal(this)">河岸段丘</span>）という。</p>
+
+                <p><strong>(3) 海岸の地形</strong><br>
+                    波の侵食でできた崖を（<span class="cloze" onclick="reveal(this)">海食崖</span>）、その前面の平坦面を（<span class="cloze"
+                        onclick="reveal(this)">海食台</span>）という。沿岸流により砂がくちばし状に伸びた地形を（<span class="cloze"
+                        onclick="reveal(this)">砂嘴</span>）という。</p>
+            </div>
+
+            <!-- 第2問 -->
+            <div class="question-block">
+                <span class="q-title">第2問 クリノメーターの使用法</span>
+                <p>地層の走向・傾斜を測定するクリノメーターについて答えよ。</p>
+
+                <img src="clinometer_usage.png" alt="クリノメーターのあて方" class="question-image" style="max-width:300px;">
+
+                <p><strong>(1)</strong> 上図の a ～ d の中から正しいあて方を選べ。</p>
+                <ul>
+                    <li>走向を測るときのあて方：（<span class="cloze"
+                            onclick="reveal(this)">a</span>）<br><small>※長辺を水平にして層理面にあてる。</small></li>
+                    <li>傾斜を測るときのあて方：（<span class="cloze"
+                            onclick="reveal(this)">d</span>）<br><small>※文字盤を立てて直角の辺をあてる。</small></li>
+                </ul>
+
+                <hr style="border:0; border-top:1px dashed #ccc; margin:1.5rem 0;">
+
+                <img src="clinometer_reading.png" alt="クリノメーターの目盛り" class="question-image" style="max-width:200px;">
+
+                <p><strong>(2)</strong> 走向を測定したところ、目盛りが上図のようになった（N極がE側の30度を指している）。この地層の走向はいくらか。</p>
+                <p>ア：北30°東　イ：北30°西　ウ：南30°東　エ：南30°西</p>
+                <p>答え：（<span class="cloze" onclick="reveal(this)">イ</span>）</p>
+
+                <!-- 解説ボタン -->
+                <button class="toggle-btn" onclick="toggleExplanation(this)">解説を表示 ▼</button>
+                <div class="explanation-content">
+                    <div class="note">
+                        <strong>解説：</strong><br>
+                        地質調査用のクリノメーターは、方位磁針の文字盤の「E（東）」と「W（西）」が通常の方位磁針とは逆に配置されています。<br>
+                        針が「E」側にあるということは、実際には「西（West）」に偏角していることを示します。よって、北から西へ30度振れているので「北30°西」が正解です。
+                    </div>
+                </div>
+            </div>
+
+            <!-- 第3問 -->
+            <div class="question-block">
+                <span class="q-title">第3問 地層の重なりと地質構造</span>
+
+                <img src="strata_sketch.png" alt="地質図とスケッチ" class="question-image">
+
+                <p><strong>(1)</strong> スケッチ①では、B層の下部に<strong>A層の岩石の礫（レキ）</strong>が含まれていた。このような、不整合面の直上にある礫岩を特に何というか。
+                </p>
+                <p>答え：（<span class="cloze" onclick="reveal(this)">基底礫岩</span>）</p>
+
+                <p><strong>(2)</strong> スケッチ①と②の情報から、A層、B層、C層を<strong>形成された順に古いものから</strong>並べよ。</p>
+                <p>答え：（<span class="cloze" onclick="reveal(this)">C</span>）→（<span class="cloze"
+                        onclick="reveal(this)">A</span>）→（<span class="cloze" onclick="reveal(this)">B</span>）</p>
+
+                <!-- 解説ボタン -->
+                <button class="toggle-btn" onclick="toggleExplanation(this)">解説を表示 ▼</button>
+                <div class="explanation-content">
+                    <div class="note">
+                        <strong>解説：</strong>
+                        <ul>
+                            <li><strong>スケッチ②より (C → A)：</strong>
+                                C層がA層に接する部分が変質しています（接触変成作用）。これはC層が元々あった場所に、熱いA層（火成岩）が貫入してきたことを示すため、C層の方が古いです。</li>
+                            <li><strong>スケッチ①より (A, C → B)：</strong>
+                                B層の中にA層とC層の礫が含まれています。礫として含まれるということは、B層が堆積する前に、A層とC層がすでに陸化し、削られていたことを意味します。よってB層が最も新しいです。
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 第4問 -->
+            <div class="question-block">
+                <span class="q-title">第4問 生命の進化と環境</span>
+                <p>次の文章の（　）に適語を入れよ。</p>
+
+                <p><strong>① 先カンブリア時代</strong><br>
+                    約27億年前頃から、海中で光合成を行う（<span class="cloze"
+                        onclick="reveal(this)">シアノバクテリア</span>）が繁栄し、その痕跡はストロマトライトと呼ばれる岩石に残されている。彼らが放出した酸素により、やがて上空に（<span
+                        class="cloze" onclick="reveal(this)">オゾン層</span>）が形成され、有害な紫外線が遮られるようになった。</p>
+
+                <p><strong>② 古生代</strong><br>
+                    カンブリア紀には、硬い殻や眼を持つ多様な生物が一斉に出現した。これを（<span class="cloze"
+                        onclick="reveal(this)">カンブリア爆発</span>）という。その後、オゾン層の形成に伴い、植物や昆虫、そして脊椎動物では（<span class="cloze"
+                        onclick="reveal(this)">両生類</span>）などが陸上へ進出した。</p>
+
+                <p><strong>③ 中生代～新生代</strong><br>
+                    中生代は温暖な気候で、（<span class="cloze"
+                        onclick="reveal(this)">恐竜</span>）や海中のアンモナイトが繁栄したが、末期に巨大隕石の衝突などにより絶滅した。新生代に入ると（<span
+                        class="cloze" onclick="reveal(this)">哺乳類</span>）が多様化し、現在につながる生態系が築かれた。</p>
+            </div>
+
+            <!-- 第5問 -->
+            <div class="question-block">
+                <span class="q-title">第5問 地質年代の推定</span>
+
+                <p><strong>(1) 相対年代と化石</strong><br>
+                    離れた地域の地層を対比したり、地層が堆積した時代を決定したりするのに役立つ化石を（<span class="cloze"
+                        onclick="reveal(this)">示準化石</span>）という。この化石に適しているのは、以下の2つの条件を満たす生物である。</p>
+                <ul>
+                    <li>生存していた期間が（<span class="cloze" onclick="reveal(this)">短い</span>）こと。</li>
+                    <li>生息していた範囲が（<span class="cloze" onclick="reveal(this)">広い</span>）こと。</li>
+                </ul>
+
+                <p><strong>(2) 放射年代の計算</strong><br>
+                    ある火成岩に含まれる放射性同位体（親元素）と、それが崩壊してできた安定な同位体（娘元素）の量を調べた。</p>
+                <div style="background:#fff; padding:10px; border:1px solid #ccc; margin:10px 0;">
+                    <ul>
+                        <li>親元素の半減期：<strong>4億年</strong></li>
+                        <li>岩石中の比率： <strong>親元素 : 娘元素 ＝ 1 : 3</strong></li>
+                    </ul>
+                </div>
+                <p>この岩石が形成されたのは、今から何億年前か。</p>
+                <p>答え：（<span class="cloze" onclick="reveal(this)">8</span>）億年前</p>
+
+                <!-- 解説ボタン -->
+                <button class="toggle-btn" onclick="toggleExplanation(this)">解説を表示 ▼</button>
+                <div class="explanation-content">
+                    <div class="note">
+                        <strong>解説：</strong><br>
+                        親元素と娘元素の比率が「1：3」ということは、全体を4としたとき、親元素は「1/4」残っている状態です。<br>
+                        半減期の回数を考えます。<br>
+                        ・1回目（1/2になる）：1 → 1/2<br>
+                        ・2回目（さらに1/2）：1/2 → 1/4<br>
+                        よって、半減期が2回経過しています。<br>
+                        <strong>4億年 × 2 ＝ 8億年前</strong> となります。
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2024 High School Earth Science Exam Prep</p>
+    </footer>
+
+    <script>
+        // モード切り替え
+        function switchMode(modeName) {
+            document.querySelectorAll('.mode-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById('mode-' + modeName).classList.add('active');
+
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            if (modeName === 'understanding') {
+                document.querySelector('.tab:nth-child(1)').classList.add('active');
+            } else {
+                document.querySelector('.tab:nth-child(2)').classList.add('active');
+            }
+            window.scrollTo(0, 0);
+        }
+
+        // 虫食いの正解表示
+        function reveal(element) {
+            if (!element.classList.contains('revealed')) {
+                element.classList.add('revealed');
+            }
+        }
+
+        // 解説の表示/非表示切り替え
+        function toggleExplanation(btn) {
+            // ボタンの直後にあるexplanation-contentを取得
+            const content = btn.nextElementSibling;
+            content.classList.toggle('visible');
+
+            // ボタンのテキストを切り替え
+            if (content.classList.contains('visible')) {
+                btn.textContent = "解説を隠す ▲";
+            } else {
+                btn.textContent = "解説を表示 ▼";
+            }
+        }
+    </script>
+
+</body>
+
+</html>
