@@ -48,8 +48,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ページタイトル</title>
-    <!-- 共通スタイルの読み込み (階層に注意: ../css/) -->
-    <link rel="stylesheet" href="../css/style.css">
+    <!-- 共通スタイルの読み込み (階層に注意: ../../css/) -->
+    <link rel="stylesheet" href="../../css/style.css">
 </head>
 
 <!-- 科目に合わせてクラスを変更 -->

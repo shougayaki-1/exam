@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ページタイトル</title>
-    <!-- 共通スタイルの読み込み (階層に注意: ../css/) -->
-    <link rel="stylesheet" href="../css/style.css">
+    <!-- ★修正箇所: 階層が深くなったので ../../ に変更 -->
+    <link rel="stylesheet" href="../../css/style.css">
 </head>
 
 <!-- 科目に合わせてクラスを変更 -->
@@ -24,8 +24,9 @@
         <main id="content-study" class="tab-content active">
             <div class="card">
                 <h2>1. 単元の概要</h2>
-                <!-- AIへの指示: 色指定は style="" を使わず、クラス指定などで行わせる -->
                 <div class="text-box">
+                    <!-- 画像を使う場合は同じフォルダに置いてパス指定が楽になります -->
+                    <!-- <img src="chart.png" alt="図解" style="max-width:100%;"> -->
                     解説文。<span class="keyword">重要語句</span>タグを使用。
                 </div>
             </div>
@@ -35,21 +36,20 @@
         <main id="content-test" class="tab-content">
             <div class="card">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                    <!-- class="text-sub" を使って色を指定（style="color:#ccc"などは使わない） -->
                     <h3 class="text-sub" style="margin:0; font-size:1rem;">Question 1</h3>
                     <button class="btn-toggle-answer" onclick="markAsMastered(this)"
                         style="font-size:0.75rem; padding:4px 10px;">覚えた！</button>
                 </div>
 
-                <p>次の文章の空欄を埋めなさい。</p>
+                <p>問題文...</p>
                 <div class="text-box">
-                    日本の首都は（ <span class="cloze">東京</span> ）である。
+                    （ <span class="cloze">正解</span> ）
                 </div>
 
                 <div class="answer-area">
                     <button class="btn-toggle-answer" onclick="toggleAnswer(this)">解答を表示 ▼</button>
                     <div class="answer-content">
-                        <strong>正解: 東京</strong>
+                        <strong>正解: ...</strong>
                     </div>
                 </div>
             </div>
@@ -57,33 +57,23 @@
 
     </div>
 
-    <!-- スティッキー操作バー (更新版) -->
+    <!-- スティッキー操作バー -->
     <div class="sticky-bar">
-        <!-- リセットボタン (New) -->
-        <button class="control-btn" onclick="resetCloze()">
-            <span>↺</span><br>リセット
-        </button>
-
-        <button class="control-btn" onclick="toggleRedSheet()">
-            <span>🟥</span><br>赤シート
-        </button>
-
-        <!-- ストップウォッチ (名称変更) -->
+        <button class="control-btn" onclick="resetCloze()"><span>↺</span><br>リセット</button>
+        <button class="control-btn" onclick="toggleRedSheet()"><span>🟥</span><br>赤シート</button>
         <div class="control-btn" onclick="toggleTimer()">
-            <span id="timer-display" class="timer-display">00:00</span>
-            <br>ウォッチ
+            <span id="timer-display" class="timer-display">00:00</span><br>ウォッチ
         </div>
+        <button class="control-btn" onclick="toggleDarkMode()"><span>🌙</span><br>ダーク</button>
 
-        <button class="control-btn" onclick="toggleDarkMode()">
-            <span>🌙</span><br>ダーク
-        </button>
-
-        <a href="../index.html" class="control-btn" style="text-decoration:none;">
+        <!-- ★修正箇所: ホームへのリンクも ../../ に変更 -->
+        <a href="../../index.html" class="control-btn" style="text-decoration:none;">
             <span>🏠</span><br>ホーム
         </a>
     </div>
 
-    <script src="../js/script.js"></script>
+    <!-- ★修正箇所: JSの読み込みも ../../ に変更 -->
+    <script src="../../js/script.js"></script>
 </body>
 
 </html>
